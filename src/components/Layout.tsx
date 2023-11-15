@@ -11,7 +11,11 @@ const Layout = ({ children }: Props) => {
   const isBackOffice = router.pathname.includes("/backoffice");
   const isOrder = query.locationId && query.tableId;
   if (isBackOffice) {
-    return <BackofficeLayout>{children}</BackofficeLayout>;
+    return (
+      <div>
+        <BackofficeLayout>{children}</BackofficeLayout>
+      </div>
+    );
   }
 };
 
