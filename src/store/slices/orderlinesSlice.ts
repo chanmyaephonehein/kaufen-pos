@@ -1,0 +1,26 @@
+import { Orderlines } from "@prisma/client";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+
+interface OrderlinesState {
+  isLoading: boolean;
+  items: Orderlines[];
+  error: Error | null;
+}
+
+const initialState: OrderlinesState = {
+  isLoading: false,
+  items: [],
+  error: null,
+};
+
+export const orderlinesSlice = createSlice({
+  name: "orderlines",
+  initialState,
+  reducers: {
+    setOrderlines: (state, action: PayloadAction<Orderlines[]>) => {
+      state.items = action.payload;
+    },
+  },
+});
+
+export default orderlinesSlice.reducer;

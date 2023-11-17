@@ -18,7 +18,7 @@ import TableBarIcon from "@mui/icons-material/TableBar";
 
 const SideBar = () => {
   return (
-    <div className="col-start-1 col-end-2">
+    <div className="col-span-1">
       <List>
         {items.map((item) => (
           <Link
