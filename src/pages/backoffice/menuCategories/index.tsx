@@ -15,7 +15,7 @@ const MenuCategories = () => {
     .filter((item) => item.locationId === Number(selectedLoactionId))
     .map((item) => item.menuCategoryId);
 
-  const validMenuCategory = menuCategories.filter(
+  const validMenuCategories = menuCategories.filter(
     (item) => item.id && validMenuCategoryId.includes(item.id)
   );
 
@@ -40,7 +40,7 @@ const MenuCategories = () => {
         </Button>
       </div>
       <div className="flex flex-row">
-        {validMenuCategory.map((item) => (
+        {validMenuCategories.map((item) => (
           <div key={item.id} className="flex m-3 bg-red-200 flex-col ">
             <div>{item.name}</div>
             <span className="flex justify-center">
