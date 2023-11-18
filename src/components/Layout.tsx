@@ -19,6 +19,7 @@ const Layout = ({ children }: Props) => {
       </div>
     );
   }
+  return <>{children}</>;
 };
 
 export default Layout;
