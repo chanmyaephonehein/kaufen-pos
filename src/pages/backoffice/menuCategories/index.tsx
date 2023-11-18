@@ -19,7 +19,7 @@ const MenuCategories = () => {
     (item) => item.id && validMenuCategoryId.includes(item.id)
   );
 
-  const getMenusCount = (menuCategoryId: number) => {
+  const getMenusCount = (menuCategoryId?: number) => {
     if (!menuCategoryId) return 0;
     return menusMenuCategoriesLocations.filter(
       (item) =>
