@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
-  if (path.includes("/" || path.includes("/auth"))) {
+  if (path.includes("/") || path.includes("/auth")) {
     return NextResponse.next();
   }
 
@@ -11,6 +11,7 @@ export default async function middleware(req: NextRequest) {
     req,
     secret: process.env.NEXTAUTH_SECRET,
   });
+
   const isProtected = path.includes("/backoffice") || path.includes("/api");
 
   if (!session && isProtected) {

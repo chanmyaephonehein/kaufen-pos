@@ -18,7 +18,7 @@ const BackofficeApp = () => {
     }
   }, [data, router, status]);
 
-  if (isLoading) return null;
+  if (isLoading) return <p>Fetching Data</p>;
   return null;
 };
 

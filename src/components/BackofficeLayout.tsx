@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchAppData, selectApp } from "@/store/slices/appSlice";
 import { useEffect } from "react";
 
-export interface Props {
+interface Props {
   children: string | JSX.Element | JSX.Element[];
 }
 const BackofficeLayout = (props: Props) => {
