@@ -2,11 +2,7 @@ import Layout from "@/components/Layout";
 import { Box } from "@mui/material";
 
 const Locations = () => {
-  return (
-    <Layout>
-      <p>Locations</p>
-    </Layout>
-  );
+  return <p>Locations</p>;
 };
 
 export default Locations;

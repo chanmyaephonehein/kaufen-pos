@@ -23,4 +23,6 @@ export const MenusSlice = createSlice({
   },
 });
 
-export default MenusSlice;
+export const { setMenus } = MenusSlice.actions;
+
+export default MenusSlice.reducer;

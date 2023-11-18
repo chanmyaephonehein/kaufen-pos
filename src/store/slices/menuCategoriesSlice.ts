@@ -23,4 +23,6 @@ export const menuCategoriesSlice = createSlice({
   },
 });
 
+export const { setMenuCategories } = menuCategoriesSlice.actions;
+
 export default menuCategoriesSlice.reducer;

@@ -23,4 +23,6 @@ export const orderlinesSlice = createSlice({
   },
 });
 
+export const { setOrderlines } = orderlinesSlice.actions;
+
 export default orderlinesSlice.reducer;

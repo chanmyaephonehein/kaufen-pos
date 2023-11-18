@@ -2,11 +2,7 @@ import Layout from "@/components/Layout";
 import { Box } from "@mui/material";
 
 const Tables = () => {
-  return (
-    <Layout>
-      <p>Tables</p>
-    </Layout>
-  );
+  return <p>Tables</p>;
 };
 
 export default Tables;

@@ -23,4 +23,6 @@ export const addonsSlice = createSlice({
   },
 });
 
+export const { setAddons } = addonsSlice.actions;
+
 export default addonsSlice.reducer;

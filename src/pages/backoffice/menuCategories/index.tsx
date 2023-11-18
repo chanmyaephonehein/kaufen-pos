@@ -2,11 +2,7 @@ import Layout from "@/components/Layout";
 import { Box } from "@mui/material";
 
 const MenuCategories = () => {
-  return (
-    <Layout>
-      <p>Menu Categories</p>
-    </Layout>
-  );
+  return <p>Menu Categories</p>;
 };
 
 export default MenuCategories;

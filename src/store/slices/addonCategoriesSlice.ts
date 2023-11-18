@@ -23,4 +23,6 @@ export const addonCategoriesSlice = createSlice({
   },
 });
 
+export const { setAddonCategories } = addonCategoriesSlice.actions;
+
 export default addonCategoriesSlice.reducer;

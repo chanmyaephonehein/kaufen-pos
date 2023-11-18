@@ -23,4 +23,6 @@ export const locationsSlice = createSlice({
   },
 });
 
+export const { setLocations } = locationsSlice.actions;
+
 export default locationsSlice.reducer;

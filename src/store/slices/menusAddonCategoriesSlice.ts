@@ -1,5 +1,5 @@
 import { MenusAddonCategories as MenuAddonCategory } from "@prisma/client";
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface MenusAddonCategoriesState {
   isLoading: boolean;
@@ -25,5 +25,7 @@ export const menusAddonCategoriesSlice = createSlice({
     },
   },
 });
+
+export const { setMenusAddonCategories } = menusAddonCategoriesSlice.actions;
 
 export default menusAddonCategoriesSlice.reducer;
