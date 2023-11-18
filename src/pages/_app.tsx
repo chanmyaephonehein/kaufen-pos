@@ -1,7 +1,6 @@
 import Layout from "@/components/Layout";
 import { store } from "@/store";
 import "@/styles/globals.css";
-import { ThemeProvider } from "@emotion/react";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
