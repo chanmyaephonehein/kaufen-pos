@@ -1,8 +1,8 @@
-import Layout from "@/components/Layout";
+import AddIcon from "@mui/icons-material/Add";
 import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { getAddonsByLocationId, getSelectedLocationId } from "@/utils/client";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useState } from "react";
 
 const Addons = () => {
@@ -22,6 +22,15 @@ const Addons = () => {
   );
   return (
     <div className="col-span-5">
+      <div className="flex justify-end">
+        <Button
+          onClick={() => setOpen(true)}
+          variant="contained"
+          startIcon={<AddIcon />}
+        >
+          New Addon
+        </Button>
+      </div>
       <div className="flex">
         {validAddons.map((item) => (
           <div className="flex flex-col m-3 items-center" key={item.id}>

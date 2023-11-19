@@ -1,9 +1,9 @@
-import Layout from "@/components/Layout";
 import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { getSelectedLocationId } from "@/utils/client";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useState } from "react";
+import AddIcon from "@mui/icons-material/Add";
 
 const AddonCategories = () => {
   const {
@@ -35,6 +35,15 @@ const AddonCategories = () => {
   };
   return (
     <div className="col-span-5">
+      <div className="flex justify-end">
+        <Button
+          onClick={() => setOpen(true)}
+          variant="contained"
+          startIcon={<AddIcon />}
+        >
+          New Addon Category
+        </Button>
+      </div>
       <div className="flex">
         {validAddonCategories.map((item) => (
           <div className="flex flex-col items-center m-3" key={item.id}>

@@ -1,8 +1,8 @@
-import Layout from "@/components/Layout";
+import AddIcon from "@mui/icons-material/Add";
 import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { getSelectedLocationId } from "@/utils/client";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useState } from "react";
 
 const Tables = () => {
@@ -15,6 +15,15 @@ const Tables = () => {
   );
   return (
     <div className="col-span-5">
+      <div className="flex justify-end">
+        <Button
+          onClick={() => setOpen(true)}
+          variant="contained"
+          startIcon={<AddIcon />}
+        >
+          New Table
+        </Button>
+      </div>
       <div className="flex">
         {validTables.map((item) => (
           <div key={item.id} className="m-3">
