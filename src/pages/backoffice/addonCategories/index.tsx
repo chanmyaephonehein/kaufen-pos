@@ -4,6 +4,7 @@ import { getSelectedLocationId } from "@/utils/client";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
+import Loading from "@/components/Loading";
 
 const AddonCategories = () => {
   const {
@@ -33,6 +34,7 @@ const AddonCategories = () => {
     return addons.filter((item) => item.addonCategoryId === addonCategoryId)
       .length;
   };
+  if (isLoading) return <Loading />;
   return (
     <div className="col-span-5">
       <div className="flex justify-end">

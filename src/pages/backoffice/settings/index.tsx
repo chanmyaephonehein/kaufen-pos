@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import Loading from "@/components/Loading";
 import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { getSelectedLocationId } from "@/utils/client";
@@ -10,6 +11,7 @@ const Settings = () => {
   const validLocation = locations.find(
     (item) => item.id === Number(locationId)
   );
+  if (isLoading) return <Loading />;
   return (
     <div>
       <div>{validLocation?.name}</div>

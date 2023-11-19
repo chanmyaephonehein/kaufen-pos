@@ -5,6 +5,7 @@ import { getSelectedLocationId } from "@/utils/client";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
+import Loading from "@/components/Loading";
 
 const Menus = () => {
   const { menusMenuCategoriesLocations, menus, isLoading } =
@@ -18,6 +19,8 @@ const Menus = () => {
   const validMenus = menus.filter(
     (item) => item.id && validMenuIds.includes(item.id)
   );
+
+  if (isLoading) return <Loading />;
   return (
     <div className="col-span-5">
       <div className="flex justify-end">

@@ -5,6 +5,7 @@ import { getSelectedLocationId } from "@/utils/client";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
+import Loading from "@/components/Loading";
 
 const MenuCategories = () => {
   const [open, setOpen] = useState(false);
@@ -28,6 +29,8 @@ const MenuCategories = () => {
         item.locationId === Number(selectedLoactionId)
     ).length;
   };
+
+  if (isLoading) return <Loading />;
   return (
     <div className="col-span-5">
       <div className="flex justify-end">

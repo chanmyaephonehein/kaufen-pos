@@ -4,6 +4,7 @@ import { appData } from "@/store/slices/appSlice";
 import { getAddonsByLocationId, getSelectedLocationId } from "@/utils/client";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
+import Loading from "@/components/Loading";
 
 const Addons = () => {
   const {
@@ -20,6 +21,7 @@ const Addons = () => {
     menusAddonCategories,
     addons
   );
+  if (isLoading) return <Loading />;
   return (
     <div className="col-span-5">
       <div className="flex justify-end">

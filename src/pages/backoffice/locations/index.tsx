@@ -3,10 +3,12 @@ import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
+import Loading from "@/components/Loading";
 
 const Locations = () => {
   const { locations, isLoading } = useAppSelector(appData);
   const [open, setOpen] = useState(false);
+  if (isLoading) return <Loading />;
   return (
     <div className="col-span-5">
       <div className="flex justify-end">

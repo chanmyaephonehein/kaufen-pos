@@ -4,6 +4,7 @@ import { appData } from "@/store/slices/appSlice";
 import { getSelectedLocationId } from "@/utils/client";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
+import Loading from "@/components/Loading";
 
 const Tables = () => {
   const { tables, isLoading } = useAppSelector(appData);
@@ -13,6 +14,7 @@ const Tables = () => {
   const validTables = tables.filter(
     (item) => item.locationId === Number(selectedLocationId)
   );
+  if (isLoading) return <Loading />;
   return (
     <div className="col-span-5">
       <div className="flex justify-end">
