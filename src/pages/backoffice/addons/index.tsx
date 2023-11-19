@@ -5,6 +5,8 @@ import { getAddonsByLocationId, getSelectedLocationId } from "@/utils/client";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import Loading from "@/components/Loading";
+import ItemCard from "@/components/ItemCard";
+import EggIcon from "@mui/icons-material/Egg";
 
 const Addons = () => {
   const {
@@ -35,10 +37,13 @@ const Addons = () => {
       </div>
       <div className="flex">
         {validAddons.map((item) => (
-          <div className="flex flex-col m-3 items-center" key={item.id}>
-            <span>{item.name}</span>
-            <span>{item.price}</span>
-          </div>
+          <ItemCard
+            key={item.id}
+            href={`backoffice/addons/${item.id}`}
+            icon={<EggIcon sx={{ my: 3, fontSize: 60 }} />}
+            title={item.name}
+            subTitle={`${item.price} kyats`}
+          />
         ))}
       </div>
     </div>

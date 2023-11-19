@@ -5,6 +5,8 @@ import { getSelectedLocationId } from "@/utils/client";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import Loading from "@/components/Loading";
+import ItemCard from "@/components/ItemCard";
+import TableBarIcon from "@mui/icons-material/TableBar";
 
 const Tables = () => {
   const { tables, isLoading } = useAppSelector(appData);
@@ -28,9 +30,12 @@ const Tables = () => {
       </div>
       <div className="flex">
         {validTables.map((item) => (
-          <div key={item.id} className="m-3">
-            <span>{item.name}</span>
-          </div>
+          <ItemCard
+            key={item.id}
+            href={`backoffice/tables/${item.id}`}
+            title={item.name}
+            icon={<TableBarIcon sx={{ my: 3, fontSize: 60 }} />}
+          />
         ))}
       </div>
     </div>

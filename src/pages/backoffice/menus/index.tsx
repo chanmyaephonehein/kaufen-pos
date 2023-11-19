@@ -33,7 +33,7 @@ const Menus = () => {
         </Button>
       </div>
       <div className="flex">
-        {menus.map((item) => (
+        {validMenus.map((item) => (
           <div className="flex flex-col m-3 items-center" key={item.id}>
             <span>{item.name}</span>
             <span>{item.price}</span>

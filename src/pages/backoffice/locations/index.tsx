@@ -4,6 +4,8 @@ import { appData } from "@/store/slices/appSlice";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import Loading from "@/components/Loading";
+import ItemCard from "@/components/ItemCard";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 const Locations = () => {
   const { locations, isLoading } = useAppSelector(appData);
@@ -22,9 +24,12 @@ const Locations = () => {
       </div>
       <div>
         {locations.map((item) => (
-          <div key={item.id}>
-            <span>{item.name}</span>
-          </div>
+          <ItemCard
+            key={item.id}
+            href={`backoffice/locations/${item.id}`}
+            title={item.name}
+            icon={<LocationOnIcon sx={{ my: 3, fontSize: 60 }} />}
+          />
         ))}
       </div>
     </div>

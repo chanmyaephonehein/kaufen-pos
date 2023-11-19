@@ -1,3 +1,4 @@
+import Loading from "@/components/Loading";
 import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { useSession } from "next-auth/react";
@@ -18,7 +19,7 @@ const BackofficeApp = () => {
     }
   }, [data, router, status]);
 
-  if (isLoading) return <p>Fetching Data</p>;
+  if (isLoading) return <Loading />;
   return null;
 };
 

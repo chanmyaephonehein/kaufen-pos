@@ -5,6 +5,8 @@ import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import Loading from "@/components/Loading";
+import ItemCard from "@/components/ItemCard";
+import ClassIcon from "@mui/icons-material/Class";
 
 const AddonCategories = () => {
   const {
@@ -48,10 +50,13 @@ const AddonCategories = () => {
       </div>
       <div className="flex">
         {validAddonCategories.map((item) => (
-          <div className="flex flex-col items-center m-3" key={item.id}>
-            <span>{item.name}</span>
-            <span>{getAddonsCount(item.id)}</span>
-          </div>
+          <ItemCard
+            key={item.id}
+            href={`backoffice/addonCategories/${item.id}`}
+            title={item.name}
+            icon={<ClassIcon sx={{ my: 3, fontSize: 60 }} />}
+            subTitle={`${getAddonsCount(item.id)} addons`}
+          />
         ))}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import CategoryIcon from "@mui/icons-material/Category";
 import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { getSelectedLocationId } from "@/utils/client";
@@ -6,6 +6,7 @@ import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import Loading from "@/components/Loading";
+import ItemCard from "@/components/ItemCard";
 
 const MenuCategories = () => {
   const [open, setOpen] = useState(false);
@@ -44,12 +45,13 @@ const MenuCategories = () => {
       </div>
       <div className="flex flex-row">
         {validMenuCategories.map((item) => (
-          <div key={item.id} className="flex m-3 bg-red-200 flex-col ">
-            <div>{item.name}</div>
-            <span className="flex justify-center">
-              {getMenusCount(item.id)}
-            </span>
-          </div>
+          <ItemCard
+            key={item.id}
+            href={`/backoffice/menuCategories/${item.id}`}
+            icon={<CategoryIcon sx={{ fontSize: "60px", my: 3 }} />}
+            title={item.name}
+            subTitle={`${getMenusCount(item.id)} menus`}
+          />
         ))}
       </div>
     </div>
