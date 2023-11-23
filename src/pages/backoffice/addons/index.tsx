@@ -7,6 +7,7 @@ import { useState } from "react";
 import Loading from "@/components/Loading";
 import ItemCard from "@/components/ItemCard";
 import EggIcon from "@mui/icons-material/Egg";
+import NewAddon from "./NewAddon";
 
 const Addons = () => {
   const {
@@ -46,6 +47,7 @@ const Addons = () => {
           />
         ))}
       </div>
+      <NewAddon open={open} setOpen={setOpen} />
     </div>
   );
 };

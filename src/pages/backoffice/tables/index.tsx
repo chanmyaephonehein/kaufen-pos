@@ -7,6 +7,7 @@ import { useState } from "react";
 import Loading from "@/components/Loading";
 import ItemCard from "@/components/ItemCard";
 import TableBarIcon from "@mui/icons-material/TableBar";
+import NewTable from "./NewTable";
 
 const Tables = () => {
   const { tables, isLoading } = useAppSelector(appData);
@@ -38,6 +39,7 @@ const Tables = () => {
           />
         ))}
       </div>
+      <NewTable open={open} setOpen={setOpen} />
     </div>
   );
 };

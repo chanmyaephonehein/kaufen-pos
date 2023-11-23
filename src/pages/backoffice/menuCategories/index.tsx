@@ -7,6 +7,7 @@ import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import Loading from "@/components/Loading";
 import ItemCard from "@/components/ItemCard";
+import NewMenuCategory from "./NewMenuCategory";
 
 const MenuCategories = () => {
   const [open, setOpen] = useState(false);
@@ -54,6 +55,7 @@ const MenuCategories = () => {
           />
         ))}
       </div>
+      <NewMenuCategory open={open} setOpen={setOpen} />
     </div>
   );
 };

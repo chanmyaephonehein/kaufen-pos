@@ -6,6 +6,7 @@ import { useState } from "react";
 import Loading from "@/components/Loading";
 import ItemCard from "@/components/ItemCard";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import NewLocation from "./NewLocation";
 
 const Locations = () => {
   const { locations, isLoading } = useAppSelector(appData);
@@ -32,6 +33,7 @@ const Locations = () => {
           />
         ))}
       </div>
+      <NewLocation open={open} setOpen={setOpen} />
     </div>
   );
 };

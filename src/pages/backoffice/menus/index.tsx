@@ -6,6 +6,7 @@ import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import Loading from "@/components/Loading";
+import NewMenu from "./NewMenu";
 
 const Menus = () => {
   const { menusMenuCategoriesLocations, menus, isLoading } =
@@ -40,6 +41,7 @@ const Menus = () => {
           </div>
         ))}
       </div>
+      <NewMenu open={open} setOpen={setOpen} />
     </div>
   );
 };

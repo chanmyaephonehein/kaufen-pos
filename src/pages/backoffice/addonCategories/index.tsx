@@ -7,6 +7,7 @@ import AddIcon from "@mui/icons-material/Add";
 import Loading from "@/components/Loading";
 import ItemCard from "@/components/ItemCard";
 import ClassIcon from "@mui/icons-material/Class";
+import NewAddonCategory from "./NewAddonCategory";
 
 const AddonCategories = () => {
   const {
@@ -59,6 +60,7 @@ const AddonCategories = () => {
           />
         ))}
       </div>
+      <NewAddonCategory open={open} setOpen={setOpen} />
     </div>
   );
 };
