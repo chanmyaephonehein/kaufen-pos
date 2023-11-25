@@ -53,7 +53,7 @@ const NewMenuCategory = ({ open, setOpen }: Props) => {
         }}
       >
         <TextField
-          sx={{ mb: 2 }}
+          sx={{ mb: 2, mt: 1 }}
           label="Name"
           variant="outlined"
           onChange={(evt) =>
