@@ -18,10 +18,10 @@ const AddonCategories = () => {
     addons,
   } = useAppSelector(appData);
   const [open, setOpen] = useState(false);
-  const locationId = getSelectedLocationId() as string;
+  const selectedLocationId = getSelectedLocationId() as string;
 
   const validMenuIds = menusMenuCategoriesLocations
-    .filter((item) => item.locationId === Number(locationId))
+    .filter((item) => item.locationId === Number(selectedLocationId))
     .map((item) => item.menuId);
 
   const validAddonCategoryIds = menusAddonCategories
