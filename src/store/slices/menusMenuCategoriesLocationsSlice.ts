@@ -14,20 +14,20 @@ const initialState: MenusMenusCategoriesLocationsState = {
   error: null,
 };
 
-export const fetchMenusMenuCategoriesLocations = createAsyncThunk(
-  "menusMenuCategoriesLocations/fetchMenusMenuCategoriesLocations",
-  async (locationId: string, thunkAPI) => {
-    thunkAPI.dispatch(setIsLoading(true));
-    const response = await fetch(
-      `${config.apiBaseUrl}/menusMenuCategoriesLocations?locationId=${locationId}`
-    );
-    const menusMenuCategoriesLocations = await response.json();
-    thunkAPI.dispatch(setIsLoading(false));
-    thunkAPI.dispatch(
-      setMenusMenuCategoriesLocations(menusMenuCategoriesLocations)
-    );
-  }
-);
+// export const fetchMenusMenuCategoriesLocations = createAsyncThunk(
+//   "menusMenuCategoriesLocations/fetchMenusMenuCategoriesLocations",
+//   async (locationId: string, thunkAPI) => {
+//     thunkAPI.dispatch(setIsLoading(true));
+//     const response = await fetch(
+//       `${config.apiBaseUrl}/menusMenuCategoriesLocations?locationId=${locationId}`
+//     );
+//     const menusMenuCategoriesLocations = await response.json();
+//     thunkAPI.dispatch(setIsLoading(false));
+//     thunkAPI.dispatch(
+//       setMenusMenuCategoriesLocations(menusMenuCategoriesLocations)
+//     );
+//   }
+// );
 
 const menusMenuCategoriesLocationsSlice = createSlice({
   name: "menusMenuCategoriesLocations",
@@ -42,10 +42,19 @@ const menusMenuCategoriesLocationsSlice = createSlice({
     ) => {
       state.items = action.payload;
     },
+    addMenusMenuCategoriesLocations: (
+      state,
+      action: PayloadAction<MenuMenuCategoryLocation[]>
+    ) => {
+      action.payload.map((item) => state.items.push(item));
+    },
   },
 });
 
-export const { setMenusMenuCategoriesLocations, setIsLoading } =
-  menusMenuCategoriesLocationsSlice.actions;
+export const {
+  setMenusMenuCategoriesLocations,
+  setIsLoading,
+  addMenusMenuCategoriesLocations,
+} = menusMenuCategoriesLocationsSlice.actions;
 
 export default menusMenuCategoriesLocationsSlice.reducer;

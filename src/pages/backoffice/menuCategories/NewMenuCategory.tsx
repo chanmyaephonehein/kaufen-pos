@@ -2,7 +2,8 @@ import { config } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { addMenuCategory } from "@/store/slices/menuCategoriesSlice";
-import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
+import { addMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
+// import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
 import { getSelectedLocationId } from "@/utils/client";
 import {
   Button,
@@ -57,8 +58,9 @@ const NewMenuCategory = ({ open, setOpen }: Props) => {
       body: JSON.stringify(newMenuCategory),
     });
     const menuCategoryCreated = await response.json();
-    dispatch(addMenuCategory(menuCategoryCreated));
-    dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
+    dispatch(addMenuCategory(menuCategoryCreated[0]));
+    // dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
+    dispatch(addMenusMenuCategoriesLocations(menuCategoryCreated[1]));
     setOpen(false);
   };
   return (

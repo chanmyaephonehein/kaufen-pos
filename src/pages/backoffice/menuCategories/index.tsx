@@ -44,7 +44,7 @@ const MenuCategories = () => {
           New Menu Category
         </Button>
       </div>
-      <div className="flex flex-row">
+      <div className="flex flex-row flex-wrap">
         {validMenuCategories.map((item) => (
           <ItemCard
             key={item.id}

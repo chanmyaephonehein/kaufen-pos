@@ -1,5 +1,8 @@
-import { useAppSelector } from "@/store/hooks";
+import { config } from "@/config";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
+import { addMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
+import { addMenu } from "@/store/slices/menusSlice";
 import { getSelectedLocationId } from "@/utils/client";
 import {
   Button,
@@ -22,22 +25,44 @@ interface Props {
 }
 
 const NewMenu = ({ open, setOpen }: Props) => {
+  const dispatch = useAppDispatch();
   const { menuCategories, menusMenuCategoriesLocations } =
     useAppSelector(appData);
-
+  const selectedLocationId = getSelectedLocationId() as string;
   const [newMenu, setNewMenu] = useState({
     name: "",
     price: 0,
     description: "",
-    menuCategories: [] as number[],
+    menuCategoryIds: [] as number[],
+    locationId: Number(selectedLocationId),
+    isAvailable: true,
   });
-  const selectedLocationId = getSelectedLocationId() as string;
   const validMenuCategoryIds = menusMenuCategoriesLocations
     .filter((item) => item.locationId === Number(selectedLocationId))
     .map((item) => item.menuCategoryId);
   const validMenuCategories = menuCategories.filter(
     (item) => item.id && validMenuCategoryIds.includes(item.id)
   );
+
+  const createMenu = async () => {
+    const isValid =
+      newMenu.name &&
+      newMenu.price &&
+      newMenu.menuCategoryIds &&
+      newMenu.locationId;
+    if (!isValid) return alert("Fill the blank");
+    const response = await fetch(`${config.apiBaseUrl}/menus`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newMenu),
+    });
+    const menuCreated = await response.json();
+    dispatch(addMenu(menuCreated[0]));
+    dispatch(addMenusMenuCategoriesLocations(menuCreated[1]));
+    setOpen(false);
+  };
 
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
@@ -77,16 +102,16 @@ const NewMenu = ({ open, setOpen }: Props) => {
           <InputLabel>Menu Categories</InputLabel>
           <Select
             label="Menu Categories"
-            value={newMenu.menuCategories as number[]}
+            value={newMenu.menuCategoryIds as number[]}
             multiple
             onChange={(e) => {
               const values = e.target.value as number[];
-              setNewMenu({ ...newMenu, menuCategories: values });
+              setNewMenu({ ...newMenu, menuCategoryIds: values });
             }}
             renderValue={(value) => {
               const selectedMenuCategories = menuCategories
                 .filter((item) =>
-                  newMenu.menuCategories.find((i) => i === item.id)
+                  newMenu.menuCategoryIds.find((i) => i === item.id)
                 )
                 .map((item) => item.name)
                 .join(",");
@@ -97,7 +122,7 @@ const NewMenu = ({ open, setOpen }: Props) => {
               <MenuItem key={item.id} value={item.id}>
                 <Checkbox
                   checked={
-                    item.id && newMenu.menuCategories.includes(item.id)
+                    item.id && newMenu.menuCategoryIds.includes(item.id)
                       ? true
                       : false
                   }
@@ -108,6 +133,7 @@ const NewMenu = ({ open, setOpen }: Props) => {
           </Select>
         </FormControl>
         <Button
+          onClick={createMenu}
           variant="contained"
           sx={{ display: "flex", alignSelf: "flex-end", width: "fit-content" }}
         >
