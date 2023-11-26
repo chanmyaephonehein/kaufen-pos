@@ -1,5 +1,9 @@
-import { useAppSelector } from "@/store/hooks";
+import { config } from "@/config";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
+import { addMenuCategory } from "@/store/slices/menuCategoriesSlice";
+import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
+import { getSelectedLocationId } from "@/utils/client";
 import {
   Button,
   Checkbox,
@@ -16,6 +20,7 @@ import {
 } from "@mui/material";
 import { Locations } from "@prisma/client";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 interface Props {
   open: boolean;
@@ -39,8 +44,23 @@ const NewMenuCategory = ({ open, setOpen }: Props) => {
     name: "",
     locationIds: [] as number[],
   });
-
-  const createNewMenu = () => {};
+  const selectedLocationId = getSelectedLocationId() as string;
+  const dispatch = useAppDispatch();
+  const createNewMenu = async () => {
+    if (!newMenuCategory.name || !newMenuCategory.locationIds.length)
+      return alert("Fill all input");
+    const response = await fetch(`${config.apiBaseUrl}/menuCategories`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newMenuCategory),
+    });
+    const menuCategoryCreated = await response.json();
+    dispatch(addMenuCategory(menuCategoryCreated));
+    dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
+    setOpen(false);
+  };
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle>Create Menu Categories</DialogTitle>
@@ -101,6 +121,7 @@ const NewMenuCategory = ({ open, setOpen }: Props) => {
             display: "flex",
             alignSelf: "flex-end",
           }}
+          onClick={createNewMenu}
         >
           Create
         </Button>
