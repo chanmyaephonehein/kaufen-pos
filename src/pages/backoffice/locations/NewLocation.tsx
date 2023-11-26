@@ -1,3 +1,7 @@
+import { config } from "@/config";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { appData } from "@/store/slices/appSlice";
+import { addLocation } from "@/store/slices/locationsSlice";
 import {
   Button,
   Dialog,
@@ -13,7 +17,28 @@ interface Props {
 }
 
 const NewLocation = ({ open, setOpen }: Props) => {
-  const [newLocation, setNewLocation] = useState({ name: "", address: "" });
+  const { company } = useAppSelector(appData);
+  const dispatch = useAppDispatch();
+  const [newLocation, setNewLocation] = useState({
+    name: "",
+    address: "",
+    companyId: company?.id,
+  });
+
+  const createLocation = async () => {
+    const isValid = newLocation.name && newLocation.address;
+    if (!isValid) return alert("Fill all blank");
+    const response = await fetch(`${config.apiBaseUrl}/locations`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newLocation),
+    });
+    const locationCreated = await response.json();
+    dispatch(addLocation(locationCreated));
+    setOpen(false);
+  };
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle>Create New Location</DialogTitle>
@@ -34,7 +59,11 @@ const NewLocation = ({ open, setOpen }: Props) => {
             setNewLocation({ ...newLocation, address: e.target.value })
           }
         />
-        <Button variant="contained" sx={{ alignSelf: "end" }}>
+        <Button
+          onClick={createLocation}
+          variant="contained"
+          sx={{ alignSelf: "end" }}
+        >
           Create
         </Button>
       </DialogContent>

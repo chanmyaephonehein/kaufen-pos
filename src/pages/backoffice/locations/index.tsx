@@ -23,7 +23,7 @@ const Locations = () => {
           New Location
         </Button>
       </div>
-      <div>
+      <div className="flex flex-row flex-wrap">
         {locations.map((item) => (
           <ItemCard
             key={item.id}

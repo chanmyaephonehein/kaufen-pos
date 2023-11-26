@@ -19,7 +19,6 @@ interface Props {
 
 const NewTable = ({ open, setOpen }: Props) => {
   const dispatch = useAppDispatch();
-  const { company } = useAppSelector(appData);
   const selectedLocationId = Number(getSelectedLocationId());
   const [newTable, setNewTable] = useState({
     name: "",
