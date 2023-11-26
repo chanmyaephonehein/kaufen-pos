@@ -1,5 +1,7 @@
-import { useAppSelector } from "@/store/hooks";
+import { config } from "@/config";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
+import { addTable } from "@/store/slices/tablesSlice";
 import { getSelectedLocationId } from "@/utils/client";
 import {
   Button,
@@ -16,13 +18,27 @@ interface Props {
 }
 
 const NewTable = ({ open, setOpen }: Props) => {
+  const dispatch = useAppDispatch();
   const { company } = useAppSelector(appData);
-  const selectedLocationId = getSelectedLocationId() as string;
+  const selectedLocationId = Number(getSelectedLocationId());
   const [newTable, setNewTable] = useState({
     name: "",
-    locationId: selectedLocationId,
-    companyId: company?.id,
+    locationId: Number(selectedLocationId),
   });
+  const createTable = async () => {
+    const isValid = newTable.name && newTable.locationId;
+    if (!isValid) return alert("Fill the blank");
+    const response = await fetch(`${config.apiBaseUrl}/tables`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newTable),
+    });
+    const tableCreated = await response.json();
+    dispatch(addTable(tableCreated));
+    setOpen(false);
+  };
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle>Create New Table</DialogTitle>
@@ -32,7 +48,11 @@ const NewTable = ({ open, setOpen }: Props) => {
           label="name"
           onChange={(e) => setNewTable({ ...newTable, name: e.target.value })}
         />
-        <Button variant="contained" sx={{ alignSelf: "end", mt: 2 }}>
+        <Button
+          onClick={createTable}
+          variant="contained"
+          sx={{ alignSelf: "end", mt: 2 }}
+        >
           Create
         </Button>
       </DialogContent>
