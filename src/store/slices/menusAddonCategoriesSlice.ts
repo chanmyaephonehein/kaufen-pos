@@ -23,9 +23,16 @@ export const menusAddonCategoriesSlice = createSlice({
     ) => {
       state.items = action.payload;
     },
+    addMenusAddonCategories: (
+      state,
+      action: PayloadAction<MenuAddonCategory[]>
+    ) => {
+      action.payload.map((item) => state.items.push(item));
+    },
   },
 });
 
-export const { setMenusAddonCategories } = menusAddonCategoriesSlice.actions;
+export const { setMenusAddonCategories, addMenusAddonCategories } =
+  menusAddonCategoriesSlice.actions;
 
 export default menusAddonCategoriesSlice.reducer;

@@ -1,5 +1,8 @@
-import { useAppSelector } from "@/store/hooks";
+import { config } from "@/config";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { addAddonCategory } from "@/store/slices/addonCategoriesSlice";
 import { appData } from "@/store/slices/appSlice";
+import { addMenusAddonCategories } from "@/store/slices/menusAddonCategoriesSlice";
 import { getSelectedLocationId } from "@/utils/client";
 import {
   Button,
@@ -26,16 +29,35 @@ interface Props {
 
 const NewAddonCategory = ({ open, setOpen }: Props) => {
   const { menus, menusMenuCategoriesLocations } = useAppSelector(appData);
+  const dispatch = useAppDispatch();
   const [newAddonCategory, setNewAddonCategory] = useState({
     name: "",
     isRequired: false,
     menuIds: [] as number[],
   });
+
   const selectedLocationId = getSelectedLocationId() as string;
+
   const validMenuIds = menusMenuCategoriesLocations
     .filter((item) => item.locationId === Number(selectedLocationId))
     .map((item) => item.menuId);
   const validMenus = menus.filter((item) => validMenuIds.includes(item.id));
+
+  const createNewAddonCategory = async () => {
+    const isValid = newAddonCategory.name && newAddonCategory.menuIds.length;
+    if (!isValid) return alert("Fill the blank");
+    const response = await fetch(`${config.apiBaseUrl}/addonCategories`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newAddonCategory),
+    });
+    const addonCategoryCreated = await response.json();
+    dispatch(addAddonCategory(addonCategoryCreated[0]));
+    dispatch(addMenusAddonCategories(addonCategoryCreated[1]));
+    setOpen(false);
+  };
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle>Create Addon Category</DialogTitle>
@@ -96,7 +118,11 @@ const NewAddonCategory = ({ open, setOpen }: Props) => {
             />
           }
         />
-        <Button sx={{ alignSelf: "end", mt: 2 }} variant="contained">
+        <Button
+          sx={{ alignSelf: "end", mt: 2 }}
+          variant="contained"
+          onClick={createNewAddonCategory}
+        >
           Create
         </Button>
       </DialogContent>
