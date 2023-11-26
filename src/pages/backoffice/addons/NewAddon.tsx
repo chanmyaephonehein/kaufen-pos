@@ -1,4 +1,6 @@
-import { useAppSelector } from "@/store/hooks";
+import { config } from "@/config";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { addAddon } from "@/store/slices/addonsSlice";
 import { appData } from "@/store/slices/appSlice";
 import { getSelectedLocationId } from "@/utils/client";
 import {
@@ -20,6 +22,7 @@ interface Props {
 }
 
 const NewAddon = ({ open, setOpen }: Props) => {
+  const dispatch = useAppDispatch();
   const {
     menusMenuCategoriesLocations,
     menusAddonCategories,
@@ -28,7 +31,7 @@ const NewAddon = ({ open, setOpen }: Props) => {
   const [newAddon, setNewAddon] = useState({
     name: "",
     price: 0,
-    addonCategoryId: [] as number[],
+    addonCategoryId: "",
   });
   const selectedLocationId = getSelectedLocationId() as string;
 
@@ -44,6 +47,21 @@ const NewAddon = ({ open, setOpen }: Props) => {
     validAddonCategoryIds.includes(item.id)
   );
 
+  const createAddon = async () => {
+    console.log(newAddon);
+    const isValid = newAddon.name && newAddon.price && newAddon.addonCategoryId;
+    if (!isValid) return alert("Fill all blank");
+    const response = await fetch(`${config.apiBaseUrl}/addons`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newAddon),
+    });
+    const addonCreated = await response.json();
+    dispatch(addAddon(addonCreated));
+    setOpen(false);
+  };
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle>Create New Addon</DialogTitle>
@@ -68,12 +86,12 @@ const NewAddon = ({ open, setOpen }: Props) => {
           <Select
             label="Addon Categories"
             value={newAddon.addonCategoryId}
-            onChange={(e) =>
+            onChange={(e) => {
               setNewAddon({
                 ...newAddon,
-                addonCategoryId: e.target.value as number[],
-              })
-            }
+                addonCategoryId: e.target.value,
+              });
+            }}
           >
             {validAddonCategories.map((item) => (
               <MenuItem key={item.id} value={item.id}>
@@ -82,7 +100,11 @@ const NewAddon = ({ open, setOpen }: Props) => {
             ))}
           </Select>
         </FormControl>
-        <Button variant="contained" sx={{ alignSelf: "end", mt: 2 }}>
+        <Button
+          onClick={createAddon}
+          variant="contained"
+          sx={{ alignSelf: "end", mt: 2 }}
+        >
           Create
         </Button>
       </DialogContent>
