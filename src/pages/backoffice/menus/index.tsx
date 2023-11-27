@@ -7,6 +7,7 @@ import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import Loading from "@/components/Loading";
 import NewMenu from "./NewMenu";
+import MenuCard from "@/components/MenuCard";
 
 const Menus = () => {
   const { menusMenuCategoriesLocations, menus, isLoading } =
@@ -35,10 +36,11 @@ const Menus = () => {
       </div>
       <div className="flex">
         {validMenus.map((item) => (
-          <div className="flex flex-col m-3 items-center" key={item.id}>
-            <span>{item.name}</span>
-            <span>{item.price}</span>
-          </div>
+          <MenuCard
+            key={item.id}
+            menu={item}
+            href={`/backoffice/menus/${item.id}`}
+          />
         ))}
       </div>
       <NewMenu open={open} setOpen={setOpen} />
