@@ -27,7 +27,7 @@ const Locations = () => {
         {locations.map((item) => (
           <ItemCard
             key={item.id}
-            href={`backoffice/locations/${item.id}`}
+            href={`/backoffice/locations/${item.id}`}
             title={item.name}
             icon={<LocationOnIcon sx={{ my: 3, fontSize: 60 }} />}
           />
