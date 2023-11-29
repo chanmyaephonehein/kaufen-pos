@@ -19,6 +19,8 @@ import { useState } from "react";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import MenuCard from "@/components/MenuCard";
+import Loading from "@/components/Loading";
+import { useSession } from "next-auth/react";
 
 const EditMenuCategory = () => {
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
