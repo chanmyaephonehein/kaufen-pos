@@ -33,7 +33,7 @@ const Tables = () => {
         {validTables.map((item) => (
           <ItemCard
             key={item.id}
-            href={`backoffice/tables/${item.id}`}
+            href={`/backoffice/tables/${item.id}`}
             title={item.name}
             icon={<TableBarIcon sx={{ my: 3, fontSize: 60 }} />}
           />
