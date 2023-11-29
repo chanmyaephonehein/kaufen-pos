@@ -1,5 +1,7 @@
 import {
   Addons,
+  Locations,
+  Menus,
   MenusAddonCategories,
   MenusMenuCategoriesLocations,
 } from "@prisma/client";
@@ -26,4 +28,32 @@ export const getAddonsByLocationId = (
   return addons.filter((item) =>
     validAddonCategoryIds.includes(item.addonCategoryId as number)
   );
+};
+
+export const getLocationsByMenuCategoryId = (
+  locations: Locations[],
+  menuCategoryId: string,
+  menusMenuCategoriesLocations: MenusMenuCategoriesLocations[]
+) => {
+  const validLocationIds = menusMenuCategoriesLocations
+    .filter((item) => item.menuCategoryId === Number(menuCategoryId))
+    .map((item) => item.locationId);
+  return locations.filter((item) => validLocationIds.includes(item.id));
+};
+
+export const getMenusByMenuCategoryId = (
+  menus: Menus[],
+  menuCategoryId: string,
+  menusMenuCategoriesLocations: MenusMenuCategoriesLocations[],
+  selectedLocationId: string
+) => {
+  const validMenuIds = menusMenuCategoriesLocations
+    .filter(
+      (item) =>
+        item.menuId &&
+        item.menuCategoryId === Number(menuCategoryId) &&
+        item.locationId === Number(selectedLocationId)
+    )
+    .map((item) => item.menuId);
+  return menus.filter((item) => validMenuIds.includes(item.id));
 };
