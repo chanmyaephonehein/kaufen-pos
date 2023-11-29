@@ -53,7 +53,7 @@ const AddonCategories = () => {
         {validAddonCategories.map((item) => (
           <ItemCard
             key={item.id}
-            href={`backoffice/addonCategories/${item.id}`}
+            href={`/backoffice/addonCategories/${item.id}`}
             title={item.name}
             icon={<ClassIcon sx={{ my: 3, fontSize: 60 }} />}
             subTitle={`${getAddonsCount(item.id)} addons`}
