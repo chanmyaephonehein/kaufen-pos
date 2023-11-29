@@ -40,7 +40,7 @@ const Addons = () => {
         {validAddons.map((item) => (
           <ItemCard
             key={item.id}
-            href={`backoffice/addons/${item.id}`}
+            href={`/backoffice/addons/${item.id}`}
             icon={<EggIcon sx={{ my: 3, fontSize: 60 }} />}
             title={item.name}
             subTitle={`${item.price} kyats`}
