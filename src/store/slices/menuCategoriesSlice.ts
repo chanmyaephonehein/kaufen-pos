@@ -23,10 +23,15 @@ export const menuCategoriesSlice = createSlice({
     addMenuCategory: (state, action: PayloadAction<MenuCategory>) => {
       state.items = [...state.items, action.payload];
     },
+    updateMenuCategory: (state, action: PayloadAction<MenuCategory>) => {
+      state.items = state.items.map((item) =>
+        item.id === action.payload.id ? action.payload : item
+      );
+    },
   },
 });
 
-export const { setMenuCategories, addMenuCategory } =
+export const { setMenuCategories, addMenuCategory, updateMenuCategory } =
   menuCategoriesSlice.actions;
 
 export default menuCategoriesSlice.reducer;

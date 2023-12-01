@@ -2,7 +2,7 @@ import { config } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addAddonCategory } from "@/store/slices/addonCategoriesSlice";
 import { appData } from "@/store/slices/appSlice";
-import { addMenusAddonCategories } from "@/store/slices/menusAddonCategoriesSlice";
+import { fetchMenusAddonCategories } from "@/store/slices/menusAddonCategoriesSlice";
 import { getSelectedLocationId } from "@/utils/client";
 import {
   Button,
@@ -40,7 +40,7 @@ const NewAddonCategory = ({ open, setOpen }: Props) => {
 
   const validMenuIds = menusMenuCategoriesLocations
     .filter((item) => item.locationId === Number(selectedLocationId))
-    .map((item) => item.menuId);
+    .map((item) => item.menuId) as number[];
   const validMenus = menus.filter((item) => validMenuIds.includes(item.id));
 
   const createNewAddonCategory = async () => {
@@ -55,7 +55,7 @@ const NewAddonCategory = ({ open, setOpen }: Props) => {
     });
     const addonCategoryCreated = await response.json();
     dispatch(addAddonCategory(addonCategoryCreated[0]));
-    dispatch(addMenusAddonCategories(addonCategoryCreated[1]));
+    dispatch(fetchMenusAddonCategories(validMenuIds));
     setOpen(false);
   };
   return (

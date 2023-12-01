@@ -1,7 +1,7 @@
 import { config } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
-import { addMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
+import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
 import { addMenu } from "@/store/slices/menusSlice";
 import { getSelectedLocationId } from "@/utils/client";
 import {
@@ -60,7 +60,7 @@ const NewMenu = ({ open, setOpen }: Props) => {
     });
     const menuCreated = await response.json();
     dispatch(addMenu(menuCreated[0]));
-    dispatch(addMenusMenuCategoriesLocations(menuCreated[1]));
+    dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
     setOpen(false);
   };
 

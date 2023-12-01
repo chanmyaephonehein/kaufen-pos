@@ -1,5 +1,6 @@
+import { config } from "@/config";
 import { MenusAddonCategories as MenuAddonCategory } from "@prisma/client";
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 interface MenusAddonCategoriesState {
   isLoading: boolean;
@@ -13,6 +14,17 @@ const initialState: MenusAddonCategoriesState = {
   error: null,
 };
 
+export const fetchMenusAddonCategories = createAsyncThunk(
+  "menusAddonCategories/fetchMenusAddonCategories",
+  async (menuIds: number[], thunkAPI) => {
+    thunkAPI.dispatch(setIsLoading(true));
+    const response = await fetch(`${config.apiBaseUrl}/menusAddonCategories}`);
+    const menusAddonCategories = await response.json();
+    thunkAPI.dispatch(setIsLoading(false));
+    thunkAPI.dispatch(setMenusAddonCategories(menusAddonCategories));
+  }
+);
+
 export const menusAddonCategoriesSlice = createSlice({
   name: "menusAddonCategories",
   initialState,
@@ -23,16 +35,13 @@ export const menusAddonCategoriesSlice = createSlice({
     ) => {
       state.items = action.payload;
     },
-    addMenusAddonCategories: (
-      state,
-      action: PayloadAction<MenuAddonCategory[]>
-    ) => {
-      action.payload.map((item) => state.items.push(item));
+    setIsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
     },
   },
 });
 
-export const { setMenusAddonCategories, addMenusAddonCategories } =
+export const { setMenusAddonCategories, setIsLoading } =
   menusAddonCategoriesSlice.actions;
 
 export default menusAddonCategoriesSlice.reducer;

@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import {
   getLocationsByMenuCategoryId,
@@ -19,8 +19,9 @@ import { useState } from "react";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import MenuCard from "@/components/MenuCard";
-import Loading from "@/components/Loading";
-import { useSession } from "next-auth/react";
+import { config } from "@/config";
+import { updateMenuCategory } from "@/store/slices/menuCategoriesSlice";
+import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
 
 const EditMenuCategory = () => {
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -36,12 +37,12 @@ const EditMenuCategory = () => {
   const selectedLocationId = getSelectedLocationId() as string;
   const router = useRouter();
   const menuCategoryId = router.query.id as string;
-
+  const dispatch = useAppDispatch();
   const menuCategory = menuCategories.find(
     (item) => item.id === Number(menuCategoryId)
   ) as MenuCategories;
 
-  const [updateMenuCategory, setUpdateMenuCategory] = useState(
+  const [updatedMenuCategory, setUpdatedMenuCategory] = useState(
     menuCategory?.name as string
   );
   const validLocations = getLocationsByMenuCategoryId(
@@ -62,12 +63,30 @@ const EditMenuCategory = () => {
     useState<Locations[]>(validLocations);
 
   const [selectedMenu, setSelectedMenu] = useState<Menus>();
+
+  const handleUpdateMenuCategory = async () => {
+    const response = await fetch(`${config.apiBaseUrl}/menuCategories`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: menuCategoryId,
+        name: updatedMenuCategory,
+        locationIds: selectedLocation.map((item) => item.id),
+      }),
+    });
+    const menuCategoryUpdated = await response.json();
+    dispatch(updateMenuCategory(menuCategoryUpdated));
+    dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
+    router.push({ pathname: "/backoffice/menuCategories" });
+  };
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
       <Typography variant="h5">Menu Category</Typography>
       <TextField
-        value={updateMenuCategory}
-        onChange={(e) => setUpdateMenuCategory(e.target.value)}
+        value={updatedMenuCategory}
+        onChange={(e) => setUpdatedMenuCategory(e.target.value)}
       />
 
       <Autocomplete
@@ -92,7 +111,11 @@ const EditMenuCategory = () => {
         sx={{ width: 300, mt: 3 }}
         renderInput={(params) => <TextField {...params} label="Locations" />}
       />
-      <Button variant="contained" sx={{ width: "fit-content", mt: 2 }}>
+      <Button
+        onClick={handleUpdateMenuCategory}
+        variant="contained"
+        sx={{ width: "fit-content", mt: 2 }}
+      >
         Update
       </Button>
       <Typography variant="h4" sx={{ mt: 4 }}>

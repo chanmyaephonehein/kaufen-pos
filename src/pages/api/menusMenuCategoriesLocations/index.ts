@@ -6,12 +6,9 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
-    const locationId = Number(req.query.locationId);
-    if (!locationId) return res.status(400).send("Bad request");
     const menusMenuCategoriesLocations =
       await prisma.menusMenuCategoriesLocations.findMany({
         where: {
-          locationId,
           isArchived: false,
         },
       });
