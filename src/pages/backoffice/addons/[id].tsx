@@ -30,7 +30,7 @@ const EditAddon = () => {
     <Box>
       <TextField
         sx={{ mt: 2 }}
-        value={updatedAddon.name}
+        value={updatedAddon?.name}
         label="Name"
         onChange={(e) =>
           setUpdatedAddon({ ...updatedAddon, name: e.target.value })
@@ -39,7 +39,7 @@ const EditAddon = () => {
       <TextField
         type="number"
         sx={{ my: 2 }}
-        value={updatedAddon.price}
+        value={updatedAddon?.price}
         label="Price"
         onChange={(e) =>
           setUpdatedAddon({ ...updatedAddon, price: Number(e.target.value) })
