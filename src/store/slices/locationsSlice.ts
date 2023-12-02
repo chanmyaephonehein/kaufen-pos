@@ -23,9 +23,15 @@ export const locationsSlice = createSlice({
     addLocation: (state, action: PayloadAction<Location>) => {
       state.items.push(action.payload);
     },
+    updateLocation: (state, action: PayloadAction<Location>) => {
+      state.items = state.items.map((item) =>
+        item.id === action.payload.id ? action.payload : item
+      );
+    },
   },
 });
 
-export const { setLocations, addLocation } = locationsSlice.actions;
+export const { setLocations, addLocation, updateLocation } =
+  locationsSlice.actions;
 
 export default locationsSlice.reducer;
