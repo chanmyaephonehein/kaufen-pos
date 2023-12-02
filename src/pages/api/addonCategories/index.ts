@@ -21,5 +21,14 @@ export default async function handler(
     );
     const info = [addonCategory, data];
     return res.status(200).send(info);
+  } else if (req.method === "PUT") {
+    const { id, name, isRequired } = req.body;
+    const isValid = name && isRequired;
+    if (!isValid) res.status(200).send("Bad request");
+    const addonCategory = await prisma.addonCategories.update({
+      data: { name, isRequired },
+      where: { id },
+    });
+    return res.status(200).send(addonCategory);
   }
 }

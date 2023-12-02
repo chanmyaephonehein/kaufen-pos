@@ -1,5 +1,9 @@
-import { useAppSelector } from "@/store/hooks";
-import { setAddonCategories } from "@/store/slices/addonCategoriesSlice";
+import { config } from "@/config";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import {
+  setAddonCategories,
+  updateAddonCategory,
+} from "@/store/slices/addonCategoriesSlice";
 import { appData } from "@/store/slices/appSlice";
 import {
   Box,
@@ -14,22 +18,36 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 const EditAddonCategory = () => {
+  const dispatch = useAppDispatch();
   const { addonCategories } = useAppSelector(appData);
   const router = useRouter();
   const addonCategoryId = router.query.id as string;
   const addonCategory = addonCategories.find(
     (item) => item.id === Number(addonCategoryId)
   ) as AddonCategories;
-  const [updateAddonCategory, setUpdateAddonCategory] =
+  const [updatedAddonCategory, setUpdatedAddonCategory] =
     useState<AddonCategories>(addonCategory);
+
+  const handleUpdateAddonCategory = async () => {
+    const response = await fetch(`${config.apiBaseUrl}/addonCategories`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedAddonCategory),
+    });
+    const addonCategory = await response.json();
+    dispatch(updateAddonCategory(addonCategory));
+    router.push({ pathname: "/backoffice/addonCategories" });
+  };
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
       <TextField
         label="Addon Category"
-        value={updateAddonCategory?.name}
+        value={updatedAddonCategory?.name}
         onChange={(e) =>
-          setUpdateAddonCategory({
-            ...updateAddonCategory,
+          setUpdatedAddonCategory({
+            ...updatedAddonCategory,
             name: e.target.value,
           })
         }
@@ -38,17 +56,21 @@ const EditAddonCategory = () => {
         label="Required"
         control={
           <Switch
-            checked={updateAddonCategory?.isRequired}
+            checked={updatedAddonCategory?.isRequired}
             onChange={(e) =>
-              setUpdateAddonCategory({
-                ...updateAddonCategory,
+              setUpdatedAddonCategory({
+                ...updatedAddonCategory,
                 isRequired: e.target.checked,
               })
             }
           />
         }
       />
-      <Button sx={{ width: "fit-content", mt: 2 }} variant="contained">
+      <Button
+        onClick={handleUpdateAddonCategory}
+        sx={{ width: "fit-content", mt: 2 }}
+        variant="contained"
+      >
         Update
       </Button>
     </Box>
