@@ -23,7 +23,7 @@ export default async function handler(
     return res.status(200).send(info);
   } else if (req.method === "PUT") {
     const { id, name, isRequired } = req.body;
-    const isValid = name && isRequired;
+    const isValid = name;
     if (!isValid) res.status(200).send("Bad request");
     const addonCategory = await prisma.addonCategories.update({
       data: { name, isRequired },

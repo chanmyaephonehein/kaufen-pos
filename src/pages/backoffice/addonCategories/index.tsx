@@ -49,7 +49,7 @@ const AddonCategories = () => {
           New Addon Category
         </Button>
       </div>
-      <div className="flex">
+      <div className="flex flex-wrap">
         {validAddonCategories.map((item) => (
           <ItemCard
             key={item.id}

@@ -34,7 +34,7 @@ const Menus = () => {
           New Menu
         </Button>
       </div>
-      <div className="flex">
+      <div className="flex flex-wrap">
         {validMenus.map((item) => (
           <MenuCard
             key={item.id}

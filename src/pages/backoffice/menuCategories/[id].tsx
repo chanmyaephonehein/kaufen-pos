@@ -5,6 +5,8 @@ import {
   getMenusByMenuCategoryId,
   getSelectedLocationId,
 } from "@/utils/client";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 import {
   Autocomplete,
   Box,
@@ -81,71 +83,124 @@ const EditMenuCategory = () => {
     dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
     router.push({ pathname: "/backoffice/menuCategories" });
   };
-  return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <Typography variant="h5">Menu Category</Typography>
-      <TextField
-        value={updatedMenuCategory}
-        onChange={(e) => setUpdatedMenuCategory(e.target.value)}
-      />
 
-      <Autocomplete
-        multiple
-        disableCloseOnSelect
-        value={selectedLocation}
-        onChange={(e, values) => setSelectedLocation(values)}
-        options={locations}
-        isOptionEqualToValue={(option, value) => option.id === value.id}
-        getOptionLabel={(option) => option.name}
-        renderOption={(props, options, { selected }) => (
-          <li {...props}>
-            <Checkbox
-              checkedIcon={checkedIcon}
-              icon={icon}
-              checked={selected}
-              style={{ marginRight: 8 }}
-            />
-            {options.name}
-          </li>
-        )}
-        sx={{ width: 300, mt: 3 }}
-        renderInput={(params) => <TextField {...params} label="Locations" />}
-      />
-      <Button
-        onClick={handleUpdateMenuCategory}
-        variant="contained"
-        sx={{ width: "fit-content", mt: 2 }}
-      >
-        Update
-      </Button>
-      <Typography variant="h4" sx={{ mt: 4 }}>
-        Menus
-      </Typography>
-      <Autocomplete
-        sx={{ minWidth: 300, mr: 3 }}
-        value={selectedMenu}
-        isOptionEqualToValue={(option, value) => option.id === value.id}
-        getOptionLabel={(option) => option.name}
-        onChange={(evt, value) => {
-          if (value) setSelectedMenu(value);
-        }}
-        clearOnBlur
-        options={menus.filter((item) => !validMenuIds.includes(item.id))}
-        renderInput={(params) => (
-          <TextField {...params} label="Add menu to this category" />
-        )}
-      />
-      <Button variant="contained" sx={{ width: "fit-content", mt: 2 }}>
-        Add
-      </Button>
-      {validMenus.map((item) => (
-        <MenuCard
-          key={item.id}
-          menu={item}
-          href={`/backoffice/menus/${item.id}`}
+  const handleAddMenu = async () => {
+    await fetch(`${config.apiBaseUrl}/menuCategories/addMenu`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        menuCategoryId,
+        locationId: selectedLocationId,
+        menuId: selectedMenu && selectedMenu.id,
+      }),
+    });
+    dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
+    setSelectedMenu(undefined);
+  };
+
+  const handleRemoveMenu = async (menu: Menus) => {
+    await fetch(`${config.apiBaseUrl}/menuCategories/removeMenu`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        menuCategoryId,
+        menuId: menu.id,
+        locationId: selectedLocationId,
+      }),
+    });
+    dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
+  };
+  return (
+    <div>
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Typography variant="h5">Menu Category</Typography>
+        <TextField
+          value={updatedMenuCategory}
+          onChange={(e) => setUpdatedMenuCategory(e.target.value)}
         />
-      ))}
-    </Box>
+
+        <Autocomplete
+          multiple
+          disableCloseOnSelect
+          value={selectedLocation}
+          onChange={(e, values) => setSelectedLocation(values)}
+          options={locations}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
+          getOptionLabel={(option) => option.name}
+          renderOption={(props, options, { selected }) => (
+            <li {...props}>
+              <Checkbox
+                checkedIcon={checkedIcon}
+                icon={icon}
+                checked={selected}
+                style={{ marginRight: 8 }}
+              />
+              {options.name}
+            </li>
+          )}
+          sx={{ width: 300, mt: 3 }}
+          renderInput={(params) => <TextField {...params} label="Locations" />}
+        />
+        <Button
+          onClick={handleUpdateMenuCategory}
+          variant="contained"
+          sx={{ width: "fit-content", mt: 2 }}
+        >
+          Update
+        </Button>
+        <Typography variant="h4" sx={{ mt: 4 }}>
+          Menus
+        </Typography>
+        <Autocomplete
+          sx={{ minWidth: 300, mr: 3 }}
+          value={selectedMenu}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
+          getOptionLabel={(option) => option.name}
+          onChange={(evt, value) => {
+            if (value) setSelectedMenu(value);
+          }}
+          clearOnBlur
+          options={menus.filter((item) => !validMenuIds.includes(item.id))}
+          renderInput={(params) => (
+            <TextField {...params} label="Add menu to this category" />
+          )}
+        />
+        <Button
+          onClick={handleAddMenu}
+          variant="contained"
+          sx={{ width: "fit-content", mt: 2 }}
+        >
+          Add
+        </Button>
+        <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+          {validMenus.map((item) => (
+            <Box
+              key={item.id}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <MenuCard menu={item} href={`/backoffice/menus/${item.id}`} />
+              <Button
+                onClick={() => handleRemoveMenu(item)}
+                startIcon={<DeleteIcon />}
+                variant="contained"
+                color="error"
+                sx={{ width: "fit-content" }}
+              >
+                Delete
+              </Button>
+            </Box>
+          ))}
+        </Box>
+      </Box>
+    </div>
   );
 };
 

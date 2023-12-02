@@ -31,50 +31,52 @@ export default async function handler(
       data: { name },
       where: { id: menuCategoryId },
     });
-    const menusMenuCategoriesLocations =
-      await prisma.menusMenuCategoriesLocations.findMany({
-        where: { menuCategoryId },
-      });
-
-    const existingLocationIds = menusMenuCategoriesLocations
-      .map((item) => item.locationId)
-      .filter((item) => item);
-
-    const addedLocationIds = locationIds.filter(
-      (item: number) => !existingLocationIds.includes(item)
-    ) as number[];
-
-    const removeLocationIds = existingLocationIds.filter(
-      (item) => !locationIds.includes(item)
-    ) as number[];
-
-    if (addedLocationIds.length) {
-      await prisma.$transaction(
-        addedLocationIds.map((item) =>
-          prisma.menusMenuCategoriesLocations.createMany({
-            data: { menuCategoryId, locationId: item },
-          })
-        )
-      );
-    }
-    if (removeLocationIds.length) {
-      removeLocationIds.forEach(async (item) => {
-        const row = await prisma.menusMenuCategoriesLocations.findFirst({
-          where: { locationId: item, menuCategoryId },
+    if (locationIds.length) {
+      const menusMenuCategoriesLocations =
+        await prisma.menusMenuCategoriesLocations.findMany({
+          where: { menuCategoryId },
         });
-        if (row) {
-          if (row.menuId) {
-            await prisma.menusMenuCategoriesLocations.update({
-              data: { locationId: null },
-              where: { id: row.id },
-            });
-          } else {
-            await prisma.menusMenuCategoriesLocations.delete({
-              where: { id: row.id },
-            });
+
+      const existingLocationIds = menusMenuCategoriesLocations
+        .map((item) => item.locationId)
+        .filter((item) => item);
+
+      const addedLocationIds = locationIds.filter(
+        (item: number) => !existingLocationIds.includes(item)
+      ) as number[];
+
+      const removeLocationIds = existingLocationIds.filter(
+        (item) => !locationIds.includes(item)
+      ) as number[];
+
+      if (addedLocationIds.length) {
+        await prisma.$transaction(
+          addedLocationIds.map((item) =>
+            prisma.menusMenuCategoriesLocations.createMany({
+              data: { menuCategoryId, locationId: item },
+            })
+          )
+        );
+      }
+      if (removeLocationIds.length) {
+        removeLocationIds.forEach(async (item) => {
+          const row = await prisma.menusMenuCategoriesLocations.findFirst({
+            where: { locationId: item, menuCategoryId },
+          });
+          if (row) {
+            if (row.menuId) {
+              await prisma.menusMenuCategoriesLocations.update({
+                data: { locationId: null },
+                where: { id: row.id },
+              });
+            } else {
+              await prisma.menusMenuCategoriesLocations.delete({
+                where: { id: row.id },
+              });
+            }
           }
-        }
-      });
+        });
+      }
     }
     res.status(200).send(updatedMenuCategory);
   }
