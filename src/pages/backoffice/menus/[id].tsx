@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import {
   getAddonCategoriesByMenuId,
@@ -17,6 +17,10 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import { config } from "@/config";
+import { updateMenu } from "@/store/slices/menusSlice";
+import { fetchMenusAddonCategories } from "@/store/slices/menusAddonCategoriesSlice";
+import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
 
 const EditMenu = () => {
   const { menusAddonCategories, addonCategories, menus } =
@@ -30,28 +34,56 @@ const EditMenu = () => {
     addonCategories
   ) as AddonCategories[];
   const validMenu = menus.find((item) => item.id === Number(menuId)) as Menus;
-  const [updateMenu, setUpdateMenu] = useState<Partial<Menus>>(validMenu);
+  const [updatedMenu, setUpdatedMenu] = useState<Partial<Menus>>(validMenu);
   const [updateAddonCategories, setUpdateAddonCategory] =
     useState<AddonCategories[]>(validAddonCategories);
 
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
+  const dispatch = useAppDispatch();
+  const handleUpdateMenu = async () => {
+    const response = await fetch(`${config.apiBaseUrl}/menus`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: updatedMenu.id,
+        name: updatedMenu.name,
+        price: updatedMenu.price,
+        addonCategoryIds: updateAddonCategories.map(
+          (item) => item.id
+        ) as number[],
+      }),
+    });
+    const updatedMenusAddonCategory = await response.json();
+    dispatch(updateMenu(updatedMenusAddonCategory));
+    dispatch(
+      fetchMenusAddonCategories(
+        updateAddonCategories.map((item) => item.id) as number[]
+      )
+    );
+    dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId as string));
+    router.push({ pathname: "/backoffice/menus" });
+  };
   return (
     <Box>
       <Typography variant="h4">Menu Edit</Typography>
       <TextField
         sx={{ mt: 2 }}
         label="Name"
-        value={updateMenu?.name}
-        onChange={(e) => setUpdateMenu({ ...updateMenu, name: e.target.value })}
+        value={updatedMenu?.name}
+        onChange={(e) =>
+          setUpdatedMenu({ ...updatedMenu, name: e.target.value })
+        }
       />
       <TextField
         sx={{ my: 2 }}
         label="Price"
         type="number"
-        value={updateMenu?.price}
+        value={updatedMenu?.price}
         onChange={(e) =>
-          setUpdateMenu({ ...updateMenu, price: Number(e.target.value) })
+          setUpdatedMenu({ ...updatedMenu, price: Number(e.target.value) })
         }
       />
       <Autocomplete
@@ -76,7 +108,11 @@ const EditMenu = () => {
           <TextField {...params} label="Addon Categories" />
         )}
       />
-      <Button variant="contained" sx={{ width: "fit-content", mt: 2 }}>
+      <Button
+        onClick={handleUpdateMenu}
+        variant="contained"
+        sx={{ width: "fit-content", mt: 2 }}
+      >
         Update
       </Button>
     </Box>

@@ -18,7 +18,7 @@ export const fetchMenusAddonCategories = createAsyncThunk(
   "menusAddonCategories/fetchMenusAddonCategories",
   async (menuIds: number[], thunkAPI) => {
     thunkAPI.dispatch(setIsLoading(true));
-    const response = await fetch(`${config.apiBaseUrl}/menusAddonCategories}`);
+    const response = await fetch(`${config.apiBaseUrl}/menusAddonCategories`);
     const menusAddonCategories = await response.json();
     thunkAPI.dispatch(setIsLoading(false));
     thunkAPI.dispatch(setMenusAddonCategories(menusAddonCategories));

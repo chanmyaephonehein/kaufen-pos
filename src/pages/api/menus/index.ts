@@ -5,7 +5,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if ((req.method = "POST")) {
+  if (req.method === "POST") {
     const {
       name,
       price,
@@ -28,5 +28,49 @@ export default async function handler(
     );
     const info = [menu, data];
     return res.status(200).send(info);
+  } else if (req.method === "PUT") {
+    const { id, name, price, addonCategoryIds } = req.body;
+    const isValid = id && name && price;
+    console.log(isValid);
+    if (!isValid) return res.status(401).send("Bad Request");
+    const updatedMenus = await prisma.menus.update({
+      data: { name, price },
+      where: { id },
+    });
+    if (addonCategoryIds.length) {
+      const addonCategories = await prisma.menusAddonCategories.findMany({
+        where: { menuId: id },
+      });
+      const existingAddonCategoryIds = addonCategories.map(
+        (item) => item.addonCategoryId
+      ) as number[];
+
+      const addedAddonCategoryIds = addonCategoryIds.filter(
+        (item: number) => !existingAddonCategoryIds.includes(item)
+      );
+
+      const removeAddonCategoryIds = existingAddonCategoryIds.filter(
+        (item: number) => !addonCategoryIds.includes(item)
+      );
+
+      if (addedAddonCategoryIds.length) {
+        await prisma.$transaction(
+          addedAddonCategoryIds.map((item: number) =>
+            prisma.menusAddonCategories.create({
+              data: { menuId: id, addonCategoryId: item },
+            })
+          )
+        );
+      }
+      if (removeAddonCategoryIds.length) {
+        await prisma.menusAddonCategories.deleteMany({
+          where: {
+            menuId: id,
+            addonCategoryId: { in: removeAddonCategoryIds },
+          },
+        });
+      }
+    }
+    return res.status(200).send(updatedMenus);
   }
 }
