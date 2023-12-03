@@ -28,9 +28,13 @@ export const tablesSlice = createSlice({
         item.id === action.payload.id ? action.payload : item
       );
     },
+    deleteTable: (state, action: PayloadAction<Table>) => {
+      state.items = state.items.filter((item) => item.id !== action.payload.id);
+    },
   },
 });
 
-export const { setTables, addTable, updateTable } = tablesSlice.actions;
+export const { setTables, addTable, updateTable, deleteTable } =
+  tablesSlice.actions;
 
 export default tablesSlice.reducer;

@@ -16,5 +16,11 @@ export default async function handler(
     if (!id || !name) return res.status(400).send("Bad Request");
     const table = await prisma.tables.update({ data: { name }, where: { id } });
     return res.status(200).send(table);
+  } else if (req.method === "DELETE") {
+    const id = req.query.id as string;
+    const tableId = Number(id);
+    if (!tableId) return res.status(400).send("Bad Request");
+    await prisma.tables.delete({ where: { id: tableId } });
+    return res.status(200).send("OK");
   }
 }

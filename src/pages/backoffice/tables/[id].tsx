@@ -1,7 +1,7 @@
 import { config } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
-import { updateTable } from "@/store/slices/tablesSlice";
+import { deleteTable, updateTable } from "@/store/slices/tablesSlice";
 import { Box, Button, TextField } from "@mui/material";
 import { Tables } from "@prisma/client";
 import { useRouter } from "next/router";
@@ -30,7 +30,13 @@ const EditTable = () => {
   };
 
   const [open, setOpen] = useState(false);
-  const handleDeleteTable = async () => {};
+  const handleDeleteTable = async () => {
+    await fetch(`${config.apiBaseUrl}/tables?id=${tableId}`, {
+      method: "DELETE",
+    });
+    dispatch(deleteTable(table));
+    router.push({ pathname: "/backoffice/tables" });
+  };
   return (
     <Box>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
