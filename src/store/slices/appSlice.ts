@@ -75,7 +75,7 @@ export const fetchAppData = createAsyncThunk(
     if (selectedLocationId) {
       localStorage.setItem("selectedLocationId", selectedLocationId);
     } else {
-      localStorage.setItem("selectedLocationId", locations[0].id);
+      localStorage.setItem("selectedLocationId", String(locations[0].id));
     }
     thunkAPI.dispatch(setInit(true));
   }

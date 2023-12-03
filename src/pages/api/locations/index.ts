@@ -22,5 +22,14 @@ export default async function handler(
       where: { id, companyId },
     });
     return res.status(200).send(location);
+  } else if (req.method === "DELETE") {
+    const { id } = req.query;
+    const locationId = Number(id);
+    if (!locationId) return res.status(400).send("Bad Request");
+    await prisma.locations.update({
+      data: { isArchived: true },
+      where: { id: locationId },
+    });
+    return res.status(200).send("OK");
   }
 }

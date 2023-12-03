@@ -1,13 +1,14 @@
 import { config } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
-import { updateLocation } from "@/store/slices/locationsSlice";
+import { deleteLocation, updateLocation } from "@/store/slices/locationsSlice";
 import { Box, Button, TextField } from "@mui/material";
 import { Locations } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteDialog from "@/components/DeleteDialog";
+import { getSelectedLocationId } from "@/utils/client";
 
 const EditLocation = () => {
   const dispatch = useAppDispatch();
@@ -31,7 +32,17 @@ const EditLocation = () => {
     router.push({ pathname: "/backoffice/locations" });
   };
   const [open, setOpen] = useState(false);
-  const handleDeleteLocation = async () => {};
+  const handleDeleteLocation = async () => {
+    const id = getSelectedLocationId();
+    if (id === locationId) {
+      await fetch(`${config.apiBaseUrl}/locations?id=${locationId}`, {
+        method: "DELETE",
+      });
+      dispatch(deleteLocation(location));
+      router.push({ pathname: "/backoffice/locations" });
+      localStorage.setItem("selectedLocationId", String(locations[0].id));
+    }
+  };
   return (
     <Box>
       {" "}

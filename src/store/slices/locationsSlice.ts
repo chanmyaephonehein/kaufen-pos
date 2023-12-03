@@ -28,10 +28,13 @@ export const locationsSlice = createSlice({
         item.id === action.payload.id ? action.payload : item
       );
     },
+    deleteLocation: (state, action: PayloadAction<Location>) => {
+      state.items = state.items.filter((item) => item.id !== action.payload.id);
+    },
   },
 });
 
-export const { setLocations, addLocation, updateLocation } =
+export const { setLocations, addLocation, updateLocation, deleteLocation } =
   locationsSlice.actions;
 
 export default locationsSlice.reducer;
