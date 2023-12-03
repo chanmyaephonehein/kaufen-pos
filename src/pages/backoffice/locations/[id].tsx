@@ -6,6 +6,8 @@ import { Box, Button, TextField } from "@mui/material";
 import { Locations } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteDialog from "@/components/DeleteDialog";
 
 const EditLocation = () => {
   const dispatch = useAppDispatch();
@@ -28,8 +30,22 @@ const EditLocation = () => {
     dispatch(updateLocation(location));
     router.push({ pathname: "/backoffice/locations" });
   };
+  const [open, setOpen] = useState(false);
+  const handleDeleteLocation = async () => {};
   return (
     <Box>
+      {" "}
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button
+          variant="contained"
+          color="error"
+          startIcon={<DeleteIcon />}
+          sx={{ width: "fit-content" }}
+          onClick={() => setOpen(true)}
+        >
+          DELETE
+        </Button>
+      </Box>
       <TextField
         sx={{ mt: 2 }}
         label="Location"
@@ -53,6 +69,12 @@ const EditLocation = () => {
       >
         Update
       </Button>
+      <DeleteDialog
+        open={open}
+        setOpen={setOpen}
+        callback={handleDeleteLocation}
+        title="Location"
+      />
     </Box>
   );
 };
