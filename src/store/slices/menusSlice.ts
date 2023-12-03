@@ -28,9 +28,12 @@ export const MenusSlice = createSlice({
         item.id === action.payload.id ? action.payload : item
       );
     },
+    deleteMenu: (state, action: PayloadAction<Menu>) => {
+      state.items = state.items.filter((item) => item.id !== action.payload.id);
+    },
   },
 });
 
-export const { setMenus, addMenu, updateMenu } = MenusSlice.actions;
+export const { setMenus, addMenu, updateMenu, deleteMenu } = MenusSlice.actions;
 
 export default MenusSlice.reducer;

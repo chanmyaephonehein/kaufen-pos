@@ -72,5 +72,16 @@ export default async function handler(
       }
     }
     return res.status(200).send(updatedMenus);
+  } else if (req.method === "DELETE") {
+    const id = req.query.id as string;
+    if (!id) return res.status(400).send("Bad request");
+    await prisma.menusMenuCategoriesLocations.deleteMany({
+      where: { menuId: Number(id) },
+    });
+    await prisma.menusAddonCategories.deleteMany({
+      where: { menuId: Number(id) },
+    });
+    await prisma.menus.delete({ where: { id: Number(id) } });
+    return res.status(200).send("OK");
   }
 }

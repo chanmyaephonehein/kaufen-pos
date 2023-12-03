@@ -18,9 +18,11 @@ import { useState } from "react";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import { config } from "@/config";
-import { updateMenu } from "@/store/slices/menusSlice";
+import { deleteMenu, updateMenu } from "@/store/slices/menusSlice";
 import { fetchMenusAddonCategories } from "@/store/slices/menusAddonCategoriesSlice";
-import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
+import menusMenuCategoriesLocationsSlice, {
+  fetchMenusMenuCategoriesLocations,
+} from "@/store/slices/menusMenuCategoriesLocationsSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteDialog from "@/components/DeleteDialog";
 
@@ -69,7 +71,17 @@ const EditMenu = () => {
     router.push({ pathname: "/backoffice/menus" });
   };
   const [open, setOpen] = useState(false);
-  const handleDeleteMenu = async () => {};
+  const handleDeleteMenu = async () => {
+    await fetch(`${config.apiBaseUrl}/menus?id=${menuId}}`, {
+      method: "DELETE",
+    });
+    dispatch(deleteMenu(validMenu));
+    dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId as string));
+    dispatch(
+      fetchMenusAddonCategories(menus.map((item) => item.id) as number[])
+    );
+    router.push({ pathname: "/backoffice/menus" });
+  };
   return (
     <Box>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
