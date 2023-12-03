@@ -1,10 +1,11 @@
 import { config } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
+  deleteAddonCategory,
   setAddonCategories,
   updateAddonCategory,
 } from "@/store/slices/addonCategoriesSlice";
-import { appData } from "@/store/slices/appSlice";
+import { appData, fetchAppData } from "@/store/slices/appSlice";
 import {
   Box,
   Button,
@@ -18,10 +19,11 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteDialog from "@/components/DeleteDialog";
+import { fetchMenusAddonCategories } from "@/store/slices/menusAddonCategoriesSlice";
 
 const EditAddonCategory = () => {
   const dispatch = useAppDispatch();
-  const { addonCategories } = useAppSelector(appData);
+  const { addonCategories, menus } = useAppSelector(appData);
   const router = useRouter();
   const addonCategoryId = router.query.id as string;
   const addonCategory = addonCategories.find(
@@ -44,7 +46,14 @@ const EditAddonCategory = () => {
   };
 
   const [open, setOpen] = useState(false);
-  const handleDeleteAddonCategory = async () => {};
+  const handleDeleteAddonCategory = async () => {
+    await fetch(`${config.apiBaseUrl}/addonCategories?id=${addonCategoryId}`, {
+      method: "DELETE",
+    });
+    dispatch(deleteAddonCategory(addonCategory));
+    dispatch(fetchAppData({ locationId: undefined }));
+    router.push({ pathname: "/backoffice/addonCategories" });
+  };
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>

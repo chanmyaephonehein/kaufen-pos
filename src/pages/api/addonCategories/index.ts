@@ -30,5 +30,13 @@ export default async function handler(
       where: { id },
     });
     return res.status(200).send(addonCategory);
+  } else if (req.method === "DELETE") {
+    const { id } = req.query;
+    if (!id) return res.status(400).send("Bad request");
+    await prisma.addonCategories.update({
+      data: { isArchived: true },
+      where: { id: Number(id) },
+    });
+    return res.status(200).send("OK");
   }
 }
