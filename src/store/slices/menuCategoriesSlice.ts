@@ -28,10 +28,17 @@ export const menuCategoriesSlice = createSlice({
         item.id === action.payload.id ? action.payload : item
       );
     },
+    deleteMenuCategory: (state, action: PayloadAction<MenuCategory>) => {
+      state.items = state.items.filter((item) => item.id !== action.payload.id);
+    },
   },
 });
 
-export const { setMenuCategories, addMenuCategory, updateMenuCategory } =
-  menuCategoriesSlice.actions;
+export const {
+  setMenuCategories,
+  addMenuCategory,
+  updateMenuCategory,
+  deleteMenuCategory,
+} = menuCategoriesSlice.actions;
 
 export default menuCategoriesSlice.reducer;

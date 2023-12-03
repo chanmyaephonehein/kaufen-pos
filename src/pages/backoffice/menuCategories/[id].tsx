@@ -22,7 +22,10 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import MenuCard from "@/components/MenuCard";
 import { config } from "@/config";
-import { updateMenuCategory } from "@/store/slices/menuCategoriesSlice";
+import {
+  deleteMenuCategory,
+  updateMenuCategory,
+} from "@/store/slices/menuCategoriesSlice";
 import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
 import DeleteDialog from "@/components/DeleteDialog";
 
@@ -118,7 +121,15 @@ const EditMenuCategory = () => {
 
   const [open, setOpen] = useState(false);
 
-  const handleDeleteMenuCategory = async () => {};
+  const handleDeleteMenuCategory = async () => {
+    await fetch(
+      `${config.apiBaseUrl}/menuCategories?id=${menuCategoryId}&locationId=${selectedLocationId}`,
+      { method: "DELETE" }
+    );
+    dispatch(deleteMenuCategory(menuCategory));
+    dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
+    router.push({ pathname: "/backoffice/menuCategories" });
+  };
   return (
     <div>
       <Box sx={{ display: "flex", flexDirection: "column" }}>

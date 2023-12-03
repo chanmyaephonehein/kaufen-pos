@@ -59,25 +59,22 @@ export default async function handler(
         );
       }
       if (removeLocationIds.length) {
-        removeLocationIds.forEach(async (item) => {
-          const row = await prisma.menusMenuCategoriesLocations.findFirst({
-            where: { locationId: item, menuCategoryId },
-          });
-          if (row) {
-            if (row.menuId) {
-              await prisma.menusMenuCategoriesLocations.update({
-                data: { locationId: null },
-                where: { id: row.id },
-              });
-            } else {
-              await prisma.menusMenuCategoriesLocations.delete({
-                where: { id: row.id },
-              });
-            }
-          }
+        await prisma.menusMenuCategoriesLocations.deleteMany({
+          where: {
+            locationId: { in: removeLocationIds },
+            menuCategoryId,
+          },
         });
       }
     }
     res.status(200).send(updatedMenuCategory);
+  } else if (req.method === "DELETE") {
+    const { id } = req.query;
+    if (!id) return res.status(400).send("Bad Request");
+    await prisma.menusMenuCategoriesLocations.deleteMany({
+      where: { menuCategoryId: Number(id) },
+    });
+    await prisma.menuCategories.deleteMany({ where: { id: Number(id) } });
+    return res.status(200).send("OK");
   }
 }
