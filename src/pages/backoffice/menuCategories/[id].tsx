@@ -24,6 +24,7 @@ import MenuCard from "@/components/MenuCard";
 import { config } from "@/config";
 import { updateMenuCategory } from "@/store/slices/menuCategoriesSlice";
 import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
+import DeleteDialog from "@/components/DeleteDialog";
 
 const EditMenuCategory = () => {
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -114,9 +115,24 @@ const EditMenuCategory = () => {
     });
     dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
   };
+
+  const [open, setOpen] = useState(false);
+
+  const handleDeleteMenuCategory = async () => {};
   return (
     <div>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            variant="contained"
+            color="error"
+            startIcon={<DeleteIcon />}
+            sx={{ width: "fit-content" }}
+            onClick={() => setOpen(true)}
+          >
+            DELETE
+          </Button>
+        </Box>
         <Typography variant="h5">Menu Category</Typography>
         <TextField
           value={updatedMenuCategory}
@@ -194,12 +210,18 @@ const EditMenuCategory = () => {
                 color="error"
                 sx={{ width: "fit-content" }}
               >
-                Delete
+                Remove
               </Button>
             </Box>
           ))}
         </Box>
       </Box>
+      <DeleteDialog
+        open={open}
+        setOpen={setOpen}
+        title="Menu Category"
+        callback={handleDeleteMenuCategory}
+      />
     </div>
   );
 };
