@@ -47,15 +47,18 @@ const EditAddonCategory = () => {
   const handleDeleteAddonCategory = async () => {};
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <Button
-        variant="contained"
-        color="error"
-        startIcon={<DeleteIcon />}
-        sx={{ width: "fit-content" }}
-        onClick={() => setOpen(true)}
-      >
-        DELETE
-      </Button>
+      {" "}
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button
+          variant="contained"
+          color="error"
+          startIcon={<DeleteIcon />}
+          sx={{ width: "fit-content" }}
+          onClick={() => setOpen(true)}
+        >
+          DELETE
+        </Button>
+      </Box>
       <TextField
         label="Addon Category"
         value={updatedAddonCategory?.name}

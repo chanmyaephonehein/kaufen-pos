@@ -6,6 +6,8 @@ import { Box, Button, TextField } from "@mui/material";
 import { Addons } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteDialog from "@/components/DeleteDialog";
 
 const EditAddon = () => {
   const dispatch = useAppDispatch();
@@ -26,8 +28,22 @@ const EditAddon = () => {
     dispatch(updateAddon(addon));
     router.push({ pathname: "/backoffice/addons" });
   };
+
+  const [open, setOpen] = useState(false);
+  const handleDeleteAddon = async () => {};
   return (
     <Box>
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button
+          variant="contained"
+          color="error"
+          startIcon={<DeleteIcon />}
+          sx={{ width: "fit-content" }}
+          onClick={() => setOpen(true)}
+        >
+          DELETE
+        </Button>
+      </Box>
       <TextField
         sx={{ mt: 2 }}
         value={updatedAddon?.name}
@@ -52,6 +68,12 @@ const EditAddon = () => {
       >
         Update
       </Button>
+      <DeleteDialog
+        open={open}
+        setOpen={setOpen}
+        callback={handleDeleteAddon}
+        title="Addon"
+      />
     </Box>
   );
 };
