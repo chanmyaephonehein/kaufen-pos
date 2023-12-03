@@ -47,7 +47,6 @@ const EditAddonCategory = () => {
   const handleDeleteAddonCategory = async () => {};
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
-      {" "}
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <Button
           variant="contained"

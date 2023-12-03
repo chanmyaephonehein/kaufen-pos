@@ -6,6 +6,8 @@ import { Box, Button, TextField } from "@mui/material";
 import { Tables } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteDialog from "@/components/DeleteDialog";
 
 const EditTable = () => {
   const dispatch = useAppDispatch();
@@ -26,8 +28,22 @@ const EditTable = () => {
     dispatch(updateTable(table));
     router.push({ pathname: "/backoffice/tables" });
   };
+
+  const [open, setOpen] = useState(false);
+  const handleDeleteTable = async () => {};
   return (
     <Box>
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button
+          variant="contained"
+          color="error"
+          startIcon={<DeleteIcon />}
+          sx={{ width: "fit-content" }}
+          onClick={() => setOpen(true)}
+        >
+          DELETE
+        </Button>
+      </Box>
       <TextField
         sx={{ my: 3 }}
         label="Table"
@@ -39,6 +55,12 @@ const EditTable = () => {
       <Button onClick={handleUpdateTable} variant="contained">
         Update
       </Button>
+      <DeleteDialog
+        open={open}
+        setOpen={setOpen}
+        callback={handleDeleteTable}
+        title="Table"
+      />
     </Box>
   );
 };
