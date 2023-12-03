@@ -32,10 +32,9 @@ const Settings = () => {
 
   useEffect(() => {
     if (locations.length) {
-      const selectedLocationId = getSelectedLocationId() as string;
-      if (selectedLocationId) {
+      if (locationId) {
         const selectedLocation = locations.find(
-          (item) => item.id === Number(selectedLocationId)
+          (item) => item.id === Number(locationId)
         );
         setValidLocation(selectedLocation);
       } else {
@@ -64,7 +63,7 @@ const Settings = () => {
           setUpdateCompany({ ...updateCompany, address: e.target.value })
         }
       />
-      <Button variant="contained">Create</Button>
+      <Button variant="contained">Update</Button>
       <Typography sx={{ my: 2 }} variant="h5">
         Location Update
       </Typography>

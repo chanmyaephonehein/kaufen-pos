@@ -21,5 +21,10 @@ export default async function handler(
       where: { id },
     });
     res.status(200).send(addon);
+  } else if (req.method === "DELETE") {
+    const id = req.query.id as string;
+    const addonId = Number(id);
+    await prisma.addons.delete({ where: { id: addonId } });
+    res.status(200).send("OK");
   }
 }

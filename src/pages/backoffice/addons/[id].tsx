@@ -1,6 +1,6 @@
 import { config } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { updateAddon } from "@/store/slices/addonsSlice";
+import { deleteAddon, updateAddon } from "@/store/slices/addonsSlice";
 import { appData } from "@/store/slices/appSlice";
 import { Box, Button, TextField } from "@mui/material";
 import { Addons } from "@prisma/client";
@@ -30,7 +30,13 @@ const EditAddon = () => {
   };
 
   const [open, setOpen] = useState(false);
-  const handleDeleteAddon = async () => {};
+  const handleDeleteAddon = async () => {
+    await fetch(`${config.apiBaseUrl}/addons?id${addonId}`, {
+      method: "DELETE",
+    });
+    dispatch(deleteAddon(addon));
+    router.push({ pathname: "/backoffice/addons" });
+  };
   return (
     <Box>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>

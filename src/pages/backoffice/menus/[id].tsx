@@ -72,7 +72,7 @@ const EditMenu = () => {
   };
   const [open, setOpen] = useState(false);
   const handleDeleteMenu = async () => {
-    await fetch(`${config.apiBaseUrl}/menus?id=${menuId}}`, {
+    await fetch(`${config.apiBaseUrl}/menus?id=${menuId}`, {
       method: "DELETE",
     });
     dispatch(deleteMenu(validMenu));

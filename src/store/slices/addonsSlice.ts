@@ -28,9 +28,13 @@ export const addonsSlice = createSlice({
         item.id === action.payload.id ? action.payload : item
       );
     },
+    deleteAddon: (state, action: PayloadAction<Addon>) => {
+      state.items = state.items.filter((item) => item.id !== action.payload.id);
+    },
   },
 });
 
-export const { setAddons, addAddon, updateAddon } = addonsSlice.actions;
+export const { setAddons, addAddon, updateAddon, deleteAddon } =
+  addonsSlice.actions;
 
 export default addonsSlice.reducer;
