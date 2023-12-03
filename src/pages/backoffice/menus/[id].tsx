@@ -21,6 +21,8 @@ import { config } from "@/config";
 import { updateMenu } from "@/store/slices/menusSlice";
 import { fetchMenusAddonCategories } from "@/store/slices/menusAddonCategoriesSlice";
 import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteDialog from "@/components/DeleteDialog";
 
 const EditMenu = () => {
   const { menusAddonCategories, addonCategories, menus } =
@@ -66,8 +68,21 @@ const EditMenu = () => {
     dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId as string));
     router.push({ pathname: "/backoffice/menus" });
   };
+  const [open, setOpen] = useState(false);
+  const handleDeleteMenu = async () => {};
   return (
     <Box>
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button
+          variant="contained"
+          color="error"
+          startIcon={<DeleteIcon />}
+          sx={{ width: "fit-content" }}
+          onClick={() => setOpen(true)}
+        >
+          DELETE
+        </Button>
+      </Box>
       <Typography variant="h4">Menu Edit</Typography>
       <TextField
         sx={{ mt: 2 }}
@@ -115,6 +130,12 @@ const EditMenu = () => {
       >
         Update
       </Button>
+      <DeleteDialog
+        open={open}
+        setOpen={setOpen}
+        callback={handleDeleteMenu}
+        title="Menu"
+      />
     </Box>
   );
 };

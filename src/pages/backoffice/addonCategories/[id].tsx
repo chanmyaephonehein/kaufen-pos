@@ -16,6 +16,8 @@ import {
 import { AddonCategories } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteDialog from "@/components/DeleteDialog";
 
 const EditAddonCategory = () => {
   const dispatch = useAppDispatch();
@@ -40,8 +42,20 @@ const EditAddonCategory = () => {
     dispatch(updateAddonCategory(addonCategory));
     router.push({ pathname: "/backoffice/addonCategories" });
   };
+
+  const [open, setOpen] = useState(false);
+  const handleDeleteAddonCategory = async () => {};
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <Button
+        variant="contained"
+        color="error"
+        startIcon={<DeleteIcon />}
+        sx={{ width: "fit-content" }}
+        onClick={() => setOpen(true)}
+      >
+        DELETE
+      </Button>
       <TextField
         label="Addon Category"
         value={updatedAddonCategory?.name}
@@ -73,6 +87,12 @@ const EditAddonCategory = () => {
       >
         Update
       </Button>
+      <DeleteDialog
+        open={open}
+        setOpen={setOpen}
+        title="Addon Category"
+        callback={handleDeleteAddonCategory}
+      />
     </Box>
   );
 };
