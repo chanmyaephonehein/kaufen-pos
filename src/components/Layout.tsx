@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import BackofficeLayout from "./BackofficeLayout";
+import OrderLayout from "./OrderLayout";
 
 interface Props {
   children: string | JSX.Element | JSX.Element[];
@@ -14,6 +15,13 @@ const Layout = ({ children }: Props) => {
     return (
       <div>
         <BackofficeLayout>{children}</BackofficeLayout>
+      </div>
+    );
+  }
+  if (isOrder) {
+    return (
+      <div>
+        <OrderLayout>{children}</OrderLayout>
       </div>
     );
   }
