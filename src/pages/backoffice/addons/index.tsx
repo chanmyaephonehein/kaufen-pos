@@ -24,6 +24,7 @@ const Addons = () => {
     menusAddonCategories,
     addons
   );
+  console.log(validAddons);
   if (isLoading) return <Loading />;
   return (
     <div className="col-span-5">

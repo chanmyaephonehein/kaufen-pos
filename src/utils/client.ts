@@ -21,7 +21,9 @@ export const getAddonsByLocationId = (
   addons: Addons[]
 ) => {
   const validMenuIds = menusMenuCategoriesLocations
-    .filter((item) => item.locationId === Number(selectedLocationId))
+    .filter(
+      (item) => item.menuId && item.locationId === Number(selectedLocationId)
+    )
     .map((item) => item.menuId);
   const validAddonCategoryIds = menusAddonCategories
     .filter((item) => validMenuIds.includes(item.menuId as number))
@@ -65,7 +67,7 @@ export const getAddonCategoriesByMenuId = (
   addonCategories: AddonCategories[]
 ) => {
   const validAddonCategoryIds = menusAddonCategories
-    .filter((item) => item.id === Number(menuId))
+    .filter((item) => item.menuId === Number(menuId))
     .map((item) => item.addonCategoryId);
   return addonCategories.filter((item) =>
     validAddonCategoryIds.includes(item.id)
