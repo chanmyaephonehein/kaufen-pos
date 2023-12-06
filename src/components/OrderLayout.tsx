@@ -19,7 +19,7 @@ const OrderLayout = ({ children }: Props) => {
 
   return (
     <div>
-      <div>Lee lh </div>
+      <div>{children} </div>
     </div>
   );
 };
