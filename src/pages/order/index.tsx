@@ -34,6 +34,7 @@ const Order = () => {
       .map((item) => item.menuId);
 
     const validMenus = menus.filter((item) => validMenuIds.includes(item.id));
+
     return (
       <Box>
         {validMenus.map((item) => (

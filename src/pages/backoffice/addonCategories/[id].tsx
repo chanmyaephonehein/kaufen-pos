@@ -9,21 +9,34 @@ import { appData, fetchAppData } from "@/store/slices/appSlice";
 import {
   Box,
   Button,
+  FormControl,
   FormControlLabel,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
   Switch,
   TextField,
   Typography,
 } from "@mui/material";
-import { AddonCategories } from "@prisma/client";
+import { AddonCategories, Addons } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DeleteDialog from "@/components/DeleteDialog";
 import { fetchMenusAddonCategories } from "@/store/slices/menusAddonCategoriesSlice";
+import { getAddonsByLocationId, getSelectedLocationId } from "@/utils/client";
+import CheckBox from "@mui/icons-material/CheckBox";
 
 const EditAddonCategory = () => {
   const dispatch = useAppDispatch();
-  const { addonCategories, menus } = useAppSelector(appData);
+  const {
+    addonCategories,
+    menus,
+    menusAddonCategories,
+    menusMenuCategoriesLocations,
+    addons,
+  } = useAppSelector(appData);
   const router = useRouter();
   const addonCategoryId = router.query.id as string;
   const addonCategory = addonCategories.find(
@@ -54,6 +67,19 @@ const EditAddonCategory = () => {
     dispatch(fetchAppData({ locationId: undefined }));
     router.push({ pathname: "/backoffice/addonCategories" });
   };
+
+  const validAddon = getAddonsByLocationId(
+    getSelectedLocationId() as string,
+    menusMenuCategoriesLocations,
+    menusAddonCategories,
+    addons
+  );
+
+  const selectedAddon = addons.filter(
+    (item) => item.addonCategoryId === Number(addonCategoryId)
+  );
+
+  const [addonUpdate, setAddonUpdate] = useState<Addons[]>(selectedAddon);
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -91,6 +117,25 @@ const EditAddonCategory = () => {
           />
         }
       />
+      <FormControl sx={{ mt: 3 }}>
+        <InputLabel>Addons</InputLabel>
+        <Select
+          input={<OutlinedInput label="Menus" />}
+          label="Addons"
+          multiple
+          value={addonUpdate}
+          onChange={(e) => {
+            const value = e.target.value as number[];
+            setAddonUpdate({ ...addonUpdate, id: value });
+          }}
+        >
+          {validAddon.map((item) => (
+            <MenuItem key={item.id} value={item.id}>
+              <CheckBox />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
       <Button
         onClick={handleUpdateAddonCategory}
         sx={{ width: "fit-content", mt: 2 }}
