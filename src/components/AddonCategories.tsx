@@ -10,17 +10,17 @@ interface Props {
 
 const AddonCategories = ({ validAddonCategories, validAddons }: Props) => {
   return (
-    <Box>
+    <div className="w-1/4">
       {validAddonCategories.map((item) => (
-        <Box key={item.id}>
-          <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-            <Typography>{item.name}</Typography>
+        <Box key={item.id} sx={{ mb: 3 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography variant="h4">{item.name}</Typography>
             <Chip label={item.isRequired ? "Required" : "Optional"} />
           </Box>
           <OrderAddons validAddons={validAddons} addonCategory={item} />
         </Box>
       ))}
-    </Box>
+    </div>
   );
 };
 

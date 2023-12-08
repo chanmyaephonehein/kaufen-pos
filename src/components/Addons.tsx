@@ -1,4 +1,5 @@
-import { Box } from "@mui/material";
+import CheckBox from "@mui/icons-material/CheckBox";
+import { Box, FormControlLabel, Radio } from "@mui/material";
 import { AddonCategories, Addons } from "@prisma/client";
 import React from "react";
 
@@ -13,11 +14,16 @@ const OrderAddons = ({ addonCategory, validAddons }: Props) => {
   );
 
   return (
-    <Box>
+    <div className="flex flex-col">
       {addons.map((item) => (
-        <p key={item.id}>{item.name}</p>
+        <FormControlLabel
+          value={item.name}
+          key={item.id}
+          control={addonCategory.isRequired ? <Radio /> : <CheckBox />}
+          label={item.name}
+        />
       ))}
-    </Box>
+    </div>
   );
 };
 
