@@ -1,10 +1,11 @@
 import { Addons as Addon, Menus as Menu } from "@prisma/client";
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { RootState } from "..";
 
 export interface CartItem {
   id: number;
   menu: Menu;
-  addon: Addon;
+  addon: Addon[];
   quantity: number;
 }
 
@@ -23,7 +24,27 @@ const initialState: CartState = {
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {},
+  reducers: {
+    addoToCart: (state, action: PayloadAction<CartItem>) => {
+      state.items = [...state.items, action.payload];
+    },
+    removeFromCart: (state, action: PayloadAction<CartItem>) => {
+      state.items = state.items.filter((item) => item.id !== action.payload.id);
+    },
+    emptyCart: (state) => {
+      state.items = [];
+    },
+    updateCart: (state, action: PayloadAction<CartItem>) => {
+      state.items = state.items.map((item) =>
+        item.id === action.payload.id ? action.payload : item
+      );
+    },
+  },
 });
+
+export const selectCart = (state: RootState) => state.cart;
+
+export const { addoToCart, removeFromCart, emptyCart, updateCart } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;

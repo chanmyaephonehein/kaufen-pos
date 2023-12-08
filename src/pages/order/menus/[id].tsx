@@ -1,4 +1,5 @@
 import AddonCategories from "@/components/AddonCategories";
+import QuantitySelector from "@/components/QuantitySelector";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   appData,
@@ -32,11 +33,13 @@ const OrderAppMenu = () => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [selectedAddon, setSelectedAddon] = useState<Addons[]>([]);
 
-  interface Props {
-    selected: boolean;
-    addon: Addons;
-  }
-
+  const [amount, setAmount] = useState<number>(1);
+  const increase = () => {
+    setAmount(amount + 1);
+  };
+  const decrease = () => {
+    setAmount(amount - 1 === 0 ? amount : amount - 1);
+  };
   useEffect(() => {
     const requiredAddonCategory = validAddonCategories.filter(
       (item) => item.isRequired
@@ -54,13 +57,13 @@ const OrderAppMenu = () => {
         });
         const hasSelectedAll =
           requiredAddonCategory.length === selectedRequiredAddonCategory.length;
-        const disable = hasSelectedAll ? true : false;
+        const disable = hasSelectedAll ? false : true;
         setIsDisabled(disable);
       }
     }
   }, [validAddonCategories, selectedAddon]);
 
-  const handleSelectAddon = ({ selected, addon }: Props) => {
+  const handleSelectAddon = async (selected: boolean, addon: Addons) => {
     const parentOfAddon = validAddonCategories.find(
       (item) => item.id === addon.addonCategoryId
     ) as AddonCategory;
@@ -69,11 +72,14 @@ const OrderAppMenu = () => {
         (item) => item.addonCategoryId === addon.addonCategoryId
       );
       if (existingAddonCategory) {
-        setSelectedAddon([
+        let newArray = [];
+        newArray = [
           ...selectedAddon.filter(
             (item) => item.addonCategoryId !== addon.addonCategoryId
           ),
-        ]);
+        ];
+        setSelectedAddon([...newArray, addon]);
+      } else {
         setSelectedAddon([...selectedAddon, addon]);
       }
     } else {
@@ -87,13 +93,26 @@ const OrderAppMenu = () => {
     }
   };
 
+  const handleAddToCart = () => {};
   return (
     <div>
       <AddonCategories
         validAddonCategories={validAddonCategories}
         validAddons={validAddons}
+        selectedAddon={selectedAddon}
+        onChange={(checked, item) => handleSelectAddon(checked, item)}
       />
-      <Button variant="contained" disabled={isDisabled}>
+
+      <QuantitySelector
+        value={amount}
+        increase={increase}
+        decrease={decrease}
+      />
+      <Button
+        variant="contained"
+        disabled={isDisabled}
+        onClick={handleAddToCart}
+      >
         Add to cart
       </Button>
     </div>

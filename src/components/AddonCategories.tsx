@@ -6,9 +6,16 @@ import OrderAddons from "./Addons";
 interface Props {
   validAddonCategories: AddonCategories[];
   validAddons: Addons[];
+  selectedAddon: Addons[];
+  onChange: (checked: boolean, addon: Addons) => void;
 }
 
-const AddonCategories = ({ validAddonCategories, validAddons }: Props) => {
+const AddonCategories = ({
+  validAddonCategories,
+  validAddons,
+  selectedAddon,
+  onChange,
+}: Props) => {
   return (
     <div className="w-1/4">
       {validAddonCategories.map((item) => (
@@ -17,7 +24,12 @@ const AddonCategories = ({ validAddonCategories, validAddons }: Props) => {
             <Typography variant="h4">{item.name}</Typography>
             <Chip label={item.isRequired ? "Required" : "Optional"} />
           </Box>
-          <OrderAddons validAddons={validAddons} addonCategory={item} />
+          <OrderAddons
+            validAddons={validAddons}
+            addonCategory={item}
+            selectedAddon={selectedAddon}
+            onChange={(checked, addon) => onChange(checked, addon)}
+          />
         </Box>
       ))}
     </div>
