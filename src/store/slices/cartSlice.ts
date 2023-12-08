@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "..";
 
 export interface CartItem {
-  id: number;
+  id: string;
   menu: Menu;
   addon: Addon[];
   quantity: number;

@@ -6,9 +6,14 @@ import {
   selectAddonCategories,
   selectAddons,
 } from "@/store/slices/appSlice";
-import { getAddonCategoriesByMenuId } from "@/utils/client";
+import { CartItem, addoToCart } from "@/store/slices/cartSlice";
+import { generateRandomId, getAddonCategoriesByMenuId } from "@/utils/client";
 import { Button } from "@mui/material";
-import { AddonCategories as AddonCategory, Addons } from "@prisma/client";
+import {
+  AddonCategories as AddonCategory,
+  Addons,
+  Menus,
+} from "@prisma/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -17,8 +22,10 @@ const OrderAppMenu = () => {
   const dispatch = useAppDispatch();
   const query = router.query;
   const menuId = query.id as string;
-  const { menusAddonCategories, addonCategories, addons } =
+
+  const { menusAddonCategories, menus, addonCategories, addons } =
     useAppSelector(appData);
+  const menu = menus.find((item) => item.id === Number(menuId)) as Menus;
   const validAddonCategories = getAddonCategoriesByMenuId(
     menuId,
     menusAddonCategories,
@@ -93,7 +100,16 @@ const OrderAppMenu = () => {
     }
   };
 
-  const handleAddToCart = () => {};
+  const handleAddToCart = () => {
+    const cartItem: CartItem = {
+      addon: selectedAddon,
+      quantity: amount,
+      menu,
+      id: generateRandomId(),
+    };
+    dispatch(addoToCart(cartItem));
+    router.push({ pathname: "/order", query });
+  };
   return (
     <div>
       <AddonCategories
