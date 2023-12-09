@@ -1,4 +1,10 @@
-import { Box, FormControlLabel, Radio, Checkbox } from "@mui/material";
+import {
+  Box,
+  FormControlLabel,
+  Radio,
+  Checkbox,
+  Typography,
+} from "@mui/material";
 import { AddonCategories, Addons } from "@prisma/client";
 import React from "react";
 
@@ -22,7 +28,7 @@ const OrderAddons = ({
   return (
     <div className="flex flex-col">
       {addons.map((item) => (
-        <div key={item.id}>
+        <div key={item.id} className="flex items-center justify-between">
           <FormControlLabel
             value={item.name}
             control={
@@ -44,6 +50,7 @@ const OrderAddons = ({
             }
             label={item.name}
           />
+          <Typography>{item.price}</Typography>
         </div>
       ))}
     </div>

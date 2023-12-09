@@ -37,7 +37,7 @@ const Addons = () => {
           New Addon
         </Button>
       </div>
-      <div className="flex">
+      <div className="flex  flex-wrap">
         {validAddons.map((item) => (
           <ItemCard
             key={item.id}

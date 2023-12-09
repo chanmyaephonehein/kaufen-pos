@@ -12,9 +12,8 @@ const OrderAppHeader = ({ cartCountItem }: Props) => {
   const query = router.query;
   console.log(query);
   const isHome = router.pathname === "/order";
-  const isCart = router.pathname === "/cart";
-  const isActiveOrder = router.pathname === "/activeOrder";
-  const isMenu = router.pathname === "/:id";
+  const isCart = router.pathname === "/order/cart";
+  const isActiveOrder = router.pathname === "/order/activeOrder";
   const showCartIcon = !isCart && !isActiveOrder;
   const { locations } = useAppSelector(appData);
   return (

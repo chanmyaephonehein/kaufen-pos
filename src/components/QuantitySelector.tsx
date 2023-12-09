@@ -9,14 +9,17 @@ interface Props {
 
 const QuantitySelector = ({ value, increase, decrease }: Props) => {
   return (
-    <div className="flex items-center">
-      <IconButton color="primary" onClick={decrease}>
-        <RemoveCircle />
-      </IconButton>
-      <Typography>{value}</Typography>
-      <IconButton>
-        <AddCircle color="primary" onClick={increase} />
-      </IconButton>
+    <div className="flex justify-between items-center">
+      <Typography variant="h4">Quantity</Typography>
+      <div className="flex items-center">
+        <IconButton color="primary" onClick={decrease}>
+          <RemoveCircle />
+        </IconButton>
+        <Typography>{value}</Typography>
+        <IconButton>
+          <AddCircle color="primary" onClick={increase} />
+        </IconButton>
+      </div>
     </div>
   );
 };

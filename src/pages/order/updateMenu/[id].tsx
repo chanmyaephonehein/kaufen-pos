@@ -2,9 +2,13 @@ import AddonCategories from "@/components/AddonCategories";
 import QuantitySelector from "@/components/QuantitySelector";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
-import { selectCart, updateCart } from "@/store/slices/cartSlice";
+import {
+  removeFromCart,
+  selectCart,
+  updateCart,
+} from "@/store/slices/cartSlice";
 import { getAddonCategoriesByMenuId } from "@/utils/client";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { AddonCategories as AddonCategory, Addons } from "@prisma/client";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -41,7 +45,7 @@ const UpdateMenu = () => {
       let newArray: Addons[] = [];
       if (selectedAddonCategory) {
         newArray = selectedAddon.filter(
-          (item) => item.addonCategoryId !== item.addonCategoryId
+          (item) => item.addonCategoryId !== addon.addonCategoryId
         );
         setSelectedAddon([...newArray, addon]);
       } else {
@@ -88,22 +92,34 @@ const UpdateMenu = () => {
   const decrease = () => {
     setQuantity(quantity - 1 === 0 ? quantity : quantity - 1);
   };
+
   return (
-    <div>
-      <AddonCategories
-        validAddonCategories={validAddonCategories}
-        validAddons={validAddons}
-        selectedAddon={selectedAddon}
-        onChange={(checked, item) => handleSelectAddon(checked, item)}
-      />
-      <QuantitySelector
-        value={quantity}
-        increase={increase}
-        decrease={decrease}
-      />
-      <Button variant="contained" onClick={handleUpdateMenu}>
-        Update
-      </Button>
+    <div className="flex justify-center">
+      <div className="flex flex-col">
+        <Typography sx={{ mb: 2 }} variant="h3">
+          {cartItem?.menu.name}
+        </Typography>
+        <AddonCategories
+          validAddonCategories={validAddonCategories}
+          validAddons={validAddons}
+          selectedAddon={selectedAddon}
+          onChange={(checked, item) => handleSelectAddon(checked, item)}
+        />
+        <QuantitySelector
+          value={quantity}
+          increase={increase}
+          decrease={decrease}
+        />
+        <div className="flex justify-center mt-2">
+          <Button
+            sx={{ width: "fit-content" }}
+            variant="contained"
+            onClick={handleUpdateMenu}
+          >
+            Update Menu
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

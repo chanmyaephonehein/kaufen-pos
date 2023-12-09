@@ -17,7 +17,7 @@ const AddonCategories = ({
   onChange,
 }: Props) => {
   return (
-    <div className="w-1/4">
+    <div>
       {validAddonCategories.map((item) => (
         <Box key={item.id} sx={{ mb: 3 }}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>

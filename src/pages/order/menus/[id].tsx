@@ -8,7 +8,7 @@ import {
 } from "@/store/slices/appSlice";
 import { CartItem, addoToCart } from "@/store/slices/cartSlice";
 import { generateRandomId, getAddonCategoriesByMenuId } from "@/utils/client";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import {
   AddonCategories as AddonCategory,
   Addons,
@@ -34,7 +34,7 @@ const OrderAppMenu = () => {
 
   const validAddonCategoryIds = validAddonCategories.map((item) => item.id);
   const validAddons = addons.filter((item) =>
-    validAddonCategoryIds.includes(item.addonCategoryId)
+    validAddonCategoryIds.includes(item.addonCategoryId as number)
   );
 
   const [isDisabled, setIsDisabled] = useState(false);
@@ -111,26 +111,33 @@ const OrderAppMenu = () => {
     router.push({ pathname: "/order", query });
   };
   return (
-    <div>
-      <AddonCategories
-        validAddonCategories={validAddonCategories}
-        validAddons={validAddons}
-        selectedAddon={selectedAddon}
-        onChange={(checked, item) => handleSelectAddon(checked, item)}
-      />
-
-      <QuantitySelector
-        value={amount}
-        increase={increase}
-        decrease={decrease}
-      />
-      <Button
-        variant="contained"
-        disabled={isDisabled}
-        onClick={handleAddToCart}
-      >
-        Add to cart
-      </Button>
+    <div className="flex justify-center">
+      <div className="flex flex-col">
+        <Typography variant="h3" sx={{ mb: 2 }}>
+          {menu?.name}
+        </Typography>
+        <AddonCategories
+          validAddonCategories={validAddonCategories}
+          validAddons={validAddons}
+          selectedAddon={selectedAddon}
+          onChange={(checked, item) => handleSelectAddon(checked, item)}
+        />
+        <QuantitySelector
+          value={amount}
+          increase={increase}
+          decrease={decrease}
+        />
+        <div className="flex justify-center mt-3">
+          <Button
+            variant="contained"
+            disabled={isDisabled}
+            onClick={handleAddToCart}
+            sx={{ width: "fit-content" }}
+          >
+            Add to cart
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
