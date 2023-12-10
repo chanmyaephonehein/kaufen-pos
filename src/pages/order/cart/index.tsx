@@ -14,6 +14,11 @@ const Cart = () => {
   const query = router.query;
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const confirmOrder = () => {
+    console.log(query.tableId);
+    console.log(query.locationId);
+    console.log(items);
+  };
   return (
     <div className="flex justify-center">
       {amount > 0 ? (
@@ -84,7 +89,9 @@ const Cart = () => {
               </Typography>
             </div>
             <div className="flex justify-center mt-3">
-              <Button variant="contained">Confirm order</Button>
+              <Button onClick={confirmOrder} variant="contained">
+                Confirm order
+              </Button>
             </div>
           </div>
         </div>

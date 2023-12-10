@@ -10,7 +10,6 @@ interface Props {
 const OrderAppHeader = ({ cartCountItem }: Props) => {
   const router = useRouter();
   const query = router.query;
-  console.log(query);
   const isHome = router.pathname === "/order";
   const isCart = router.pathname === "/order/cart";
   const isActiveOrder = router.pathname === "/order/activeOrder";
