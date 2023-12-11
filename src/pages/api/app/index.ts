@@ -1,6 +1,10 @@
+import { CartItem } from "@/store/slices/cartSlice";
+import { getCartTotalPrice } from "@/utils/client";
 import { prisma } from "@/utils/server";
+import { OrderStatus } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
+import { useState } from "react";
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,69 +13,121 @@ export default async function handler(
   let isOrderAppRequest =
     req.query.locationId && !isNaN(Number(req.query.locationId));
   if (isOrderAppRequest) {
-    const locationId = req.query.locationId;
-    const locations = await prisma.locations.findFirst({
-      where: { id: Number(locationId), isArchived: false },
-    });
-
-    const menusMenuCategoriesLocations =
-      await prisma.menusMenuCategoriesLocations.findMany({
-        where: { locationId: Number(locationId), isArchived: false },
+    const method = req.method;
+    if (method === "GET") {
+      const locationId = req.query.locationId;
+      const locations = await prisma.locations.findFirst({
+        where: { id: Number(locationId), isArchived: false },
       });
 
-    const menuIds = menusMenuCategoriesLocations
-      .map((item) => item.menuId)
-      .filter((item) => item !== null) as number[];
+      const menusMenuCategoriesLocations =
+        await prisma.menusMenuCategoriesLocations.findMany({
+          where: { locationId: Number(locationId), isArchived: false },
+        });
 
-    const menuCategoryIds = menusMenuCategoriesLocations.map(
-      (item) => item.menuCategoryId
-    ) as number[];
+      const menuIds = menusMenuCategoriesLocations
+        .map((item) => item.menuId)
+        .filter((item) => item !== null) as number[];
 
-    const menus = await prisma.menus.findMany({
-      where: { id: { in: menuIds }, isArchived: false },
-    });
+      const menuCategoryIds = menusMenuCategoriesLocations.map(
+        (item) => item.menuCategoryId
+      ) as number[];
 
-    const menuCategories = await prisma.menuCategories.findMany({
-      where: { id: { in: menuCategoryIds }, isArchived: false },
-    });
+      const menus = await prisma.menus.findMany({
+        where: { id: { in: menuIds }, isArchived: false },
+      });
 
-    const menusAddonCategories = await prisma.menusAddonCategories.findMany({
-      where: { menuId: { in: menuIds }, isArchived: false },
-    });
+      const menuCategories = await prisma.menuCategories.findMany({
+        where: { id: { in: menuCategoryIds }, isArchived: false },
+      });
 
-    const addonCategoryIds = menusAddonCategories.map(
-      (item) => item.addonCategoryId
-    ) as number[];
+      const menusAddonCategories = await prisma.menusAddonCategories.findMany({
+        where: { menuId: { in: menuIds }, isArchived: false },
+      });
 
-    const addonCategories = await prisma.addonCategories.findMany({
-      where: { id: { in: addonCategoryIds }, isArchived: false },
-    });
+      const addonCategoryIds = menusAddonCategories.map(
+        (item) => item.addonCategoryId
+      ) as number[];
 
-    const addons = await prisma.addons.findMany({
-      where: { addonCategoryId: { in: addonCategoryIds }, isArchived: false },
-    });
+      const addonCategories = await prisma.addonCategories.findMany({
+        where: { id: { in: addonCategoryIds }, isArchived: false },
+      });
 
-    const orders = await prisma.orders.findMany({
-      where: { locationId: Number(locationId) },
-    });
+      const addons = await prisma.addons.findMany({
+        where: { addonCategoryId: { in: addonCategoryIds }, isArchived: false },
+      });
 
-    const orderIds = orders.map((item) => item.id);
+      const orders = await prisma.orders.findMany({
+        where: { locationId: Number(locationId) },
+      });
 
-    const orderlines = await prisma.orderlines.findMany({
-      where: { orderId: { in: orderIds } },
-    });
+      const orderIds = orders.map((item) => item.id);
 
-    res.status(200).send({
-      locations: [locations],
-      menuCategories,
-      menus,
-      addonCategories,
-      addons,
-      menusMenuCategoriesLocations,
-      menusAddonCategories,
-      orders,
-      orderlines,
-    });
+      const orderlines = await prisma.orderlines.findMany({
+        where: { orderId: { in: orderIds } },
+      });
+
+      res.status(200).send({
+        locations: [locations],
+        menuCategories,
+        menus,
+        addonCategories,
+        addons,
+        menusMenuCategoriesLocations,
+        menusAddonCategories,
+        orders,
+        orderlines,
+      });
+    }
+    if (method === "POST") {
+      const { items } = req.body;
+      const { locationId, tableId } = req.query;
+      const isValid = items && locationId && tableId;
+      if (!isValid) return res.status(400).send("Bad Request");
+      const orderData = {
+        locationId: Number(locationId),
+        tableId: Number(tableId),
+        isPaid: false,
+        price: getCartTotalPrice(items),
+      };
+      let data = [] as any[];
+      const order = await prisma.orders.create({ data: orderData });
+      items.forEach(async (item: CartItem) => {
+        const menu = item.menu;
+        const addon = item.addon;
+        if (addon.length) {
+          const orderlineData = addon.map((i: any) => ({
+            menuId: menu.id,
+            addonId: i.id,
+            itemId: item.id,
+            orderId: order.id,
+            quantity: item.quantity,
+            status: OrderStatus.PENDING,
+          }));
+          const orderlines = await prisma.$transaction(
+            orderlineData.map((order: any) =>
+              prisma.orderlines.create({ data: order })
+            )
+          );
+          data = [order, orderlines];
+        } else {
+          const orderlineData = addon.map((i: any) => ({
+            quantity: item.quantity,
+            menuId: menu.id,
+            itemId: item.id,
+            orderId: order.id,
+            status: OrderStatus.PENDING,
+          }));
+          const orderlines = await prisma.$transaction(
+            orderlineData.map((item: any) =>
+              prisma.orderlines.create({ data: item })
+            )
+          );
+          data = [order, orderlines];
+        }
+      });
+      res.status(200).send(data);
+    }
   } else {
     const session = await getSession({ req });
     if (!session) return res.status(401).send("Unauthorized");

@@ -1,6 +1,8 @@
 import DeleteDialog from "@/components/DeleteDialog";
+import { config } from "@/config";
 import { useAppSelector } from "@/store/hooks";
 import { removeFromCart, selectCart } from "@/store/slices/cartSlice";
+import { addOrder } from "@/store/slices/ordersSlice";
 import { getCartTotalPrice, getMenuTotalPrice } from "@/utils/client";
 import { Box, Button, Typography } from "@mui/material";
 import { useRouter } from "next/router";
@@ -14,10 +16,24 @@ const Cart = () => {
   const query = router.query;
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
-  const confirmOrder = () => {
-    console.log(query.tableId);
-    console.log(query.locationId);
-    console.log(items);
+  const confirmOrder = async () => {
+    const { locationId, tableId } = query;
+    const isValid = locationId && tableId && items.length;
+    if (!isValid) return alert("Something Error");
+    const response = await fetch(
+      `${config.apiBaseUrl}/app?locationId=${locationId}&tableId=${tableId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ items }),
+      }
+    );
+    const data = await response.json();
+    const order = data;
+    dispatch(addOrder(order[0]));
+    router.push({ pathname: `/order/activeOrder/${order.id}`, query });
   };
   return (
     <div className="flex justify-center">
