@@ -90,8 +90,9 @@ export default async function handler(
         isPaid: false,
         price: getCartTotalPrice(items),
       };
-      let data = [] as any[];
+      let data = {} as any;
       const order = await prisma.orders.create({ data: orderData });
+      data = order;
       items.forEach(async (item: CartItem) => {
         const menu = item.menu;
         const addon = item.addon;
@@ -109,7 +110,6 @@ export default async function handler(
               prisma.orderlines.create({ data: order })
             )
           );
-          data = [order, orderlines];
         } else {
           const orderlineData = addon.map((i: any) => ({
             quantity: item.quantity,
@@ -123,9 +123,9 @@ export default async function handler(
               prisma.orderlines.create({ data: item })
             )
           );
-          data = [order, orderlines];
         }
       });
+      console.log(data);
       res.status(200).send(data);
     }
   } else {

@@ -2,6 +2,7 @@ import DeleteDialog from "@/components/DeleteDialog";
 import { config } from "@/config";
 import { useAppSelector } from "@/store/hooks";
 import { removeFromCart, selectCart } from "@/store/slices/cartSlice";
+import { fetchOrderlines } from "@/store/slices/orderlinesSlice";
 import { addOrder } from "@/store/slices/ordersSlice";
 import { getCartTotalPrice, getMenuTotalPrice } from "@/utils/client";
 import { Box, Button, Typography } from "@mui/material";
@@ -16,6 +17,7 @@ const Cart = () => {
   const query = router.query;
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+
   const confirmOrder = async () => {
     const { locationId, tableId } = query;
     const isValid = locationId && tableId && items.length;
@@ -31,9 +33,9 @@ const Cart = () => {
       }
     );
     const data = await response.json();
-    const order = data;
-    dispatch(addOrder(order[0]));
-    router.push({ pathname: `/order/activeOrder/${order.id}`, query });
+    dispatch(addOrder(data));
+    dispatch(fetchOrderlines());
+    router.push({ pathname: `/order/activeOrder/${data.id}`, query });
   };
   return (
     <div className="flex justify-center">
