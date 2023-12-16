@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { fetchMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
 import { addMenu } from "@/store/slices/menusSlice";
+import { fetchOrderlines } from "@/store/slices/orderlinesSlice";
 import { getSelectedLocationId } from "@/utils/client";
 import {
   Button,
@@ -61,6 +62,7 @@ const NewMenu = ({ open, setOpen }: Props) => {
     const menuCreated = await response.json();
     dispatch(addMenu(menuCreated[0]));
     dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId));
+    dispatch(fetchOrderlines("ok"));
     setOpen(false);
   };
 

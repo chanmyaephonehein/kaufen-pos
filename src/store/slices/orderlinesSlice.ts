@@ -15,16 +15,17 @@ const initialState: OrderlinesState = {
 };
 
 export const fetchOrderlines = createAsyncThunk(
-  "orderlines/fetchOrderlines",
-  async (locationId: any, thunkAPI) => {
+  "menusMenuCategoriesLocations/fetchMenusMenuCategoriesLocations",
+  async (locationId: string, thunkAPI) => {
     thunkAPI.dispatch(setIsLoading(true));
-    const response = await fetch(`${config.apiBaseUrl}/orderlines`);
-    const orderlines = (await response.json()) as Orderlines[];
+    const response = await fetch(
+      `${config.apiBaseUrl}/menusMenuCategoriesLocations`
+    );
+    const menusMenuCategoriesLocations = await response.json();
     thunkAPI.dispatch(setIsLoading(false));
-    thunkAPI.dispatch(setOrderlines(orderlines));
+    thunkAPI.dispatch(setOrderlines(menusMenuCategoriesLocations));
   }
 );
-
 export const orderlinesSlice = createSlice({
   name: "orderlines",
   initialState,

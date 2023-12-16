@@ -105,24 +105,17 @@ export default async function handler(
             quantity: item.quantity,
             status: OrderStatus.PENDING,
           }));
-          const orderlines = await prisma.$transaction(
-            orderlineData.map((order: any) =>
-              prisma.orderlines.create({ data: order })
-            )
-          );
+          await prisma.orderlines.createMany({ data: orderlineData });
         } else {
-          const orderlineData = addon.map((i: any) => ({
-            quantity: item.quantity,
-            menuId: menu.id,
-            itemId: item.id,
-            orderId: order.id,
-            status: OrderStatus.PENDING,
-          }));
-          const orderlines = await prisma.$transaction(
-            orderlineData.map((item: any) =>
-              prisma.orderlines.create({ data: item })
-            )
-          );
+          await prisma.orderlines.create({
+            data: {
+              itemId: item.id,
+              menuId: item.menu.id,
+              orderId: order.id,
+              quantity: item.quantity,
+              status: OrderStatus.PENDING,
+            },
+          });
         }
       });
       console.log(data);

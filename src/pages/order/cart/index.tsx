@@ -1,6 +1,6 @@
 import DeleteDialog from "@/components/DeleteDialog";
 import { config } from "@/config";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { removeFromCart, selectCart } from "@/store/slices/cartSlice";
 import { fetchOrderlines } from "@/store/slices/orderlinesSlice";
 import { addOrder } from "@/store/slices/ordersSlice";
@@ -8,18 +8,18 @@ import { getCartTotalPrice, getMenuTotalPrice } from "@/utils/client";
 import { Box, Button, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 
 const Cart = () => {
   const { items } = useAppSelector(selectCart);
   const amount = items.length;
   const router = useRouter();
   const query = router.query;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
 
   const confirmOrder = async () => {
-    const { locationId, tableId } = query;
+    const locationId = router.query.locationId;
+    const tableId = router.query.tableId;
     const isValid = locationId && tableId && items.length;
     if (!isValid) return alert("Something Error");
     const response = await fetch(
@@ -34,7 +34,7 @@ const Cart = () => {
     );
     const data = await response.json();
     dispatch(addOrder(data));
-    dispatch(fetchOrderlines());
+    dispatch(fetchOrderlines(""));
     router.push({ pathname: `/order/activeOrder/${data.id}`, query });
   };
   return (
