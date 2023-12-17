@@ -84,42 +84,71 @@ export default async function handler(
       const { locationId, tableId } = req.query;
       const isValid = items && locationId && tableId;
       if (!isValid) return res.status(400).send("Bad Request");
-      const orderData = {
-        locationId: Number(locationId),
-        tableId: Number(tableId),
-        isPaid: false,
-        price: getCartTotalPrice(items),
-      };
-      let data = {} as any;
-      const order = await prisma.orders.create({ data: orderData });
-      data = order;
-      items.forEach(async (item: CartItem) => {
-        const menu = item.menu;
-        const addon = item.addon;
-        if (addon.length) {
-          const orderlineData = addon.map((i: any) => ({
-            menuId: menu.id,
-            addonId: i.id,
-            itemId: item.id,
-            orderId: order.id,
-            quantity: item.quantity,
-            status: OrderStatus.PENDING,
-          }));
-          await prisma.orderlines.createMany({ data: orderlineData });
-        } else {
-          await prisma.orderlines.create({
-            data: {
+      const idLocation = Number(locationId);
+      const idTable = Number(tableId);
+      const unPaidOrder = await prisma.orders.findFirst({
+        where: { locationId: idLocation, tableId: idTable, isPaid: false },
+      });
+      if (!unPaidOrder) {
+        const orderData = {
+          locationId: Number(locationId),
+          tableId: Number(tableId),
+          isPaid: false,
+          price: getCartTotalPrice(items),
+        };
+        const order = await prisma.orders.create({ data: orderData });
+        items.forEach(async (item: CartItem) => {
+          const menu = item.menu;
+          const addon = item.addon;
+          if (addon.length) {
+            const orderlineData = addon.map((i: any) => ({
+              menuId: menu.id,
+              addonId: i.id,
               itemId: item.id,
-              menuId: item.menu.id,
               orderId: order.id,
               quantity: item.quantity,
               status: OrderStatus.PENDING,
-            },
-          });
-        }
-      });
-      console.log(data);
-      res.status(200).send(data);
+            }));
+            await prisma.orderlines.createMany({ data: orderlineData });
+          } else {
+            await prisma.orderlines.create({
+              data: {
+                itemId: item.id,
+                menuId: item.menu.id,
+                orderId: order.id,
+                quantity: item.quantity,
+                status: OrderStatus.PENDING,
+              },
+            });
+          }
+        });
+        return res.status(200).send(order);
+      } else {
+        items.forEach(async (item: CartItem) => {
+          const addon = item.addon;
+          if (addon.length) {
+            const orderlineData = addon.map((i: any) => ({
+              orderId: unPaidOrder.id,
+              menuId: item.menu.id,
+              addonId: i.id,
+              itemId: item.id,
+              quantity: item.quantity,
+              status: OrderStatus.PENDING,
+            }));
+            await prisma.orderlines.createMany({ data: orderlineData });
+          } else {
+            await prisma.orderlines.create({
+              data: {
+                orderId: unPaidOrder.id,
+                menuId: item.menu.id,
+                itemId: item.id,
+                quantity: item.quantity,
+              },
+            });
+          }
+        });
+        return res.status(200).send(unPaidOrder);
+      }
     }
   } else {
     const session = await getSession({ req });

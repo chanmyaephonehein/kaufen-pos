@@ -1,7 +1,11 @@
 import DeleteDialog from "@/components/DeleteDialog";
 import { config } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { removeFromCart, selectCart } from "@/store/slices/cartSlice";
+import {
+  emptyCart,
+  removeFromCart,
+  selectCart,
+} from "@/store/slices/cartSlice";
 import { fetchOrderlines } from "@/store/slices/orderlinesSlice";
 import { addOrder } from "@/store/slices/ordersSlice";
 import { getCartTotalPrice, getMenuTotalPrice } from "@/utils/client";
@@ -35,6 +39,7 @@ const Cart = () => {
     const data = await response.json();
     dispatch(addOrder(data));
     dispatch(fetchOrderlines(""));
+    dispatch(emptyCart());
     router.push({ pathname: `/order/activeOrder/${data.id}`, query });
   };
   return (
