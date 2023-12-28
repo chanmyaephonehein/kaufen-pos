@@ -13,9 +13,10 @@ import {
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
-import { Orderlines } from "@prisma/client";
+import { Orderlines, Orders } from "@prisma/client";
 import { emptyCart } from "@/store/slices/cartSlice";
 import { fetchOrderlines } from "@/store/slices/orderlinesSlice";
+import { fetchOrders } from "@/store/slices/ordersSlice";
 
 const ActiveOrder = () => {
   const { orders, orderlines, menus, addons } = useAppSelector(appData);
@@ -72,10 +73,16 @@ const ActiveOrder = () => {
     dispatch(emptyCart());
     const intervalId = setInterval(() => {
       dispatch(fetchOrderlines(""));
-    }, 4000);
+    }, 1000);
     return () => clearInterval(intervalId);
   }, []);
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      dispatch(fetchOrders(""));
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
   // useEffect(() => {
   // if (isReady && !validOrder) {
   // router.push({ pathname: "/order", query });
@@ -114,6 +121,7 @@ const ActiveOrder = () => {
                   {renderMenu(item)}
                   {renderAddon(item)}
                   <TableCell align="center">{item.quantity}</TableCell>
+
                   <TableCell align="center">{item.status}</TableCell>
                 </TableRow>
               );
