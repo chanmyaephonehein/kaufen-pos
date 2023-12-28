@@ -2,7 +2,7 @@ import Loading from "@/components/Loading";
 import MenuCard from "@/components/MenuCard";
 import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
-import { Box, Tab, Tabs } from "@mui/material";
+import { Box, Button, Tab, Tabs } from "@mui/material";
 import { MenuCategories } from "@prisma/client";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -22,6 +22,7 @@ const Order = () => {
       setSelectedMenuCategory(menuCategories[0]);
     }
   }, [menuCategories]);
+
   const renderValue = () => {
     const isValid = selectedLocationId && selectedMenuCategory;
     if (!isValid) return <Loading />;
@@ -49,7 +50,15 @@ const Order = () => {
   };
   return (
     <div>
-      Order
+      <p>Order</p>
+      <Button
+        variant="outlined"
+        onClick={() => {
+          router.push({ pathname: "/order/activeOrder", query });
+        }}
+      >
+        Active Order
+      </Button>
       <Tabs value={value} onChange={(e, v) => setValue(v)}>
         {menuCategories.map((item) => (
           <Tab

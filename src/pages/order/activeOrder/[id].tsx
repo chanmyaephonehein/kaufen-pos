@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -14,6 +15,7 @@ import React, { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import { Orderlines } from "@prisma/client";
 import { emptyCart } from "@/store/slices/cartSlice";
+import { fetchOrderlines } from "@/store/slices/orderlinesSlice";
 
 const ActiveOrder = () => {
   const { orders, orderlines, menus, addons } = useAppSelector(appData);
@@ -68,6 +70,10 @@ const ActiveOrder = () => {
 
   useEffect(() => {
     dispatch(emptyCart());
+    const intervalId = setInterval(() => {
+      dispatch(fetchOrderlines(""));
+    }, 4000);
+    return () => clearInterval(intervalId);
   }, []);
 
   // useEffect(() => {
@@ -77,12 +83,14 @@ const ActiveOrder = () => {
   // }, [isReady, validOrder]);
 
   return (
-    <div className="flex flex-col items-center mt-10">
-      <Typography variant="h4">Table: {validOrder?.tableId}</Typography>
-      <Typography variant="h6">
-        {validOrder?.isPaid ? "Check Out" : "Not Paid"}
-      </Typography>
-      <Typography variant="h5">Total: {validOrder?.price} MMK</Typography>
+    <div className="flex flex-col items-center mt-10 relative">
+      <div className="fixed right-10  top-1/3">
+        <Typography variant="h4">Table: {validOrder?.tableId}</Typography>
+        <Typography variant="h6">
+          {validOrder?.isPaid ? "Check Out" : "Not Paid"}
+        </Typography>
+        <Typography variant="h5">Total: {validOrder?.price} MMK</Typography>
+      </div>
       <TableContainer sx={{ minWidth: 650, maxWidth: 800 }} component={Paper}>
         <Table sx={{ minWidth: 650, maxWidth: 800 }} aria-label="simple table">
           <TableHead>
@@ -113,6 +121,14 @@ const ActiveOrder = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <div className="fixed right-20 top-1/2">
+        <Button
+          variant="contained"
+          onClick={() => router.push({ pathname: "/order", query })}
+        >
+          Buy More
+        </Button>
+      </div>
     </div>
   );
 };
