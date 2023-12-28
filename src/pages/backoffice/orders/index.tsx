@@ -37,6 +37,8 @@ import {
   fetchOrderlines,
   updateOrderlineStatus,
 } from "@/store/slices/orderlinesSlice";
+import { fetchOrders, updateOrderStatus } from "@/store/slices/ordersSlice";
+import { config } from "@/config";
 
 interface Props {
   menus: Menus[];
@@ -57,6 +59,7 @@ function Row({
 }: Props) {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
+
   const handleUpdateOrderStatus = async (
     itemId: string,
     evt: SelectChangeEvent<"PENDING" | "PREPARING" | "COMPLETE" | "REJECTED">
@@ -65,6 +68,22 @@ function Row({
       updateOrderlineStatus({ itemId, status: evt.target.value as OrderStatus })
     );
   };
+
+  const renderOrderStatus = async (
+    orderId: number,
+    evt: SelectChangeEvent<"true" | "false">
+  ) => {
+    const value = evt.target.value === "true" ? true : false;
+    await fetch(`${config.apiBaseUrl}/orders`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ orderId, value }),
+    });
+    dispatch(updateOrderStatus({ orderId, status: value }));
+  };
+
   const getOrderlinesByOrderId = orderlines
     .filter((item) => item.orderId === orders.id)
     .map((item) => item.itemId);
@@ -226,7 +245,6 @@ function Row({
   });
 
   const tableName = tables.find((item) => item.id === orders.tableId);
-
   return (
     <Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
@@ -244,7 +262,19 @@ function Row({
         <TableCell align="center">{menuCount.length}</TableCell>
         <TableCell align="center">{orders.price}</TableCell>
         <TableCell align="center">
-          {orders.isPaid ? "Already Paid" : "Not Paid"}
+          <FormControl sx={{ width: 120 }}>
+            <InputLabel>Status</InputLabel>
+            <Select
+              label="Status"
+              value={orders.isPaid ? "true" : "false"}
+              onChange={(evt) => {
+                renderOrderStatus(orders.id, evt);
+              }}
+            >
+              <MenuItem value="true">Paid</MenuItem>
+              <MenuItem value="false">Not Paid</MenuItem>
+            </Select>
+          </FormControl>
         </TableCell>
       </TableRow>
       <TableRow>
@@ -280,6 +310,13 @@ const Orders = () => {
     const intervalId = setInterval(() => {
       dispatch(fetchOrderlines(""));
     }, 8000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      dispatch(fetchOrders(""));
+    }, 1000);
     return () => clearInterval(intervalId);
   }, []);
 
