@@ -1,4 +1,5 @@
 import DeleteDialog from "@/components/DeleteDialog";
+import Loading from "@/components/Loading";
 import { config } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
@@ -41,6 +42,7 @@ const Cart = () => {
     dispatch(fetchOrderlines(""));
     dispatch(emptyCart());
     router.push({ pathname: `/order/activeOrder/${data.id}`, query });
+    return <Loading />;
   };
   return (
     <div className="flex justify-center">

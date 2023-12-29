@@ -238,11 +238,17 @@ function Row({
     );
   };
 
-  const menuCount = [] as Orderlines[];
-  orderlines.forEach((item) => {
-    const hasAdded = menuCount.find((i) => i.menuId === item.menuId);
-    if (!hasAdded) menuCount.push(item);
-  });
+  const getMenuCount = (orderId: number) => {
+    const respectiveOrderlinesMenu = orderlines
+      .filter((item) => item.orderId === orderId)
+      .map((item) => item.menuId) as number[];
+    const uniqueMenuId = [] as number[];
+    respectiveOrderlinesMenu.forEach((menuId) => {
+      const hasAdded = uniqueMenuId.find((item) => item === menuId);
+      if (!hasAdded) return uniqueMenuId.push(menuId);
+    });
+    return uniqueMenuId.length;
+  };
 
   const tableName = tables.find((item) => item.id === orders.tableId);
   return (
@@ -259,7 +265,7 @@ function Row({
         </TableCell>
         <TableCell align="center">{orders.id}</TableCell>
         <TableCell align="center">{tableName?.name}</TableCell>
-        <TableCell align="center">{menuCount.length}</TableCell>
+        <TableCell align="center">{getMenuCount(orders.id)}</TableCell>
         <TableCell align="center">{orders.price}</TableCell>
         <TableCell align="center">
           <FormControl sx={{ width: 120 }}>
@@ -309,7 +315,7 @@ const Orders = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       dispatch(fetchOrderlines(""));
-    }, 8000);
+    }, 1000);
     return () => clearInterval(intervalId);
   }, []);
 
