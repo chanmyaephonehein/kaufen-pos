@@ -9,8 +9,8 @@ interface Props {
 
 const QuantitySelector = ({ value, increase, decrease }: Props) => {
   return (
-    <div className="flex justify-between items-center">
-      <Typography variant="h4">Quantity</Typography>
+    <div className="flex justify-center items-center">
+      <Typography variant="h6">Quantity:</Typography>
       <div className="flex items-center">
         <IconButton color="primary" onClick={decrease}>
           <RemoveCircle />

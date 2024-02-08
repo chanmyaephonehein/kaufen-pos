@@ -27,6 +27,7 @@ interface AppState {
 
 interface fetchAppDataPayload {
   locationId?: string;
+  tableId?: string;
 }
 
 const initialState: AppState = {
@@ -41,7 +42,7 @@ export const fetchAppData = createAsyncThunk(
     thunkAPI.dispatch(setAppLoading(true));
     const selectedLocationId = getSelectedLocationId();
     const response = await fetch(
-      `${config.apiBaseUrl}/app?locationId=${payload.locationId}`
+      `${config.apiBaseUrl}/app?locationId=${payload.locationId}&tableId=${payload.tableId}`
     );
     const responseJson = await response.json();
     const {

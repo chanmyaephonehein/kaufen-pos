@@ -20,6 +20,13 @@ export default async function handler(
         where: { id: Number(locationId), isArchived: false },
       });
 
+      const tableId = req.query.tableId;
+      const existingTable = await prisma.tables.findFirst({
+        where: { id: Number(tableId), isArchived: false },
+      });
+
+      if (!existingTable) return res.status(400).send("Bad Request");
+
       const menusMenuCategoriesLocations =
         await prisma.menusMenuCategoriesLocations.findMany({
           where: { locationId: Number(locationId), isArchived: false },
@@ -125,6 +132,26 @@ export default async function handler(
         return res.status(200).send(order);
       } else {
         items.forEach(async (item: CartItem) => {
+          const existingOrder = await prisma.orders.findFirst({
+            where: {
+              isPaid: false,
+              tableId: Number(tableId),
+              locationId: Number(locationId),
+            },
+          });
+          const originalPrice = existingOrder?.price;
+          const newPrice = getCartTotalPrice(items);
+          if (existingOrder && originalPrice) {
+            const totalPrice = originalPrice + newPrice;
+            await prisma.orders.updateMany({
+              data: { price: totalPrice },
+              where: {
+                isPaid: false,
+                tableId: Number(tableId),
+                locationId: Number(locationId),
+              },
+            });
+          }
           const addon = item.addon;
           if (addon.length) {
             const orderlineData = addon.map((i: any) => ({
@@ -159,14 +186,14 @@ export default async function handler(
     const userFromDB = await prisma.users.findFirst({ where: { email } });
     if (!userFromDB) {
       const newCompany = await prisma.companies.create({
-        data: { name: "Default Companies", address: "Default Address" },
+        data: { name: "Default Company", address: "Default Address" },
       });
       await prisma.users.create({
         data: { name, email, companyId: newCompany.id },
       });
       const newLocation = await prisma.locations.create({
         data: {
-          name: "Default Loaction",
+          name: "Default Location",
           address: "Default Address",
           companyId: newCompany.id,
         },

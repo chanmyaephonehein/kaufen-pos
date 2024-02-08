@@ -2,15 +2,17 @@ import Loading from "@/components/Loading";
 import MenuCard from "@/components/MenuCard";
 import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
-import { Box, Button, Tab, Tabs } from "@mui/material";
+import { Button, Tab, Tabs } from "@mui/material";
 import { MenuCategories } from "@prisma/client";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 const Order = () => {
+  const { orders } = useAppSelector(appData);
   const router = useRouter();
   const query = router.query;
   const selectedLocationId = router.query.locationId as string;
+  const selectedTableId = router.query.tableId as string;
   const { menuCategories, menus, menusMenuCategoriesLocations } =
     useAppSelector(appData);
   const [value, setValue] = useState(0);
@@ -22,7 +24,12 @@ const Order = () => {
       setSelectedMenuCategory(menuCategories[0]);
     }
   }, [menuCategories]);
-
+  const orderId = orders.find(
+    (item) =>
+      item.locationId === Number(selectedLocationId) &&
+      item.tableId === Number(selectedTableId) &&
+      item.isPaid === false
+  )?.id;
   const renderValue = () => {
     const isValid = selectedLocationId && selectedMenuCategory;
     if (!isValid) return <Loading />;
@@ -37,7 +44,7 @@ const Order = () => {
     const validMenus = menus.filter((item) => validMenuIds.includes(item.id));
 
     return (
-      <Box>
+      <div className="flex flex-row flex-wrap">
         {validMenus.map((item) => (
           <MenuCard
             key={item.id}
@@ -45,20 +52,21 @@ const Order = () => {
             href={{ pathname: `order/menus/${item.id}`, query }}
           />
         ))}
-      </Box>
+      </div>
     );
   };
   return (
-    <div>
-      <p>Order</p>
-      <Button
-        variant="outlined"
-        onClick={() => {
-          router.push({ pathname: "/order/activeOrder", query });
-        }}
-      >
-        Active Order
-      </Button>
+    <div className="mx-64">
+      <div className="flex justify-center mb-4">
+        <Button
+          variant="outlined"
+          onClick={() => {
+            router.push({ pathname: `/order/activeOrder/${orderId}`, query });
+          }}
+        >
+          Your Orders
+        </Button>
+      </div>
       <Tabs value={value} onChange={(e, v) => setValue(v)}>
         {menuCategories.map((item) => (
           <Tab

@@ -13,9 +13,15 @@ const OrderLayout = ({ children }: Props) => {
   const { query, isReady, ...router } = useRouter();
   const dispatch = useAppDispatch();
   const { items } = useAppSelector(selectCart);
+
   useEffect(() => {
     if (isReady) {
-      dispatch(fetchAppData({ locationId: query.locationId as string }));
+      dispatch(
+        fetchAppData({
+          locationId: query.locationId as string,
+          tableId: query.tableId as string,
+        })
+      );
     }
   }, [query, isReady, dispatch, fetchAppData]);
 

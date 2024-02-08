@@ -21,7 +21,7 @@ const AddonCategories = ({
       {validAddonCategories.map((item) => (
         <Box key={item.id} sx={{ mb: 3 }}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="h4">{item.name}</Typography>
+            <Typography variant="h5">{item.name}</Typography>
             <Chip label={item.isRequired ? "Required" : "Optional"} />
           </Box>
           <OrderAddons

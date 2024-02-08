@@ -1,6 +1,7 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Divider } from "@mui/material";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import PetsIcon from "@mui/icons-material/Pets";
 
 const TopBar = () => {
   const router = useRouter();
@@ -19,11 +20,23 @@ const TopBar = () => {
     return;
   };
   return (
-    <div>
-      <div className="bg-indigo-400 py-3 col-span-6">{getTitle()}</div>
-      {data && (
-        <Button onClick={() => signOut({ callbackUrl: "/" })}>Logout</Button>
-      )}
+    <div className="flex flex-col my-3">
+      <div className="flex justify-between items-center">
+        <div className="flex justify-center items-center gap-2">
+          <PetsIcon style={{ color: "gray", fontSize: "30px" }} />
+          <span className="text-xl">Kaufen</span>
+        </div>
+        <p className="py-2 col-span-6 text-lg font-bold">{getTitle()}</p>
+        {data && (
+          <Button
+            variant="outlined"
+            onClick={() => signOut({ callbackUrl: "/" })}
+          >
+            Logout
+          </Button>
+        )}
+      </div>
+      <Divider />
     </div>
   );
 };

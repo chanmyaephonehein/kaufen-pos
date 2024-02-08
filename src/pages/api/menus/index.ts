@@ -6,14 +6,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const {
-      name,
-      price,
-      description,
-      menuCategoryIds,
-      locationId,
-      isAvailable,
-    } = req.body;
+    const { name, price, menuCategoryIds, locationId, isAvailable } = req.body;
     const isValid = name && price && menuCategoryIds.length && locationId;
     if (!isValid) return res.status(400).send("Bad request");
     const menu = await prisma.menus.create({

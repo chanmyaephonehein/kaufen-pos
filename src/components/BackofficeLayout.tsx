@@ -25,7 +25,7 @@ const BackofficeLayout = (props: Props) => {
   return (
     <div>
       <TopBar />
-      <div className="grid grid-cols-6 gap-2">
+      <div className="grid grid-cols-6 gap-1">
         {data && <SideBar />}
         <div className="col-span-5">{props.children}</div>
       </div>

@@ -15,8 +15,22 @@ import LocalMallIcon from "@mui/icons-material/LocalMall";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SettingsIcon from "@mui/icons-material/Settings";
 import TableBarIcon from "@mui/icons-material/TableBar";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 const SideBar = () => {
+  const [selected, setSelected] = useState<number>();
+  const router = useRouter();
+  useEffect(() => {
+    if (!selected) {
+      const route = router.pathname;
+      const id = items.find((item) => item.route === route)?.id;
+      if (id) {
+        setSelected(id);
+      }
+    }
+  }, []);
+
   return (
     <div className="col-span-1">
       <List>
@@ -25,12 +39,16 @@ const SideBar = () => {
             key={item.id}
             href={item.route}
             style={{ textDecoration: "none" }}
+            onClick={() => setSelected(item.id)}
           >
             <ListItem disablePadding>
               <ListItemButton>
                 <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.label} />
+                <ListItemText primary={item.label} style={{ color: "gray" }} />
               </ListItemButton>
+              <div
+                className={selected === item.id ? "w-1 h-10 bg-blue-800" : ""}
+              />
             </ListItem>
           </Link>
         ))}

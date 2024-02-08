@@ -46,7 +46,7 @@ const Settings = () => {
 
   if (isLoading) return <Loading />;
   return (
-    <div>
+    <div className="flex flex-col max-w-[400px]">
       <TextField
         label="Company Name"
         sx={{ mt: 1 }}
@@ -63,7 +63,9 @@ const Settings = () => {
           setUpdateCompany({ ...updateCompany, address: e.target.value })
         }
       />
-      <Button variant="contained">Update</Button>
+      <Button variant="contained" sx={{ width: "fit-content" }}>
+        Update
+      </Button>
       <Typography sx={{ my: 2 }} variant="h5">
         Location Update
       </Typography>

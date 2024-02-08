@@ -16,10 +16,10 @@ const OrderAppHeader = ({ cartCountItem }: Props) => {
   const showCartIcon = !isCart && !isActiveOrder;
   const { locations } = useAppSelector(appData);
   return (
-    <div>
+    <div className="my-10 mx-20">
       {showCartIcon && (
         <div
-          className="flex justify-end"
+          className="flex justify-end cursor-pointer"
           onClick={() => router.push({ pathname: "/order/cart", query })}
         >
           <div className="flex flex-col">
@@ -28,15 +28,21 @@ const OrderAppHeader = ({ cartCountItem }: Props) => {
                 {cartCountItem}
               </Typography>
             )}
-            <ShoppingCartCheckoutIcon />
+            <ShoppingCartCheckoutIcon
+              style={{ color: "gray", fontSize: "30px" }}
+            />
           </div>
         </div>
       )}
       {isHome && (
         <div className="flex justify-center">
           <div className="flex flex-col items-center">
-            <p>{locations.map((item) => item.name)}</p>
-            <p>{locations.map((item) => item.address)}</p>
+            <span className="text-xl font-bold text-gray-600">
+              {locations.map((item) => item.name)}
+            </span>
+            <span className="text-3xl text-gray-600">
+              {locations.map((item) => item.address)}
+            </span>
           </div>
         </div>
       )}

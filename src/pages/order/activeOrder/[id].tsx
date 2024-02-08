@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import {
   Button,
+  Divider,
   Table,
   TableBody,
   TableCell,
@@ -28,13 +29,6 @@ const ActiveOrder = () => {
   ) as Orderlines[];
   const validOrder = orders.find((item: any) => item.id === Number(orderId));
   const header = ["No", "Menu", "Addon", "Quantity", "Status"];
-
-  //unique set
-  // const uniqueItemsMap = validOrderlines.reduce((uniqueMap, item) => {
-  //   uniqueMap.set(item.itemId, item);
-  //   return uniqueMap;
-  // }, new Map<string, Orderlines>());
-  // const uniqueItems: Orderlines[] = Array.from(uniqueItemsMap.values());
 
   const ids = [] as Orderlines[];
   validOrderlines.forEach((item) => {
@@ -91,14 +85,34 @@ const ActiveOrder = () => {
 
   return (
     <div className="flex flex-col items-center mt-10 relative">
-      <div className="fixed right-10  top-1/3">
-        <Typography variant="h4">Table: {validOrder?.tableId}</Typography>
-        <Typography variant="h6">
-          {validOrder?.isPaid ? "Check Out" : "Not Paid"}
+      <div className="sticky flex flex-row justify-between w-full max-w-[800px] min-w-[650px] items-center z-40">
+        <Typography variant="h5" sx={{ color: "blue" }}>
+          Table: {validOrder?.tableId}
         </Typography>
-        <Typography variant="h5">Total: {validOrder?.price} MMK</Typography>
+        {validOrder?.isPaid ? (
+          <Typography variant="h5" sx={{ color: "green" }}>
+            Paid
+          </Typography>
+        ) : (
+          <Typography variant="h5" sx={{ color: "red" }}>
+            Not Paid
+          </Typography>
+        )}
+
+        <Typography sx={{ color: "gray" }} variant="h5">
+          Total: {validOrder?.price} MMK
+        </Typography>
+        <Button
+          variant="contained"
+          onClick={() => router.push({ pathname: "/order", query })}
+        >
+          Buy More
+        </Button>
       </div>
-      <TableContainer sx={{ minWidth: 650, maxWidth: 800 }} component={Paper}>
+      <TableContainer
+        sx={{ minWidth: 650, maxWidth: 800, marginTop: "30px" }}
+        component={Paper}
+      >
         <Table sx={{ minWidth: 650, maxWidth: 800 }} aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -129,14 +143,6 @@ const ActiveOrder = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <div className="fixed right-20 top-1/2">
-        <Button
-          variant="contained"
-          onClick={() => router.push({ pathname: "/order", query })}
-        >
-          Buy More
-        </Button>
-      </div>
     </div>
   );
 };

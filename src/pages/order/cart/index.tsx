@@ -1,4 +1,5 @@
 import DeleteDialog from "@/components/DeleteDialog";
+import LinearLoading from "@/components/LinearLoading";
 import Loading from "@/components/Loading";
 import { config } from "@/config";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -38,11 +39,12 @@ const Cart = () => {
       }
     );
     const data = await response.json();
-    dispatch(addOrder(data));
-    dispatch(fetchOrderlines(""));
-    dispatch(emptyCart());
-    router.push({ pathname: `/order/activeOrder/${data.id}`, query });
-    return <Loading />;
+    if (data) {
+      dispatch(addOrder(data));
+      dispatch(fetchOrderlines(""));
+      dispatch(emptyCart());
+      router.push({ pathname: `/order/activeOrder/${data.id}`, query });
+    }
   };
   return (
     <div className="flex justify-center">

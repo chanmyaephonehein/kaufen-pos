@@ -14,7 +14,7 @@ const ItemCard = ({ icon, href, title, subTitle }: Props) => {
     <Link href={href} style={{ textDecoration: "none" }}>
       <Paper
         sx={{
-          m: 3,
+          m: 2,
           width: 200,
           height: 200,
           display: "flex",

@@ -33,7 +33,6 @@ const NewMenu = ({ open, setOpen }: Props) => {
   const [newMenu, setNewMenu] = useState({
     name: "",
     price: 0,
-    description: "",
     menuCategoryIds: [] as number[],
     locationId: Number(selectedLocationId),
     isAvailable: true,
@@ -91,14 +90,6 @@ const NewMenu = ({ open, setOpen }: Props) => {
           onChange={(e) => {
             setNewMenu({ ...newMenu, price: Number(e.target.value) });
           }}
-        />
-        <TextField
-          sx={{ mb: 2 }}
-          variant="outlined"
-          label="Description"
-          onChange={(e) =>
-            setNewMenu({ ...newMenu, description: e.target.value })
-          }
         />
         <FormControl sx={{ mb: 2 }}>
           <InputLabel>Menu Categories</InputLabel>
