@@ -39,7 +39,7 @@ const EditMenu = () => {
   ) as AddonCategories[];
   const validMenu = menus.find((item) => item.id === Number(menuId)) as Menus;
   const [updatedMenu, setUpdatedMenu] = useState<Partial<Menus>>(validMenu);
-  const [updateAddonCategories, setUpdateAddonCategory] =
+  const [updatedAddonCategories, setUpdatedAddonCategory] =
     useState<AddonCategories[]>(validAddonCategories);
 
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -55,7 +55,7 @@ const EditMenu = () => {
         id: updatedMenu.id,
         name: updatedMenu.name,
         price: updatedMenu.price,
-        addonCategoryIds: updateAddonCategories.map(
+        addonCategoryIds: updatedAddonCategories.map(
           (item) => item.id
         ) as number[],
       }),
@@ -64,7 +64,7 @@ const EditMenu = () => {
     dispatch(updateMenu(updatedMenusAddonCategory));
     dispatch(
       fetchMenusAddonCategories(
-        updateAddonCategories.map((item) => item.id) as number[]
+        updatedAddonCategories.map((item) => item.id) as number[]
       )
     );
     dispatch(fetchMenusMenuCategoriesLocations(selectedLocationId as string));
@@ -95,53 +95,55 @@ const EditMenu = () => {
           DELETE
         </Button>
       </Box>
-      <Typography variant="h4">Menu Edit</Typography>
-      <TextField
-        sx={{ mt: 2 }}
-        label="Name"
-        value={updatedMenu?.name}
-        onChange={(e) =>
-          setUpdatedMenu({ ...updatedMenu, name: e.target.value })
-        }
-      />
-      <TextField
-        sx={{ my: 2 }}
-        label="Price"
-        type="number"
-        value={updatedMenu?.price}
-        onChange={(e) =>
-          setUpdatedMenu({ ...updatedMenu, price: Number(e.target.value) })
-        }
-      />
-      <Autocomplete
-        disableCloseOnSelect
-        value={updateAddonCategories}
-        onChange={(e, v) => setUpdateAddonCategory(v)}
-        options={addonCategories}
-        renderOption={(props, options, { selected }) => (
-          <li {...props}>
-            <Checkbox
-              checkedIcon={checkedIcon}
-              icon={icon}
-              checked={selected}
-            />
-            {options.name}
-          </li>
-        )}
-        getOptionLabel={(option) => option.name}
-        isOptionEqualToValue={(option, value) => option.id === value.id}
-        multiple
-        renderInput={(params) => (
-          <TextField {...params} label="Addon Categories" />
-        )}
-      />
-      <Button
-        onClick={handleUpdateMenu}
-        variant="contained"
-        sx={{ width: "fit-content", mt: 2 }}
-      >
-        Update
-      </Button>
+      <div className="flex flex-col max-w-[400px]">
+        <Typography variant="h4">Menu Edit</Typography>
+        <TextField
+          sx={{ mt: 2 }}
+          label="Name"
+          value={updatedMenu?.name}
+          onChange={(e) =>
+            setUpdatedMenu({ ...updatedMenu, name: e.target.value })
+          }
+        />
+        <TextField
+          sx={{ my: 2 }}
+          label="Price"
+          type="number"
+          value={updatedMenu?.price}
+          onChange={(e) =>
+            setUpdatedMenu({ ...updatedMenu, price: Number(e.target.value) })
+          }
+        />
+        <Autocomplete
+          disableCloseOnSelect
+          value={updatedAddonCategories}
+          onChange={(e, v) => setUpdatedAddonCategory(v)}
+          options={addonCategories}
+          renderOption={(props, options, { selected }) => (
+            <li {...props}>
+              <Checkbox
+                checkedIcon={checkedIcon}
+                icon={icon}
+                checked={selected}
+              />
+              {options.name}
+            </li>
+          )}
+          getOptionLabel={(option) => option.name}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
+          multiple
+          renderInput={(params) => (
+            <TextField {...params} label="Addon Categories" />
+          )}
+        />
+        <Button
+          onClick={handleUpdateMenu}
+          variant="contained"
+          sx={{ width: "fit-content", mt: 2 }}
+        >
+          Update
+        </Button>
+      </div>
       <DeleteDialog
         open={open}
         setOpen={setOpen}

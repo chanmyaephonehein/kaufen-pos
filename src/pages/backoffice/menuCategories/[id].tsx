@@ -32,13 +32,8 @@ import DeleteDialog from "@/components/DeleteDialog";
 const EditMenuCategory = () => {
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
-  const {
-    menuCategories,
-    menus,
-    menusMenuCategoriesLocations,
-    isLoading,
-    locations,
-  } = useAppSelector(appData);
+  const { menuCategories, menus, menusMenuCategoriesLocations, locations } =
+    useAppSelector(appData);
 
   const selectedLocationId = getSelectedLocationId() as string;
   const router = useRouter();
@@ -144,65 +139,68 @@ const EditMenuCategory = () => {
             DELETE
           </Button>
         </Box>
-        <Typography variant="h5">Menu Category</Typography>
-        <TextField
-          value={updatedMenuCategory}
-          onChange={(e) => setUpdatedMenuCategory(e.target.value)}
-        />
-
-        <Autocomplete
-          multiple
-          disableCloseOnSelect
-          value={selectedLocation}
-          onChange={(e, values) => setSelectedLocation(values)}
-          options={locations}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
-          getOptionLabel={(option) => option.name}
-          renderOption={(props, options, { selected }) => (
-            <li {...props}>
-              <Checkbox
-                checkedIcon={checkedIcon}
-                icon={icon}
-                checked={selected}
-                style={{ marginRight: 8 }}
-              />
-              {options.name}
-            </li>
-          )}
-          sx={{ width: 300, mt: 3 }}
-          renderInput={(params) => <TextField {...params} label="Locations" />}
-        />
-        <Button
-          onClick={handleUpdateMenuCategory}
-          variant="contained"
-          sx={{ width: "fit-content", mt: 2 }}
-        >
-          Update
-        </Button>
-        <Typography variant="h4" sx={{ mt: 4 }}>
-          Menus
-        </Typography>
-        <Autocomplete
-          sx={{ minWidth: 300, mr: 3 }}
-          value={selectedMenu}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
-          getOptionLabel={(option) => option.name}
-          onChange={(evt, value) => {
-            if (value) setSelectedMenu(value);
-          }}
-          clearOnBlur
-          options={menus.filter((item) => !validMenuIds.includes(item.id))}
-          renderInput={(params) => (
-            <TextField {...params} label="Add menu to this category" />
-          )}
-        />
-        <Button
-          onClick={handleAddMenu}
-          variant="contained"
-          sx={{ width: "fit-content", mt: 2 }}
-        >
-          Add
-        </Button>
+        <div className="flex flex-col max-w-[400px]">
+          <Typography variant="h5">Menu Category</Typography>
+          <TextField
+            value={updatedMenuCategory}
+            onChange={(e) => setUpdatedMenuCategory(e.target.value)}
+          />
+          <Autocomplete
+            multiple
+            disableCloseOnSelect
+            value={selectedLocation}
+            onChange={(e, values) => setSelectedLocation(values)}
+            options={locations}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            getOptionLabel={(option) => option.name}
+            renderOption={(props, options, { selected }) => (
+              <li {...props}>
+                <Checkbox
+                  checkedIcon={checkedIcon}
+                  icon={icon}
+                  checked={selected}
+                  style={{ marginRight: 8 }}
+                />
+                {options.name}
+              </li>
+            )}
+            sx={{ mt: 3 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Locations" />
+            )}
+          />
+          <Button
+            onClick={handleUpdateMenuCategory}
+            variant="contained"
+            sx={{ width: "fit-content", mt: 2 }}
+          >
+            Update
+          </Button>
+          <Typography variant="h4" sx={{ mt: 4 }}>
+            Menus
+          </Typography>
+          <Autocomplete
+            sx={{ minWidth: 300 }}
+            value={selectedMenu}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            getOptionLabel={(option) => option.name}
+            onChange={(evt, value) => {
+              if (value) setSelectedMenu(value);
+            }}
+            clearOnBlur
+            options={menus.filter((item) => !validMenuIds.includes(item.id))}
+            renderInput={(params) => (
+              <TextField {...params} label="Add menu to this category" />
+            )}
+          />
+          <Button
+            onClick={handleAddMenu}
+            variant="contained"
+            sx={{ width: "fit-content", mt: 2 }}
+          >
+            Add
+          </Button>
+        </div>
         <Box sx={{ display: "flex", flexWrap: "wrap" }}>
           {validMenus.map((item) => (
             <Box

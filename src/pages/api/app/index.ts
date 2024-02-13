@@ -74,6 +74,10 @@ export default async function handler(
         where: { orderId: { in: orderIds } },
       });
 
+      const tables = await prisma.tables.findMany({
+        where: { locationId: Number(locationId), isArchived: false },
+      });
+
       res.status(200).send({
         locations: [locations],
         menuCategories,
@@ -84,6 +88,7 @@ export default async function handler(
         menusAddonCategories,
         orders,
         orderlines,
+        tables,
       });
     }
     if (method === "POST") {

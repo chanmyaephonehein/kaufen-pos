@@ -6,6 +6,8 @@ import {
   Menus,
   MenusAddonCategories,
   MenusMenuCategoriesLocations,
+  Orderlines,
+  Orders,
 } from "@prisma/client";
 
 export const getSelectedLocationId = () => {
@@ -75,6 +77,15 @@ export const getAddonCategoriesByMenuId = (
   );
 };
 
+export const getAddonsByAddonCategoryId = (
+  addonCategoryId: string,
+  addons: Addons[]
+) => {
+  return addons.filter(
+    (item) => item.addonCategoryId === Number(addonCategoryId)
+  );
+};
+
 export const generateRandomId = () =>
   (Math.random() + 1).toString(36).substring(7);
 
@@ -88,7 +99,31 @@ export const getCartTotalPrice = (cart: CartItem[]) => {
   return totalPrice;
 };
 
-export const getMenuTotalPrice = (menu: CartItem) => {
+export const getActiveOrderPrice = (
+  menuId: number,
+  quantity: number,
+  menus: Menus[],
+  addons: Addons[],
+  orderlines: Orderlines[],
+  orders: Orders[],
+  orderId: number
+) => {
+  const specificOrderlines = orderlines.filter(
+    (item) => item.orderId === orderId
+  );
+  const menuPrice = menus.find((item) => item.id === menuId)?.price as number;
+  const addonIds = specificOrderlines
+    .filter((item) => item.menuId === menuId)
+    .map((i) => i.addonId);
+  const addonIdPrice = addons
+    .filter((item) => addonIds.includes(item.id))
+    .map((i) => i.price);
+  let addonPrice = 0;
+  addonPrice = addonIdPrice.reduce((prev, curr) => (prev += curr), 0);
+  return (menuPrice + addonPrice) * quantity;
+};
+
+export const getOrderTotalPrice = (menu: CartItem) => {
   const menuPrice = menu.menu.price;
   const addonPrice = menu.addon.reduce((prev, curr) => (prev += curr.price), 0);
   const totalPrice = (menuPrice + addonPrice) * menu.quantity;

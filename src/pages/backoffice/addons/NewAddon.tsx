@@ -49,7 +49,7 @@ const NewAddon = ({ open, setOpen }: Props) => {
 
   const createAddon = async () => {
     console.log(newAddon);
-    const isValid = newAddon.name && newAddon.price && newAddon.addonCategoryId;
+    const isValid = newAddon.name && newAddon.addonCategoryId;
     if (!isValid) return alert("Fill all blank");
     const response = await fetch(`${config.apiBaseUrl}/addons`, {
       method: "POST",

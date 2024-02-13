@@ -2,7 +2,6 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import {
   Button,
-  Divider,
   Table,
   TableBody,
   TableCell,
@@ -12,23 +11,29 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Paper from "@mui/material/Paper";
-import { Orderlines, Orders } from "@prisma/client";
+import { Orderlines, Orders, Tables } from "@prisma/client";
 import { emptyCart } from "@/store/slices/cartSlice";
 import { fetchOrderlines } from "@/store/slices/orderlinesSlice";
 import { fetchOrders } from "@/store/slices/ordersSlice";
+import { getActiveOrderPrice } from "@/utils/client";
 
 const ActiveOrder = () => {
-  const { orders, orderlines, menus, addons } = useAppSelector(appData);
+  const { orders, orderlines, menus, addons, tables } = useAppSelector(appData);
   const router = useRouter();
   const { query, isReady } = router;
   const orderId = router.query.id as string;
+
   const validOrderlines = orderlines.filter(
-    (item: any) => item.orderId === Number(orderId)
+    (item: Orderlines) => item.orderId === Number(orderId)
   ) as Orderlines[];
-  const validOrder = orders.find((item: any) => item.id === Number(orderId));
-  const header = ["No", "Menu", "Addon", "Quantity", "Status"];
+
+  const validOrder = orders.find(
+    (item: Orders) => item.id === Number(orderId)
+  ) as Orders;
+
+  const header = ["No", "Menu", "Addon", "Quantity", "Price", "Status"];
 
   const ids = [] as Orderlines[];
   validOrderlines.forEach((item) => {
@@ -61,6 +66,10 @@ const ActiveOrder = () => {
     );
   };
 
+  const tableName = tables.find(
+    (item: Tables) => item.id === validOrder.tableId
+  ) as Tables;
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -84,10 +93,10 @@ const ActiveOrder = () => {
   // }, [isReady, validOrder]);
 
   return (
-    <div className="flex flex-col items-center mt-10 relative">
-      <div className="sticky flex flex-row justify-between w-full max-w-[800px] min-w-[650px] items-center z-40">
+    <div className="flex flex-col items-center relative">
+      <div className="sticky flex flex-row justify-between w-full max-w-[900px] min-w-[650px] items-center z-40">
         <Typography variant="h5" sx={{ color: "blue" }}>
-          Table: {validOrder?.tableId}
+          {tableName?.name}
         </Typography>
         {validOrder?.isPaid ? (
           <Typography variant="h5" sx={{ color: "green" }}>
@@ -110,10 +119,10 @@ const ActiveOrder = () => {
         </Button>
       </div>
       <TableContainer
-        sx={{ minWidth: 650, maxWidth: 800, marginTop: "30px" }}
+        sx={{ minWidth: 650, maxWidth: 900, marginTop: "30px" }}
         component={Paper}
       >
-        <Table sx={{ minWidth: 650, maxWidth: 800 }} aria-label="simple table">
+        <Table sx={{ minWidth: 650, maxWidth: 900 }} aria-label="simple table">
           <TableHead>
             <TableRow>
               {header.map((item) => (
@@ -135,7 +144,17 @@ const ActiveOrder = () => {
                   {renderMenu(item)}
                   {renderAddon(item)}
                   <TableCell align="center">{item.quantity}</TableCell>
-
+                  <TableCell align="center">
+                    {getActiveOrderPrice(
+                      item.menuId,
+                      item.quantity,
+                      menus,
+                      addons,
+                      orderlines,
+                      orders,
+                      item.orderId
+                    )}
+                  </TableCell>
                   <TableCell align="center">{item.status}</TableCell>
                 </TableRow>
               );

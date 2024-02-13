@@ -31,7 +31,7 @@ const EditAddon = () => {
 
   const [open, setOpen] = useState(false);
   const handleDeleteAddon = async () => {
-    await fetch(`${config.apiBaseUrl}/addons?id${addonId}`, {
+    await fetch(`${config.apiBaseUrl}/addons?id=${addonId}`, {
       method: "DELETE",
     });
     dispatch(deleteAddon(addon));
@@ -50,30 +50,32 @@ const EditAddon = () => {
           DELETE
         </Button>
       </Box>
-      <TextField
-        sx={{ mt: 2 }}
-        value={updatedAddon?.name}
-        label="Name"
-        onChange={(e) =>
-          setUpdatedAddon({ ...updatedAddon, name: e.target.value })
-        }
-      />
-      <TextField
-        type="number"
-        sx={{ my: 2 }}
-        value={updatedAddon?.price}
-        label="Price"
-        onChange={(e) =>
-          setUpdatedAddon({ ...updatedAddon, price: Number(e.target.value) })
-        }
-      />
-      <Button
-        onClick={handleUpdateAddon}
-        variant="contained"
-        sx={{ width: "fit-content" }}
-      >
-        Update
-      </Button>
+      <div className="flex flex-col max-w-[400px]">
+        <TextField
+          sx={{ mt: 2 }}
+          value={updatedAddon?.name}
+          label="Name"
+          onChange={(e) =>
+            setUpdatedAddon({ ...updatedAddon, name: e.target.value })
+          }
+        />
+        <TextField
+          type="number"
+          sx={{ my: 2 }}
+          value={updatedAddon?.price}
+          label="Price"
+          onChange={(e) =>
+            setUpdatedAddon({ ...updatedAddon, price: Number(e.target.value) })
+          }
+        />
+        <Button
+          onClick={handleUpdateAddon}
+          variant="contained"
+          sx={{ width: "fit-content" }}
+        >
+          Update
+        </Button>
+      </div>
       <DeleteDialog
         open={open}
         setOpen={setOpen}

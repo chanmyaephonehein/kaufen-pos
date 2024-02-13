@@ -7,7 +7,7 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     const { name, price, addonCategoryId } = req.body;
-    const isValid = name && price && addonCategoryId;
+    const isValid = name && addonCategoryId;
     if (!isValid) return res.status(401).send("Bad Request");
     const addon = await prisma.addons.create({
       data: { name, price, addonCategoryId: Number(addonCategoryId) },
@@ -25,6 +25,10 @@ export default async function handler(
     const id = req.query.id as string;
     const addonId = Number(id);
     await prisma.addons.delete({ where: { id: addonId } });
+    await prisma.orderlines.updateMany({
+      data: { isArchived: true },
+      where: { addonId: Number(id) },
+    });
     res.status(200).send("OK");
   }
 }

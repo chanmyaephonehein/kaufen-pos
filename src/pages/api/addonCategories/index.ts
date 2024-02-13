@@ -1,4 +1,5 @@
 import { prisma } from "@/utils/server";
+import { Addons } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -22,13 +23,53 @@ export default async function handler(
     const info = [addonCategory, data];
     return res.status(200).send(info);
   } else if (req.method === "PUT") {
-    const { id, name, isRequired } = req.body;
-    const isValid = name;
+    const { id, name, isRequired, addonIds, addons } = req.body;
+    const isValid = id && name;
     if (!isValid) res.status(200).send("Bad request");
     const addonCategory = await prisma.addonCategories.update({
       data: { name, isRequired },
       where: { id },
     });
+
+    if (addonIds.length) {
+      const oldAddons = await prisma.addons.findMany({
+        where: { addonCategoryId: id },
+      });
+
+      const existingAddonIds = oldAddons.map((item) => item.id) as number[];
+      const addedAddons = addons.filter((item: Addons) => {
+        oldAddons.find((i: Addons) => {
+          if (i.id !== item.id) return i;
+        });
+      }) as Addons[];
+
+      const removeAddonIds = existingAddonIds.filter(
+        (item: number) => !addonIds.includes(item)
+      ) as number[];
+
+      if (addedAddons.length) {
+        await prisma.$transaction(
+          addedAddons.map((item: Addons) =>
+            prisma.addons.create({
+              data: {
+                name: item.name,
+                price: item.price,
+                addonCategoryId: id,
+              },
+            })
+          )
+        );
+      }
+      if (removeAddonIds.length) {
+        await prisma.addons.deleteMany({
+          where: {
+            addonCategoryId: id,
+            id: { in: removeAddonIds },
+          },
+        });
+      }
+    }
+
     return res.status(200).send(addonCategory);
   } else if (req.method === "DELETE") {
     const { id } = req.query;

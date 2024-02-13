@@ -24,7 +24,6 @@ export default async function handler(
   } else if (req.method === "PUT") {
     const { id, name, price, addonCategoryIds } = req.body;
     const isValid = id && name && price;
-    console.log(isValid);
     if (!isValid) return res.status(401).send("Bad Request");
     const updatedMenus = await prisma.menus.update({
       data: { name, price },
@@ -34,6 +33,7 @@ export default async function handler(
       const addonCategories = await prisma.menusAddonCategories.findMany({
         where: { menuId: id },
       });
+
       const existingAddonCategoryIds = addonCategories.map(
         (item) => item.addonCategoryId
       ) as number[];
@@ -75,6 +75,10 @@ export default async function handler(
       where: { menuId: Number(id) },
     });
     await prisma.menus.deleteMany({ where: { id: Number(id) } });
+    await prisma.orderlines.updateMany({
+      data: { isArchived: true },
+      where: { menuId: Number(id) },
+    });
     return res.status(200).send("OK");
   }
 }

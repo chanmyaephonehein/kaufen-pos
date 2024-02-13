@@ -50,17 +50,23 @@ const EditTable = () => {
           DELETE
         </Button>
       </Box>
-      <TextField
-        sx={{ my: 3 }}
-        label="Table"
-        value={updatedTable?.name}
-        onChange={(e) =>
-          setUpdatedTable({ ...updatedTable, name: e.target.value })
-        }
-      />
-      <Button onClick={handleUpdateTable} variant="contained">
-        Update
-      </Button>
+      <div className="flex flex-col max-w-[400px]">
+        <TextField
+          sx={{ my: 2 }}
+          label="Table"
+          value={updatedTable?.name}
+          onChange={(e) =>
+            setUpdatedTable({ ...updatedTable, name: e.target.value })
+          }
+        />
+        <Button
+          sx={{ width: "fit-content" }}
+          onClick={handleUpdateTable}
+          variant="contained"
+        >
+          Update
+        </Button>
+      </div>
       <DeleteDialog
         open={open}
         setOpen={setOpen}

@@ -1,5 +1,3 @@
-import { addLocation } from "@/store/slices/locationsSlice";
-import { setMenusMenuCategoriesLocations } from "@/store/slices/menusMenuCategoriesLocationsSlice";
 import { prisma } from "@/utils/server";
 import { NextApiRequest, NextApiResponse } from "next";
 

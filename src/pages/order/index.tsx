@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 const Order = () => {
-  const { orders } = useAppSelector(appData);
+  const { orders, tables, locations } = useAppSelector(appData);
   const router = useRouter();
   const query = router.query;
   const selectedLocationId = router.query.locationId as string;
@@ -30,6 +30,7 @@ const Order = () => {
       item.tableId === Number(selectedTableId) &&
       item.isPaid === false
   )?.id;
+
   const renderValue = () => {
     const isValid = selectedLocationId && selectedMenuCategory;
     if (!isValid) return <Loading />;
@@ -56,12 +57,22 @@ const Order = () => {
     );
   };
   return (
-    <div className="mx-64">
+    <div className="mx-64 ">
       <div className="flex justify-center mb-4">
         <Button
           variant="outlined"
           onClick={() => {
-            router.push({ pathname: `/order/activeOrder/${orderId}`, query });
+            const condition = orders.find(
+              (item) =>
+                item.locationId === Number(query.locationId) &&
+                item.tableId === Number(query.tableId) &&
+                item.isPaid === false
+            );
+            if (condition) {
+              router.push({ pathname: `/order/activeOrder/${orderId}`, query });
+            } else {
+              alert("You have no orders");
+            }
           }}
         >
           Your Orders

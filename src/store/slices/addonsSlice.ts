@@ -1,5 +1,7 @@
 import { Addons as Addon } from "@prisma/client";
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { setIsLoading } from "./menusMenuCategoriesLocationsSlice";
+import { config } from "@/config";
 
 interface addonsState {
   isLoading: boolean;
@@ -8,10 +10,21 @@ interface addonsState {
 }
 
 const initialState: addonsState = {
-  isLoading: true,
+  isLoading: false,
   items: [],
   error: null,
 };
+
+export const fetchAddons = createAsyncThunk(
+  "addons/fetchAddons",
+  async (locationId: string, thunkAPI) => {
+    thunkAPI.dispatch(setIsLoading(true));
+    const response = await fetch(`${config.apiBaseUrl}/addonsAddonCategories`);
+    const addons = await response.json();
+    thunkAPI.dispatch(setIsLoading(false));
+    thunkAPI.dispatch(setAddons(addons));
+  }
+);
 
 export const addonsSlice = createSlice({
   name: "addons",

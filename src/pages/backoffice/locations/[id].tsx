@@ -45,7 +45,6 @@ const EditLocation = () => {
   };
   return (
     <Box>
-      {" "}
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
         <Button
           variant="contained"
@@ -57,29 +56,31 @@ const EditLocation = () => {
           DELETE
         </Button>
       </Box>
-      <TextField
-        sx={{ mt: 2 }}
-        label="Location"
-        value={updatedLocation?.name}
-        onChange={(e) =>
-          setUpdatedLocation({ ...updatedLocation, name: e.target.value })
-        }
-      />
-      <TextField
-        sx={{ my: 2 }}
-        label="Address"
-        value={updatedLocation?.address}
-        onChange={(e) =>
-          setUpdatedLocation({ ...updatedLocation, address: e.target.value })
-        }
-      />
-      <Button
-        onClick={handleUpdateLocation}
-        variant="contained"
-        sx={{ width: "fit-content" }}
-      >
-        Update
-      </Button>
+      <div className="flex flex-col max-w-[400px]">
+        <TextField
+          sx={{ mt: 2 }}
+          label="Location"
+          value={updatedLocation?.name}
+          onChange={(e) =>
+            setUpdatedLocation({ ...updatedLocation, name: e.target.value })
+          }
+        />
+        <TextField
+          sx={{ my: 2 }}
+          label="Address"
+          value={updatedLocation?.address}
+          onChange={(e) =>
+            setUpdatedLocation({ ...updatedLocation, address: e.target.value })
+          }
+        />
+        <Button
+          onClick={handleUpdateLocation}
+          variant="contained"
+          sx={{ width: "fit-content" }}
+        >
+          Update
+        </Button>
+      </div>
       <DeleteDialog
         open={open}
         setOpen={setOpen}

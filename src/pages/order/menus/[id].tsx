@@ -6,7 +6,7 @@ import {
   selectAddonCategories,
   selectAddons,
 } from "@/store/slices/appSlice";
-import { CartItem, addoToCart } from "@/store/slices/cartSlice";
+import { CartItem, addToCart } from "@/store/slices/cartSlice";
 import { generateRandomId, getAddonCategoriesByMenuId } from "@/utils/client";
 import { Button, Typography } from "@mui/material";
 import {
@@ -107,7 +107,7 @@ const OrderAppMenu = () => {
       menu,
       id: generateRandomId(),
     };
-    dispatch(addoToCart(cartItem));
+    dispatch(addToCart(cartItem));
     router.push({ pathname: "/order", query });
   };
   return (

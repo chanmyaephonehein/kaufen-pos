@@ -138,6 +138,7 @@ model Orders {
   locations  Locations    @relation(fields: [locationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   tables     Tables       @relation(fields: [tableId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   orderlines Orderlines[]
+  isArchived Boolean      @default(false)
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @default(now()) @updatedAt
 }
@@ -150,6 +151,7 @@ model Orderlines {
   itemId       String
   quantity     Int         @default(1)
   status       OrderStatus @default(PENDING)
+  isArchived   Boolean     @default(false)
   orders       Orders      @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   menus        Menus       @relation(fields: [menuId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   addons       Addons?     @relation(fields: [addonId], references: [id], onDelete: NoAction, onUpdate: NoAction)

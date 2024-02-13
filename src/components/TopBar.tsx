@@ -11,7 +11,7 @@ const TopBar = () => {
     if (pathname.includes("/orders")) return "Orders";
     if (pathname.includes("/menuCategories")) return "Menu Categories";
     if (pathname.includes("/menus")) return "Menus";
-    if (pathname.includes("/addonCategories")) return "addonCategories";
+    if (pathname.includes("/addonCategories")) return "Addon Categories";
     if (pathname.includes("/addons")) return "Addons";
     if (pathname.includes("/tables")) return "Tables";
     if (pathname.includes("/settings")) return "Settings";
@@ -22,7 +22,10 @@ const TopBar = () => {
   return (
     <div className="flex flex-col my-3">
       <div className="flex justify-between items-center">
-        <div className="flex justify-center items-center gap-2">
+        <div
+          onClick={() => router.push({ pathname: "/backoffice" })}
+          className="flex justify-center items-center gap-2 cursor-pointer"
+        >
           <PetsIcon style={{ color: "gray", fontSize: "30px" }} />
           <span className="text-xl">Kaufen</span>
         </div>
