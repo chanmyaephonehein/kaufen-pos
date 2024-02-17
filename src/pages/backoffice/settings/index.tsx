@@ -5,6 +5,8 @@ import { getSelectedLocationId } from "@/utils/client";
 import {
   Box,
   Button,
+  FormControl,
+  InputLabel,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -69,17 +71,20 @@ const Settings = () => {
       <Typography sx={{ my: 2 }} variant="h5">
         Location Update
       </Typography>
-      <Select
-        label="Locations"
-        value={validLocation ? validLocation.id : ""}
-        onChange={handleOnChange}
-      >
-        {locations.map((item) => (
-          <MenuItem key={item.id} value={item.id}>
-            {item.name}
-          </MenuItem>
-        ))}
-      </Select>
+      <FormControl>
+        <InputLabel>Locations</InputLabel>
+        <Select
+          label="Locations"
+          value={validLocation ? validLocation.id : ""}
+          onChange={handleOnChange}
+        >
+          {locations.map((item) => (
+            <MenuItem key={item.id} value={item.id}>
+              {item.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </div>
   );
 };

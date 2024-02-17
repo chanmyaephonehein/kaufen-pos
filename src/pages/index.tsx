@@ -1,3 +1,9 @@
+import AboutUs from "@/components/landingpage/AboutUs";
+import Clients from "@/components/landingpage/Clients";
+import Contact from "@/components/landingpage/Contact";
+import Faq from "@/components/landingpage/Faq";
+import Footer from "@/components/landingpage/Footer";
+import Services from "@/components/landingpage/Services";
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
 
@@ -5,9 +11,16 @@ const Kaufen = () => {
   const router = useRouter();
   return (
     <>
-      <Button variant="outlined" onClick={() => router.push("/backoffice")}>
-        Backoffice
-      </Button>
+      <div className="bg-gradient-to-r from-gray-700 to-gray-900 h-full">
+        <div className="flex flex-col gap-6">
+          <AboutUs />
+          <Services />
+          <Clients />
+          <Contact />
+          <Faq />
+          <Footer />
+        </div>
+      </div>
     </>
   );
 };
