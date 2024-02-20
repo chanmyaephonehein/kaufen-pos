@@ -18,7 +18,6 @@ import { useEffect, useState } from "react";
 
 const Settings = () => {
   const { locations, isLoading, company } = useAppSelector(appData);
-  const locationId = getSelectedLocationId() as string;
   const [validLocation, setValidLocation] = useState<Locations>();
   const [updateCompany, setUpdateCompany] = useState<Companies>(
     company as Companies
@@ -34,17 +33,18 @@ const Settings = () => {
 
   useEffect(() => {
     if (locations.length) {
-      if (locationId) {
-        const selectedLocation = locations.find(
-          (item) => item.id === Number(locationId)
-        );
-        setValidLocation(selectedLocation);
-      } else {
+      const selectedLocationId = getSelectedLocationId() as string;
+      if (!selectedLocationId) {
         localStorage.setItem("selectedLocationId", String(locations[0].id));
         setValidLocation(locations[0]);
+      } else {
+        const selectedLocation = locations.find(
+          (item) => item.id === Number(selectedLocationId)
+        );
+        setValidLocation(selectedLocation);
       }
     }
-  }, [locations]);
+  }, [locations, validLocation]);
 
   if (isLoading) return <Loading />;
   return (
@@ -71,9 +71,11 @@ const Settings = () => {
       <Typography sx={{ my: 2 }} variant="h5">
         Location Update
       </Typography>
-      <FormControl>
-        <InputLabel>Locations</InputLabel>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Locations</InputLabel>
         <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
           label="Locations"
           value={validLocation ? validLocation.id : ""}
           onChange={handleOnChange}
