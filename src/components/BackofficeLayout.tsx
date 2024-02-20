@@ -6,21 +6,23 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData, fetchAppData, selectApp } from "@/store/slices/appSlice";
 import { useEffect } from "react";
 import Loading from "./Loading";
+import { useRouter } from "next/router";
 
 interface Props {
   children: string | JSX.Element | JSX.Element[];
 }
 const BackofficeLayout = (props: Props) => {
+  const router = useRouter();
   const { data } = useSession();
   const { init } = useAppSelector(selectApp);
   const dispatch = useAppDispatch();
   const { isLoading } = useAppSelector(appData);
-
+  const backoffice = router.pathname === "/backofffice";
   useEffect(() => {
-    if (!init) {
+    if (!init && !backoffice) {
       dispatch(fetchAppData({ locationId: undefined }));
     }
-  }, [init, dispatch]);
+  }, [init, dispatch, backoffice]);
   if (isLoading) return <Loading />;
   return (
     <div>
