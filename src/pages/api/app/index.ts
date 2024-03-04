@@ -268,6 +268,10 @@ export default async function handler(
       const newAddons = await prisma.$transaction(
         newAddonsData.map((addon) => prisma.addons.create({ data: addon }))
       );
+
+      const newTables = await prisma.tables.create({
+        data: { name: "Table 01", locationId: newLocation.id },
+      });
       return res.send({
         menuCategories: newMenuCategories,
         menus: newMenus,
@@ -277,6 +281,7 @@ export default async function handler(
         menusMenuCategoriesLocations: newMenusMenuCategoriesLocations,
         company: newCompany,
         menusAddonCategories: newMenusAddonCategories,
+        table: newTables,
         orders: [],
         orderlines: [],
         tables: [],

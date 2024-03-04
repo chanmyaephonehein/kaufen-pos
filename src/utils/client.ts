@@ -129,3 +129,7 @@ export const getOrderTotalPrice = (menu: CartItem) => {
   const totalPrice = (menuPrice + addonPrice) * menu.quantity;
   return totalPrice;
 };
+
+export const getQrCodeUrl = (locationId: number, tableId: number) => {
+  return `https://msquarefdc.sgp1.cdn.digitaloceanspaces.com/foodie-pos/qrcode/msquare/locationId-${locationId}-tableId-${tableId}.png`;
+};

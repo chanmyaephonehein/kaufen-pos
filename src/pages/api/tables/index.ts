@@ -10,6 +10,7 @@ export default async function handler(
     const isValid = name && locationId;
     if (!isValid) return res.status(400).send("Bad Request");
     const table = await prisma.tables.create({ data: { name, locationId } });
+
     return res.status(200).send(table);
   } else if (req.method === "PUT") {
     const { id, name } = req.body;
