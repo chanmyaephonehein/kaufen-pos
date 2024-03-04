@@ -236,12 +236,16 @@ export default async function handler(
           prisma.menusMenuCategoriesLocations.create({ data: item })
         )
       );
-      const newAddonCategoriesData = [{ name: "Drink" }, { name: "Size" }];
+      const newAddonCategoriesData = [
+        { name: "Drink", isRequired: true },
+        { name: "Size", isRequired: true },
+      ];
       const newAddonCategories = await prisma.$transaction(
-        newAddonCategoriesData.map((addonCategory) =>
-          prisma.addonCategories.create({ data: addonCategory })
+        newAddonCategoriesData.map((item) =>
+          prisma.addonCategories.create({ data: item })
         )
       );
+
       const newMenusAddonCategoriesData = [
         { menuId: newMenus[0].id, addonCategoryId: newAddonCategories[0].id },
         { menuId: newMenus[1].id, addonCategoryId: newAddonCategories[1].id },
