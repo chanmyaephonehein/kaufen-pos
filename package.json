@@ -9,29 +9,32 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^5.14.16",
-    "@mui/material": "^5.14.17",
+    "@mui/lab": "^5.0.0-alpha.130",
+    "@mui/material": "^5.16.13",
+    "@mui/x-date-pickers": "^7.23.3",
     "@prisma/client": "^5.5.2",
     "@reduxjs/toolkit": "^1.9.7",
-    "next": "14.0.2",
-    "next-auth": "^4.24.6",
-    "react": "^18",
-    "react-dom": "^18",
-    "react-redux": "^8.1.3",
-    "@mui/lab": "^5.0.0-alpha.130",
     "@types/multer": "^1.4.7",
     "@types/multer-s3": "^3.0.0",
     "aws-sdk": "^2.1379.0",
+    "dayjs": "^1.11.13",
     "formidable-serverless": "^1.1.1",
     "multer": "^1.4.5-lts.1",
     "multer-s3": "^3.0.1",
+    "next": "14.0.2",
+    "next-auth": "^4.24.6",
     "qrcode": "^1.5.3",
-    "react-dropzone": "^14.2.3"
+    "react": "^18",
+    "react-dom": "^18",
+    "react-dropzone": "^14.2.3",
+    "react-redux": "^8.1.3"
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/qrcode": "^1.5.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.16",
@@ -40,7 +43,6 @@
     "postcss": "^8.4.31",
     "prisma": "^5.5.2",
     "tailwindcss": "^3.3.5",
-    "typescript": "^5",
-    "@types/qrcode": "^1.5.0"
+    "typescript": "^5"
   }
 }

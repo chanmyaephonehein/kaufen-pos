@@ -14,6 +14,11 @@ const initialState: OrdersState = {
   error: null,
 };
 
+export interface updatePriceType {
+  orderId: number;
+  price: number;
+}
+
 export const fetchOrders = createAsyncThunk(
   "orders/fetchOrders",
   async (id: string, thunkAPI) => {
@@ -42,7 +47,7 @@ export const ordersSlice = createSlice({
       state,
       action: PayloadAction<{ orderId: number; status: boolean }>
     ) => {
-      state.items = state.items.map((item) => {
+      state.items.map((item) => {
         if (item.id === action.payload.orderId) {
           return { ...item, isPaid: action.payload.status };
         } else {

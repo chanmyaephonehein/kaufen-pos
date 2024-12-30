@@ -14,11 +14,6 @@ const Kaufen = () => {
       <div className="bg-gradient-to-r from-gray-700 to-gray-900 h-full">
         <div className="flex flex-col gap-6">
           <AboutUs />
-          <Services />
-          <Clients />
-          <Contact />
-          <Faq />
-          <Footer />
         </div>
       </div>
     </>

@@ -1,10 +1,10 @@
 import { Box, Chip, Typography } from "@mui/material";
-import { AddonCategories, Addons } from "@prisma/client";
+import { AddonCategories as AddonCategory, Addons } from "@prisma/client";
 import React from "react";
 import OrderAddons from "./Addons";
 
 interface Props {
-  validAddonCategories: AddonCategories[];
+  validAddonCategories: AddonCategory[];
   validAddons: Addons[];
   selectedAddon: Addons[];
   onChange: (checked: boolean, addon: Addons) => void;

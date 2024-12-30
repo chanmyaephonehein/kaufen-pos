@@ -10,7 +10,7 @@ import {
 } from "@/store/slices/cartSlice";
 import { fetchOrderlines } from "@/store/slices/orderlinesSlice";
 import { addOrder } from "@/store/slices/ordersSlice";
-import { getCartTotalPrice, getOrderTotalPrice } from "@/utils/client";
+import { getCartTotalPrice, getMenuTotalPrice } from "@/utils/client";
 import { Box, Button, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -83,7 +83,7 @@ const Cart = () => {
                   Quantity: {item.quantity}
                 </Typography>
                 <Typography sx={{ color: "blue" }}>
-                  Price: {getOrderTotalPrice(item)} MMK
+                  Price: {getMenuTotalPrice(item)} MMK
                 </Typography>
                 <div className="flex flex-row justify-end ">
                   <Button

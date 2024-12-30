@@ -11,7 +11,7 @@ interface Props {
 const MenuCard = ({ menu, href }: Props) => {
   return (
     <Link href={href} key={menu.id} style={{ textDecoration: "none" }}>
-      <Card sx={{ width: 200, height: 220, m: 2 }}>
+      <Card sx={{ width: 199, height: 220, m: 2 }}>
         <CardMedia sx={{ height: 140 }} />
         <CardContent
           sx={{

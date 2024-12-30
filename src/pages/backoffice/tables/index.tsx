@@ -10,13 +10,14 @@ import TableBarIcon from "@mui/icons-material/TableBar";
 import NewTable from "./NewTable";
 
 const Tables = () => {
-  const { tables, isLoading } = useAppSelector(appData);
+  const { tables, isLoading, orderlines, orders } = useAppSelector(appData);
   const [open, setOpen] = useState(false);
   const selectedLocationId = getSelectedLocationId() as string;
 
   const validTables = tables.filter(
     (item) => item.locationId === Number(selectedLocationId)
   );
+
   if (isLoading) return <Loading />;
   return (
     <div className="col-span-5">
@@ -29,7 +30,7 @@ const Tables = () => {
           New Table
         </Button>
       </div>
-      <div className="flex">
+      <div className="flex flex-row flex-wrap">
         {validTables.map((item) => (
           <ItemCard
             key={item.id}

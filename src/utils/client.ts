@@ -9,6 +9,7 @@ import {
   Orderlines,
   Orders,
 } from "@prisma/client";
+import { Addon } from "aws-sdk/clients/eks";
 
 export const getSelectedLocationId = () => {
   if (typeof window !== "undefined") {
@@ -99,7 +100,7 @@ export const getCartTotalPrice = (cart: CartItem[]) => {
   return totalPrice;
 };
 
-export const getActiveOrderPrice = (
+export const getSpecificActiveOrderPrice = (
   menuId: number,
   quantity: number,
   menus: Menus[],
@@ -120,10 +121,49 @@ export const getActiveOrderPrice = (
     .map((i) => i.price);
   let addonPrice = 0;
   addonPrice = addonIdPrice.reduce((prev, curr) => (prev += curr), 0);
-  return (menuPrice + addonPrice) * quantity;
+  const rejectedMenu = orderlines.find(
+    (item) =>
+      item.menuId === menuId &&
+      item.status === "REJECTED" &&
+      orderId === item.orderId
+  );
+  if (rejectedMenu) {
+    return 0;
+  } else {
+    return (menuPrice + addonPrice) * quantity;
+  }
 };
 
-export const getOrderTotalPrice = (menu: CartItem) => {
+export const updateTotalOrderPrice = (
+  menus: Menus[],
+  addons: Addons[],
+  orderlines: Orderlines[],
+  orders: Orders[],
+  orderId: number
+) => {
+  const uniqueItem: string[] = [];
+  const respectiveOrderlinesByOrderId = orderlines.filter(
+    (item) => item.orderId === orderId
+  );
+  const respectiveItemIds = respectiveOrderlinesByOrderId.map(
+    (item) => item.itemId
+  );
+
+  respectiveItemIds.forEach((item) => {
+    const hasAdded = uniqueItem.includes(item);
+    if (!hasAdded) return uniqueItem.push(item);
+  });
+
+  const menuAndAddons: { [key: number]: number[] } = {};
+  respectiveOrderlinesByOrderId.forEach((item) => {
+    const isTrue = respectiveItemIds.includes(item.itemId);
+    if (isTrue) menuAndAddons[Number(item.menuId)] = [Number(item.addonId)];
+
+    // const menuId =
+  });
+};
+
+export const getMenuTotalPrice = (menu: CartItem) => {
   const menuPrice = menu.menu.price;
   const addonPrice = menu.addon.reduce((prev, curr) => (prev += curr.price), 0);
   const totalPrice = (menuPrice + addonPrice) * menu.quantity;
@@ -132,4 +172,16 @@ export const getOrderTotalPrice = (menu: CartItem) => {
 
 export const getQrCodeUrl = (locationId: number, tableId: number) => {
   return `https://msquarefdc.sgp1.cdn.digitaloceanspaces.com/foodie-pos/qrcode/msquare/locationId-${locationId}-tableId-${tableId}.png`;
+};
+
+export const getMenuCount = (orderId: number, orderlines: Orderlines[]) => {
+  const respectiveOrderlinesMenu = orderlines
+    .filter((item) => item.orderId === orderId)
+    .map((item) => item.menuId) as number[];
+  const uniqueMenuIds = [] as number[];
+  respectiveOrderlinesMenu.forEach((menuId) => {
+    const hasAdded = uniqueMenuIds.find((item) => item === menuId);
+    if (!hasAdded) return uniqueMenuIds.push(menuId);
+  });
+  return uniqueMenuIds.length;
 };

@@ -3,43 +3,47 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { useEffect, useState } from "react";
 import { getSelectedLocationId } from "@/utils/client";
-import { Orders } from "@prisma/client";
 import { Tab, Tabs } from "@mui/material";
 import { fetchOrderlines } from "@/store/slices/orderlinesSlice";
 import { fetchOrders } from "@/store/slices/ordersSlice";
 import TableMui from "@/components/TableMui";
+import { Orders as Order } from "@prisma/client";
+import TableOrderStatus from "@/components/TableOrderStatus";
 
 const Orders = () => {
-  const { isLoading, orders } = useAppSelector(appData);
-
+  const { isLoading, orders, tables } = useAppSelector(appData);
+  const [orderOption, setOrderOption] = useState<number>(1);
+  const [value, setValue] = useState<number>(1);
   const selectedLocationId = getSelectedLocationId() as string;
   const currentLocationOrders = orders.filter(
     (item: any) => item.locationId === Number(selectedLocationId)
-  ) as Orders[];
+  ) as Order[];
 
   const newOrder = currentLocationOrders.filter(
     (item) => item.isPaid === false
-  ) as Orders[];
+  ) as Order[];
 
   const oldOrder = currentLocationOrders.filter(
     (item) => item.isPaid === true
-  ) as Orders[];
+  ) as Order[];
 
   const dispatch = useAppDispatch();
-  const [orderOption, setOrderOption] = useState<number>(1);
-  const [value, setValue] = useState<number>(1);
+
+  const handleTab = (props: number) => {
+    setOrderOption(props);
+  };
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       dispatch(fetchOrderlines(""));
-    }, 1000);
+    }, 5000);
     return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       dispatch(fetchOrders(""));
-    }, 1000);
+    }, 5000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -51,24 +55,35 @@ const Orders = () => {
         <Tabs value={value} onChange={(e, v) => setValue(v)}>
           <Tab
             value={1}
-            label="New Orders"
+            label="By Tables"
             key={1}
             onClick={() => {
-              setOrderOption(1);
+              handleTab(1);
             }}
           />
           <Tab
             value={2}
-            label="Old Orders"
+            label="New Orders"
             key={2}
             onClick={() => {
-              setOrderOption(2);
+              handleTab(2);
+            }}
+          />
+          <Tab
+            value={3}
+            label="Old Orders"
+            key={3}
+            onClick={() => {
+              handleTab(3);
             }}
           />
         </Tabs>
       </div>
-      {orderOption === 1 && TableMui(newOrder)}
-      {orderOption === 2 && TableMui(oldOrder)}
+      <div>
+        {orderOption === 1 && TableOrderStatus()}
+        {orderOption === 2 && TableMui(newOrder)}
+        {orderOption === 3 && TableMui(oldOrder)}
+      </div>
     </div>
   );
 };

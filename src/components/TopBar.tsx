@@ -3,11 +3,13 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import PetsIcon from "@mui/icons-material/Pets";
 
-const TopBar = () => {
+const TopBar = ({ location }: { location: string }) => {
   const router = useRouter();
+  console.log("direct location is", location);
   const { data } = useSession();
   const getTitle = () => {
     const pathname = router.pathname;
+    if (pathname.includes("/dashboard")) return "Dashboard";
     if (pathname.includes("/orders")) return "Orders";
     if (pathname.includes("/menuCategories")) return "Menu Categories";
     if (pathname.includes("/menus")) return "Menus";
@@ -29,7 +31,8 @@ const TopBar = () => {
           <PetsIcon style={{ color: "gray", fontSize: "30px" }} />
           <span className="text-xl">Kaufen</span>
         </div>
-        <p className="py-2 col-span-6 text-lg font-bold">{getTitle()}</p>
+        <p className="py-2 col-span-6 text-lg font-bold">{getTitle()}</p>{" "}
+        <p className="text-gray-500 ">{location}</p>
         {data && (
           <Button
             variant="outlined"

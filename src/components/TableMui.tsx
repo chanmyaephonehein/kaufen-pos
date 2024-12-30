@@ -205,6 +205,7 @@ function Row({
                     <FormControl>
                       <InputLabel>status</InputLabel>
                       <Select
+                        // disabled={orders.isPaid === true}
                         label="status"
                         value={item.status}
                         onChange={(evt) =>

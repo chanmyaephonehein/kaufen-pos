@@ -17,7 +17,7 @@ import { Orderlines, Orders, Tables } from "@prisma/client";
 import { emptyCart } from "@/store/slices/cartSlice";
 import { fetchOrderlines } from "@/store/slices/orderlinesSlice";
 import { fetchOrders } from "@/store/slices/ordersSlice";
-import { getActiveOrderPrice } from "@/utils/client";
+import { getSpecificActiveOrderPrice } from "@/utils/client";
 
 const ActiveOrder = () => {
   const { orders, orderlines, menus, addons, tables } = useAppSelector(appData);
@@ -145,7 +145,7 @@ const ActiveOrder = () => {
                   {renderAddon(item)}
                   <TableCell align="center">{item.quantity}</TableCell>
                   <TableCell align="center">
-                    {getActiveOrderPrice(
+                    {getSpecificActiveOrderPrice(
                       item.menuId,
                       item.quantity,
                       menus,

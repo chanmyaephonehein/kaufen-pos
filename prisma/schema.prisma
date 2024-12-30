@@ -23,7 +23,7 @@ model Companies {
 
 model Users {
   id         Int       @id @default(autoincrement())
-  name       String?
+  name       String?  
   email      String    @unique
   companyId  Int
   company    Companies @relation(fields: [companyId], references: [id])

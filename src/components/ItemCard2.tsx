@@ -16,7 +16,15 @@ interface Props {
   updating?: boolean;
 }
 
-const ItemCard = ({ icon, href, title, subTitle }: Props) => {
+const ItemCard2 = ({
+  icon,
+  href,
+  title,
+  subTitle,
+  noti,
+  quantity,
+  updating,
+}: Props) => {
   return (
     <Link href={href} style={{ textDecoration: "none" }}>
       <Paper
@@ -29,6 +37,29 @@ const ItemCard = ({ icon, href, title, subTitle }: Props) => {
           alignItems: "center",
         }}
       >
+        <div className="flex flex-row justify-between w-full">
+          <div
+            className={
+              noti === false
+                ? "m-3 bg-green-300 py-1 px-3 rounded-xl"
+                : "m-3 bg-blue-300 py-1 px-3 rounded-xl"
+            }
+          >
+            {noti === true ? "reserving" : "unconcern"}
+          </div>
+          <div
+            className={
+              quantity === 0
+                ? "m-3 pt-1 px-3 bg-green-300 rounded-xl"
+                : updating === false
+                ? "m-3 pt-1 px-3 bg-blue-300 rounded-xl "
+                : "m-3 pt-1 px-3 bg-blue-300 rounded-xl animate-ping"
+            }
+          >
+            {quantity}
+          </div>
+        </div>
+
         {icon}
         <Typography>{title}</Typography>
         {subTitle && <Typography>{subTitle}</Typography>}
@@ -37,4 +68,4 @@ const ItemCard = ({ icon, href, title, subTitle }: Props) => {
   );
 };
 
-export default ItemCard;
+export default ItemCard2;

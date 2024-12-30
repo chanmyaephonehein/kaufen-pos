@@ -15,6 +15,7 @@ import LocalMallIcon from "@mui/icons-material/LocalMall";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SettingsIcon from "@mui/icons-material/Settings";
 import TableBarIcon from "@mui/icons-material/TableBar";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
@@ -58,6 +59,12 @@ const SideBar = () => {
 };
 
 export const items = [
+  {
+    id: 0,
+    label: "Dashboard",
+    icon: <DashboardIcon />,
+    route: "/backoffice/dashboard",
+  },
   {
     id: 1,
     label: "Orders",
