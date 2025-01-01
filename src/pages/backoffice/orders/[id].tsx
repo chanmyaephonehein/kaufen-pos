@@ -1,11 +1,7 @@
 import TableMui from "@/components/TableMui";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
-import {
-  getMenuCount,
-  getSelectedLocationId,
-  updateTotalOrderPrice,
-} from "@/utils/client";
+import { getMenuCount, getSelectedLocationId } from "@/utils/client";
 import {
   AddonCategories,
   Addons,
