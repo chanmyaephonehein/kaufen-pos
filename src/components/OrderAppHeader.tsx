@@ -19,6 +19,18 @@ const OrderAppHeader = ({ cartCountItem }: Props) => {
   const { locations } = useAppSelector(appData);
   return (
     <div className="my-5 mx-64 flex flex-row justify-between items-center">
+      {isActiveOrder && (
+        <div className="flex justify-center w-full">
+          <div className="flex flex-col items-center">
+            <span className="text-xl font-bold text-gray-600">
+              {locations.map((item) => item.name)}
+            </span>
+            <span className="text-3xl text-gray-600">
+              {locations.map((item) => item.address)}
+            </span>
+          </div>
+        </div>
+      )}
       {showLogo && (
         <div
           className="flex items-center gap-2 min-w-[100px] cursor-pointer"

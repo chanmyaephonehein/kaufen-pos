@@ -17,6 +17,8 @@ import {
 } from "@/utils/client";
 import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
 
 interface DataDashboard {
   id: number;
@@ -72,6 +74,30 @@ const Dashboard = () => {
       title: "Total Customer",
     },
   ];
+
+  const options = {
+    chart: {
+      type: "line",
+    },
+    title: {
+      text: "My First Highcharts in React",
+    },
+    xAxis: {
+      categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    },
+    yAxis: {
+      title: {
+        text: "Values",
+      },
+    },
+    series: [
+      {
+        name: "Example Series",
+        data: [1, 3, 2, 4, 6, 5],
+      },
+    ],
+  };
+
   const handleChange = (evt: SelectChangeEvent) => {
     setMostOrderedDate(evt.target.value as string);
   };
@@ -116,8 +142,8 @@ const Dashboard = () => {
     setPayloadOrders(outputOrder);
   }, []);
   return (
-    <div className="grid grid-cols-5 gap-4">
-      <div className="m-1 col-span-3">
+    <div className="grid grib-rows-3  grid-cols-5 gap-4">
+      <div className="m-1 col-span-3 row-span-1">
         {/* <div className="flex">
           <h3>Date: Thursday 19 Dec, 2024</h3>{" "}
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -139,7 +165,7 @@ const Dashboard = () => {
             </Select>
           </FormControl>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between ">
           {dataDashboard.map((item) => (
             <div
               key={item.id}
@@ -155,7 +181,7 @@ const Dashboard = () => {
           ))}
         </div>
       </div>
-      <div className="col-span-2 flex flex-col gap-3 ">
+      <div className="col-span-2 flex flex-col gap-3 row-span-3">
         <div className="h-96 border-solid border-gray-500 rounded-lg px-3">
           <div className="flex flex-row justify-between items-center">
             <p className="flex text-lg">Most Ordered</p>
@@ -197,6 +223,10 @@ const Dashboard = () => {
             </FormControl>
           </div>
         </div>
+      </div>
+      <div className="col-span-3 row-span-2">
+        {" "}
+        <HighchartsReact highcharts={Highcharts} options={options} />
       </div>
     </div>
   );
