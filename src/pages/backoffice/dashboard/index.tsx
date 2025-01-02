@@ -18,7 +18,7 @@ import { appData } from "@/store/slices/appSlice";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import Chart from "@/components/Chart";
-import RangeCalendar from "@/components/RangeCalendar";
+import Calendar from "@/components/Calendar";
 
 interface DataDashboard {
   id: number;
@@ -51,6 +51,7 @@ const Dashboard = () => {
     orders: 0,
   });
   const [payloadOrders, setPayloadOrders] = useState<MostOrdered[]>([]);
+  const [calendarStatus, setCalendarStatus] = useState<number>(4);
   const dataDashboard: DataDashboard[] = [
     {
       id: 1,
@@ -239,8 +240,24 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <div className="flex col-span-3 justify-center">
-        <RangeCalendar />
+      <div className="flex col-span-3 justify-between items-center">
+        <Calendar calendarStatus={calendarStatus} />
+        <FormControl fullWidth size="small" sx={{ maxWidth: 120 }}>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={calendarStatus}
+            onChange={(evt) =>
+              setCalendarStatus(Number(evt.target.value) as number)
+            }
+          >
+            <MenuItem value={1}>By Day</MenuItem>
+            <MenuItem value={2}>By Month</MenuItem>
+            <MenuItem value={3}>By Year</MenuItem>
+            <MenuItem value={4}>By Week</MenuItem>{" "}
+            <MenuItem value={5}>Date Range</MenuItem>
+          </Select>
+        </FormControl>
       </div>
       <div className="col-span-3 row-span-2">
         <Chart options={options} />
