@@ -7,9 +7,7 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+
 import {
   dataStatistics,
   getSelectedLocationId,
@@ -19,6 +17,8 @@ import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import Chart from "@/components/Chart";
+import RangeCalendar from "@/components/RangeCalendar";
 
 interface DataDashboard {
   id: number;
@@ -80,20 +80,42 @@ const Dashboard = () => {
       type: "line",
     },
     title: {
-      text: "My First Highcharts in React",
+      text: "Data Statistics",
     },
     xAxis: {
-      categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+      categories: [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ],
     },
     yAxis: {
       title: {
-        text: "Values",
+        text: "Revenue",
       },
     },
     series: [
       {
         name: "Example Series",
-        data: [1, 3, 2, 4, 6, 5],
+        data: [
+          0.23, 0.12, 0.31, 0.41, 0.68, 0.58, 0.76, 0.78, 0.89, 1.44, 0.99, 1.2,
+        ],
+      },
+      {
+        name: "Example Series",
+        data: [
+          0.03, 0.12, 0.09, 0.34, 0.28, 0.21, 0.34, 1.09, 0.69, 0.76, 0.89,
+          1.01,
+        ],
       },
     ],
   };
@@ -144,12 +166,6 @@ const Dashboard = () => {
   return (
     <div className="grid grib-rows-3  grid-cols-5 gap-4">
       <div className="m-1 col-span-3 row-span-1">
-        {/* <div className="flex">
-          <h3>Date: Thursday 19 Dec, 2024</h3>{" "}
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateCalendar />
-          </LocalizationProvider>
-        </div>{" "} */}
         <div className="flex justify-end mb-3">
           <FormControl fullWidth size="small" sx={{ maxWidth: 120 }}>
             <Select
@@ -207,7 +223,6 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="h-64 border-solid border-gray-500 rounded-lg px-4">
-          {" "}
           <div className="flex flex-row justify-between items-center">
             <p className="flex text-lg">Most Type of Order</p>
             <FormControl fullWidth size="small" sx={{ maxWidth: 120 }}>
@@ -224,8 +239,13 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      <div className="flex col-span-3 justify-center">
+        <RangeCalendar />
+      </div>
       <div className="col-span-3 row-span-2">
-        {" "}
+        <Chart options={options} />
+      </div>
+      <div className="col-span-3 row-span-2">
         <HighchartsReact highcharts={Highcharts} options={options} />
       </div>
     </div>
