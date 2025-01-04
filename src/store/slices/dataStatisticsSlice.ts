@@ -38,7 +38,7 @@ export const fetchDataStatistics1 = createAsyncThunk(
   ) => {
     thunkAPI.dispatch(setIsLoading(true));
     const response = await fetch(
-      `${config.apiBaseUrl}/dataStatistics/1?locationId=${locationId}`,
+      `${config.apiBaseUrl}/dataStatistics?locationId=${locationId}&status=1`,
       {
         method: "POST",
         headers: {
