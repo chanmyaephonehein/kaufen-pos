@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
@@ -16,6 +16,12 @@ const Calendar = ({ calendarStatus }: { calendarStatus: number }) => {
   const [selectedDay, setSelectedDay] = useState(dayjs());
   const [selectedWeek, setSelectedWeek] = useState(dayjs());
 
+  const fetchDateRange = () => {};
+  useEffect(() => {
+    if (startDate && endDate) {
+      fetchDateRange;
+    }
+  }, [startDate, endDate]);
   return (
     <div className="flex justify-center items-center gap-3">
       {calendarStatus === 5 && ( // date range

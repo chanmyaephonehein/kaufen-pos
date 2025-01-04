@@ -12,6 +12,8 @@ import cartSlice from "./slices/cartSlice";
 import addonCategoriesSlice from "./slices/addonCategoriesSlice";
 import addonsSlice from "./slices/addonsSlice";
 import appSlice from "./slices/appSlice";
+import { dataStatistics } from "@/utils/client";
+import dataStatisticsSlice from "./slices/dataStatisticsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +30,7 @@ export const store = configureStore({
     tables: tablesSlice,
     menusAddonCategories: menusAddonCategoriesSlice,
     menusMenuCategoriesLocations: menusMenuCategoriesLocationsSlice,
+    dataStatistics: dataStatisticsSlice,
   },
 });
 

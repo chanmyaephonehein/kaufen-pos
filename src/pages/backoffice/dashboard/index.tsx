@@ -51,7 +51,7 @@ const Dashboard = () => {
     orders: 0,
   });
   const [payloadOrders, setPayloadOrders] = useState<MostOrdered[]>([]);
-  const [calendarStatus, setCalendarStatus] = useState<number>(4);
+  const [calendarStatus, setCalendarStatus] = useState<number>(1);
   const dataDashboard: DataDashboard[] = [
     {
       id: 1,
@@ -226,7 +226,7 @@ const Dashboard = () => {
         <div className="h-64 border-solid border-gray-500 rounded-lg px-4">
           <div className="flex flex-row justify-between items-center">
             <p className="flex text-lg">Most Type of Order</p>
-            <FormControl fullWidth size="small" sx={{ maxWidth: 120 }}>
+            {/* <FormControl fullWidth size="small" sx={{ maxWidth: 120 }}>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -236,7 +236,7 @@ const Dashboard = () => {
                 <MenuItem value={1}>Today</MenuItem>
                 <MenuItem value={2}>Yesterday</MenuItem>
               </Select>
-            </FormControl>
+            </FormControl> */}
           </div>
         </div>
       </div>
@@ -261,9 +261,6 @@ const Dashboard = () => {
       </div>
       <div className="col-span-3 row-span-2">
         <Chart options={options} />
-      </div>
-      <div className="col-span-3 row-span-2">
-        <HighchartsReact highcharts={Highcharts} options={options} />
       </div>
     </div>
   );
