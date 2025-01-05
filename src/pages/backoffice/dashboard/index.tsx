@@ -41,7 +41,7 @@ interface Payload {
 }
 
 const Dashboard = () => {
-  const currentLocationId = getSelectedLocationId();
+  const currentLocationId = Number(getSelectedLocationId());
   const { orders, orderlines, menus } = useAppSelector(appData);
   const [mostOrderedDate, setMostOrderedDate] = useState<string>("1");
   const [status, setStatus] = useState<string>("1");
@@ -164,6 +164,7 @@ const Dashboard = () => {
     ) as MostOrdered[];
     setPayloadOrders(outputOrder);
   }, []);
+
   return (
     <div className="grid grib-rows-3  grid-cols-5 gap-4">
       <div className="m-1 col-span-3 row-span-1">

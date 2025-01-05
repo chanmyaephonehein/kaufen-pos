@@ -1,6 +1,6 @@
 import { config } from "@/config";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 interface MostOrderedMenu {
   menuId: number;
@@ -33,7 +33,7 @@ const initialState: InitialState = {
 export const fetchDataStatistics1 = createAsyncThunk(
   "dataStatistics/dataStatistics",
   async (
-    { locationId, date }: { locationId: number; date: dayjs.Dayjs },
+    { locationId, date }: { locationId: number; date: Dayjs },
     thunkAPI
   ) => {
     thunkAPI.dispatch(setIsLoading(true));
@@ -58,7 +58,7 @@ export const fetchDataStatistics2 = createAsyncThunk(
   async (locationId: number, thunkAPI) => {
     thunkAPI.dispatch(setIsLoading(true));
     const response = await fetch(
-      `${config.apiBaseUrl}/dataStatistics/2?locationId=${locationId}`
+      `${config.apiBaseUrl}/dataStatistics/2?locationId=${locationId}&status=2`
     );
     const data = await response.json();
     thunkAPI.dispatch(setIsLoading(false));
@@ -71,7 +71,7 @@ export const fetchDataStatistics3 = createAsyncThunk(
   async (locationId: number, thunkAPI) => {
     thunkAPI.dispatch(setIsLoading(true));
     const response = await fetch(
-      `${config.apiBaseUrl}/dataStatistics/3?locationId=${locationId}`
+      `${config.apiBaseUrl}/dataStatistics/3?locationId=${locationId}&status=3`
     );
     const data = await response.json();
     thunkAPI.dispatch(setIsLoading(false));
@@ -84,7 +84,7 @@ export const fetchDataStatistics4 = createAsyncThunk(
   async (locationId: number, thunkAPI) => {
     thunkAPI.dispatch(setIsLoading(true));
     const response = await fetch(
-      `${config.apiBaseUrl}/dataStatistics/4?locationId=${locationId}`
+      `${config.apiBaseUrl}/dataStatistics/4?locationId=${locationId}&status=4`
     );
     const data = await response.json();
     thunkAPI.dispatch(setIsLoading(false));
@@ -97,7 +97,7 @@ export const fetchDataStatistics5 = createAsyncThunk(
   async (locationId: number, thunkAPI) => {
     thunkAPI.dispatch(setIsLoading(true));
     const response = await fetch(
-      `${config.apiBaseUrl}/dataStatistics/5?locationId=${locationId}`
+      `${config.apiBaseUrl}/dataStatistics/5?locationId=${locationId}&status=5`
     );
     const data = await response.json();
     thunkAPI.dispatch(setIsLoading(false));

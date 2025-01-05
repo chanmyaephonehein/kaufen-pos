@@ -5,10 +5,13 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import weekOfYear from "dayjs/plugin/weekOfYear";
+import { getSelectedLocationId } from "@/utils/client";
+import { fetchDataStatistics1 } from "@/store/slices/dataStatisticsSlice";
 
 dayjs.extend(weekOfYear);
 
 const Calendar = ({ calendarStatus }: { calendarStatus: number }) => {
+  const currentLocationId = Number(getSelectedLocationId());
   const [startDate, setStartDate] = useState(dayjs());
   const [endDate, setEndDate] = useState(dayjs());
   const [selectedMonth, setSelectedMonth] = useState(dayjs());
@@ -22,6 +25,10 @@ const Calendar = ({ calendarStatus }: { calendarStatus: number }) => {
       fetchDateRange;
     }
   }, [startDate, endDate]);
+
+  useEffect(() => {
+    fetchDataStatistics1(currentLocationId, selectedDay);
+  }, [selectedDay]);
   return (
     <div className="flex justify-center items-center gap-3">
       {calendarStatus === 5 && ( // date range
