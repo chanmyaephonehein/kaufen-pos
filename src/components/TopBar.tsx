@@ -5,7 +5,6 @@ import PetsIcon from "@mui/icons-material/Pets";
 
 const TopBar = ({ location }: { location: string }) => {
   const router = useRouter();
-  console.log("direct location is", location);
   const { data } = useSession();
   const getTitle = () => {
     const pathname = router.pathname;

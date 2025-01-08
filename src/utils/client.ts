@@ -456,7 +456,7 @@ export const mostOrderedAnalysis = (
     return prev;
   }, [] as MostOrdered[]);
 
-  console.log("here is the menuId with qty", menuIdWithQty);
+  // console.log("here is the menuId with qty", menuIdWithQty);
 
   return menuIdWithQty as [];
 };

@@ -36,6 +36,7 @@ export const fetchDataStatistics1 = createAsyncThunk(
     { locationId, date }: { locationId: number; date: Dayjs },
     thunkAPI
   ) => {
+    console.log("Data Fetching is started.");
     thunkAPI.dispatch(setIsLoading(true));
     const response = await fetch(
       `${config.apiBaseUrl}/dataStatistics?locationId=${locationId}&status=1`,
@@ -44,9 +45,10 @@ export const fetchDataStatistics1 = createAsyncThunk(
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ date: date.toISOString() }),
+        body: JSON.stringify({ date: date.toDate() }),
       }
     );
+    console.log("Data Fetching is completed.");
     const data = await response.json();
     thunkAPI.dispatch(setIsLoading(false));
     thunkAPI.dispatch(setDataStatistics(data));

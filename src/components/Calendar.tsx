@@ -7,17 +7,19 @@ import dayjs, { Dayjs } from "dayjs";
 import weekOfYear from "dayjs/plugin/weekOfYear";
 import { getSelectedLocationId } from "@/utils/client";
 import { fetchDataStatistics1 } from "@/store/slices/dataStatisticsSlice";
+import { useAppDispatch } from "@/store/hooks";
 
 dayjs.extend(weekOfYear);
 
 const Calendar = ({ calendarStatus }: { calendarStatus: number }) => {
   const currentLocationId = Number(getSelectedLocationId());
-  const [startDate, setStartDate] = useState(dayjs());
-  const [endDate, setEndDate] = useState(dayjs());
-  const [selectedMonth, setSelectedMonth] = useState(dayjs());
-  const [selectedYear, setSelectedYear] = useState(dayjs());
-  const [selectedDay, setSelectedDay] = useState(dayjs());
-  const [selectedWeek, setSelectedWeek] = useState(dayjs());
+  const [startDate, setStartDate] = useState<Dayjs>(dayjs());
+  const [endDate, setEndDate] = useState<Dayjs>(dayjs());
+  const [selectedMonth, setSelectedMonth] = useState<Dayjs>(dayjs());
+  const [selectedYear, setSelectedYear] = useState<Dayjs>(dayjs());
+  const [selectedDay, setSelectedDay] = useState<Dayjs>(dayjs());
+  const [selectedWeek, setSelectedWeek] = useState<Dayjs>(dayjs());
+  const dispatch = useAppDispatch();
 
   const fetchDateRange = () => {};
   useEffect(() => {
@@ -26,9 +28,8 @@ const Calendar = ({ calendarStatus }: { calendarStatus: number }) => {
     }
   }, [startDate, endDate]);
 
-  useEffect(() => {
-    fetchDataStatistics1(currentLocationId, selectedDay);
-  }, [selectedDay]);
+  useEffect(() => {}, [selectedDay]);
+
   return (
     <div className="flex justify-center items-center gap-3">
       {calendarStatus === 5 && ( // date range
@@ -40,7 +41,6 @@ const Calendar = ({ calendarStatus }: { calendarStatus: number }) => {
             value={startDate}
             onChange={(start) => {
               setStartDate(start as Dayjs);
-              console.log(startDate);
             }}
           />
           <span>To</span>
@@ -50,7 +50,6 @@ const Calendar = ({ calendarStatus }: { calendarStatus: number }) => {
             value={endDate}
             onChange={(end) => {
               setEndDate(end as Dayjs);
-              console.log(endDate);
             }}
           />
         </LocalizationProvider>
@@ -82,7 +81,15 @@ const Calendar = ({ calendarStatus }: { calendarStatus: number }) => {
           <DatePicker
             label="Select Day"
             value={selectedDay}
-            onChange={(newDate) => setSelectedDay(newDate as Dayjs)}
+            onChange={(newDate) => {
+              setSelectedDay(newDate as Dayjs);
+              dispatch(
+                fetchDataStatistics1({
+                  locationId: currentLocationId,
+                  date: selectedDay,
+                })
+              );
+            }}
             maxDate={dayjs()}
           />
         </LocalizationProvider>
@@ -94,7 +101,7 @@ const Calendar = ({ calendarStatus }: { calendarStatus: number }) => {
             value={selectedWeek}
             onChange={(newDate) => {
               setSelectedWeek(newDate?.startOf("week") as Dayjs); // Start of the selected week
-              console.log(`Selected Week: ${newDate?.week()}`);
+              // console.log(`Selected Week: ${newDate?.week()}`);
             }}
             views={["day"]} // View days, but handle weeks programmatically
             maxDate={dayjs()}
