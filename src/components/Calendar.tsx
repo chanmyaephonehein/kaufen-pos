@@ -11,6 +11,7 @@ import {
   fetchDataStatistics2,
   fetchDataStatistics3,
   fetchDataStatistics4,
+  fetchDataStatistics5,
 } from "@/store/slices/dataStatisticsSlice";
 import { useAppDispatch } from "@/store/hooks";
 
@@ -26,6 +27,15 @@ const Calendar = ({ calendarStatus }: { calendarStatus: number }) => {
   const [selectedWeek, setSelectedWeek] = useState<Dayjs>(dayjs());
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    dispatch(
+      fetchDataStatistics5({
+        locationId: currentLocationId,
+        startDay: startDate as Dayjs,
+        endDay: endDate as Dayjs,
+      })
+    );
+  }, [startDate, endDate]);
   return (
     <div className="flex justify-center items-center gap-3">
       {calendarStatus === 5 && ( // date range

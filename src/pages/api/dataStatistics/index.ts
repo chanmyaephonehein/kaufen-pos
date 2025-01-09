@@ -66,7 +66,10 @@ export default async function handler(
 
       const status = 1;
       const customerCount = orderIds.length;
-      const totalDishes = uniqueOrderlines.length;
+      const totalDishes = mostOrderedMenu.reduce((prev, curr) => {
+        prev += curr.quantity;
+        return prev;
+      }, 0);
       const revenue = inDateOrderPrice.reduce((prev, curr) => {
         return (prev += curr);
       }, 0);
@@ -153,7 +156,10 @@ export default async function handler(
 
       const status = 2;
       const customerCount = orderIds.length;
-      const totalDishes = uniqueOrderlines.length;
+      const totalDishes = mostOrderedMenu.reduce((prev, curr) => {
+        prev += curr.quantity;
+        return prev;
+      }, 0);
       const revenue = inDateOrderPrice.reduce((prev, curr) => {
         return (prev += curr);
       }, 0);
@@ -227,7 +233,10 @@ export default async function handler(
 
       const status = 3;
       const customerCount = orderIds.length;
-      const totalDishes = uniqueOrderlines.length;
+      const totalDishes = mostOrderedMenu.reduce((prev, curr) => {
+        prev += curr.quantity;
+        return prev;
+      }, 0);
       const revenue = inDateOrderPrice.reduce((prev, curr) => {
         return (prev += curr);
       }, 0);
@@ -243,7 +252,6 @@ export default async function handler(
         mostOrderedMenu,
       };
 
-      console.log(returnValue);
       return res.status(200).send(returnValue);
     }
   } else if (status === "4") {
@@ -251,7 +259,7 @@ export default async function handler(
       const locationId = Number(req.query.locationId);
       const { startOfWeek, endOfWeek } = req.body;
       const startDate = new Date(startOfWeek);
-      const endDate = new Date(startOfWeek);
+      const endDate = new Date(endOfWeek);
 
       const inDateOrder = await prisma.orders.findMany({
         where: {
@@ -301,7 +309,10 @@ export default async function handler(
 
       const status = 4;
       const customerCount = orderIds.length;
-      const totalDishes = uniqueOrderlines.length;
+      const totalDishes = mostOrderedMenu.reduce((prev, curr) => {
+        prev += curr.quantity;
+        return prev;
+      }, 0);
       const revenue = inDateOrderPrice.reduce((prev, curr) => {
         return (prev += curr);
       }, 0);
@@ -317,10 +328,86 @@ export default async function handler(
         mostOrderedMenu,
       };
 
-      console.log(returnValue);
       return res.status(200).send(returnValue);
     }
   } else if (status === "5") {
+    if (req.method === "POST") {
+      const locationId = Number(req.query.locationId);
+      const { startDay, endDay } = req.body;
+      const startDate = new Date(startDay);
+      startDate.setHours(0, 0, 0, 0);
+      const endDate = new Date(endDay);
+      endDate.setHours(23, 59, 59, 999);
+
+      const inDateOrder = await prisma.orders.findMany({
+        where: {
+          updatedAt: { gte: startDate, lte: endDate },
+          locationId: Number(locationId),
+          isPaid: true,
+        },
+      });
+      const orderIds = inDateOrder.map((item) => item.id);
+
+      const inDateOrderlines = await prisma.orderlines.findMany({
+        where: { orderId: { in: orderIds } },
+      });
+
+      const uniqueOrderlines = [] as Orderlines[];
+      inDateOrderlines.forEach((item) => {
+        const isExist = uniqueOrderlines.find((i) => i.itemId === item.itemId);
+        if (isExist) {
+          return;
+        } else {
+          uniqueOrderlines.push(item);
+        }
+      });
+
+      const inDateOrderPrice = inDateOrder.map(
+        (item) => item.price
+      ) as number[];
+
+      const menuData = await prisma.menus.findMany(); // Fetch all menus once
+
+      const mostOrderedMenu = uniqueOrderlines.reduce((prev, curr) => {
+        const found = prev.find((item) => item.menuId === curr.menuId);
+        if (found) {
+          found.quantity += curr.quantity;
+        } else {
+          const menuName =
+            menuData.find((menu) => menu.id === curr.menuId)?.name ||
+            "Unknown Menu";
+          prev.push({
+            menuId: curr.menuId,
+            name: menuName,
+            quantity: curr.quantity,
+          });
+        }
+        return prev;
+      }, [] as MostOrderedMenu[]);
+
+      const status = 5;
+      const customerCount = orderIds.length;
+      const totalDishes = mostOrderedMenu.reduce((prev, curr) => {
+        prev += curr.quantity;
+        return prev;
+      }, 0);
+      const revenue = inDateOrderPrice.reduce((prev, curr) => {
+        return (prev += curr);
+      }, 0);
+      const profits = revenue;
+
+      const returnValue = {
+        locationId,
+        status,
+        customerCount,
+        totalDishes,
+        revenue,
+        profits,
+        mostOrderedMenu,
+      };
+
+      return res.status(200).send(returnValue);
+    }
   } else {
   }
 }

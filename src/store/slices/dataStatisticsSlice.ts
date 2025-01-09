@@ -136,11 +136,26 @@ export const fetchDataStatistics4 = createAsyncThunk(
 );
 
 export const fetchDataStatistics5 = createAsyncThunk(
-  "dataStatistics/dataStatistics",
-  async (locationId: number, thunkAPI) => {
+  "dataStatistics5/dataStatistics5",
+  async (
+    {
+      locationId,
+      startDay,
+      endDay,
+    }: { locationId: number; startDay: Dayjs; endDay: Dayjs },
+    thunkAPI
+  ) => {
     thunkAPI.dispatch(setIsLoading(true));
+
     const response = await fetch(
-      `${config.apiBaseUrl}/dataStatistics?locationId=${locationId}&status=5`
+      `${config.apiBaseUrl}/dataStatistics?locationId=${locationId}&status=5`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ startDay, endDay }),
+      }
     );
     const data = await response.json();
     thunkAPI.dispatch(setIsLoading(false));
