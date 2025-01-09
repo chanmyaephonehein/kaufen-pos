@@ -21,23 +21,30 @@ interface DataAnalysis {
 
 interface InitialState {
   isLoading: boolean;
-  data: DataAnalysis[];
+  data: DataAnalysis;
   error: Error | null;
 }
 
 const initialState: InitialState = {
   isLoading: false,
-  data: [],
+  data: {
+    locationId: 0,
+    status: 0,
+    customerCount: 0,
+    totalDishes: 0,
+    mostOrderedMenu: [],
+    revenue: "",
+    profits: "",
+  },
   error: null,
 };
 
 export const fetchDataStatistics1 = createAsyncThunk(
-  "dataStatistics/dataStatistics",
+  "dataStatistics1/dataStatistics1",
   async (
     { locationId, date }: { locationId: number; date: Dayjs },
     thunkAPI
   ) => {
-    console.log("Data Fetching is started.");
     thunkAPI.dispatch(setIsLoading(true));
     const response = await fetch(
       `${config.apiBaseUrl}/dataStatistics?locationId=${locationId}&status=1`,
@@ -49,20 +56,28 @@ export const fetchDataStatistics1 = createAsyncThunk(
         body: JSON.stringify({ date: date.toDate() }),
       }
     );
-    console.log("Data Fetching is completed.");
     const data = await response.json();
-    console.log(data);
     thunkAPI.dispatch(setIsLoading(false));
     thunkAPI.dispatch(setDataStatistics(data));
   }
 );
 
 export const fetchDataStatistics2 = createAsyncThunk(
-  "dataStatistics/dataStatistics",
-  async (locationId: number, thunkAPI) => {
+  "dataStatistics2/dataStatistics2",
+  async (
+    { locationId, date }: { locationId: number; date: Dayjs },
+    thunkAPI
+  ) => {
     thunkAPI.dispatch(setIsLoading(true));
     const response = await fetch(
-      `${config.apiBaseUrl}/dataStatistics/2?locationId=${locationId}&status=2`
+      `${config.apiBaseUrl}/dataStatistics?locationId=${locationId}&status=2`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ date: date.toDate() }),
+      }
     );
     const data = await response.json();
     thunkAPI.dispatch(setIsLoading(false));
@@ -71,11 +86,21 @@ export const fetchDataStatistics2 = createAsyncThunk(
 );
 
 export const fetchDataStatistics3 = createAsyncThunk(
-  "dataStatistics/dataStatistics",
-  async (locationId: number, thunkAPI) => {
+  "dataStatistics3/dataStatistics3",
+  async (
+    { locationId, date }: { locationId: number; date: Dayjs },
+    thunkAPI
+  ) => {
     thunkAPI.dispatch(setIsLoading(true));
     const response = await fetch(
-      `${config.apiBaseUrl}/dataStatistics/3?locationId=${locationId}&status=3`
+      `${config.apiBaseUrl}/dataStatistics?locationId=${locationId}&status=3`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ date: date.toDate() }),
+      }
     );
     const data = await response.json();
     thunkAPI.dispatch(setIsLoading(false));
@@ -84,11 +109,25 @@ export const fetchDataStatistics3 = createAsyncThunk(
 );
 
 export const fetchDataStatistics4 = createAsyncThunk(
-  "dataStatistics/dataStatistics",
-  async (locationId: number, thunkAPI) => {
+  "dataStatistics4/dataStatistics4",
+  async (
+    { locationId, date }: { locationId: number; date: Dayjs },
+    thunkAPI
+  ) => {
     thunkAPI.dispatch(setIsLoading(true));
+    // Calculate start and end dates of the week
+    const startOfWeek = date.startOf("week").toDate(); // First day of the week
+    const endOfWeek = date.endOf("week").toDate(); // Last day of the week
+
     const response = await fetch(
-      `${config.apiBaseUrl}/dataStatistics/4?locationId=${locationId}&status=4`
+      `${config.apiBaseUrl}/dataStatistics?locationId=${locationId}&status=4`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ startOfWeek, endOfWeek }),
+      }
     );
     const data = await response.json();
     thunkAPI.dispatch(setIsLoading(false));
@@ -101,7 +140,7 @@ export const fetchDataStatistics5 = createAsyncThunk(
   async (locationId: number, thunkAPI) => {
     thunkAPI.dispatch(setIsLoading(true));
     const response = await fetch(
-      `${config.apiBaseUrl}/dataStatistics/5?locationId=${locationId}&status=5`
+      `${config.apiBaseUrl}/dataStatistics?locationId=${locationId}&status=5`
     );
     const data = await response.json();
     thunkAPI.dispatch(setIsLoading(false));
@@ -117,15 +156,16 @@ const dataStatisticsSlice = createSlice({
       state.isLoading = action.payload;
     },
     setDataStatistics: (state, action: PayloadAction<DataAnalysis>) => {
-      const isExist = state.data.find((item) => {
-        item.status === action.payload.status &&
-          item.locationId === action.payload.locationId;
-      });
-      state.data.map((item) => {
-        if (isExist) return;
-        else return item;
-      });
-      state.data.push(action.payload);
+      // const isExist = state.data.find((item) => {
+      //   item.status === action.payload.status &&
+      //     item.locationId === action.payload.locationId;
+      // });
+      // state.data.map((item) => {
+      //   if (isExist) return;
+      //   else return item;
+      // });
+      // state.data.push(action.payload);
+      state.data = action.payload;
     },
   },
 });

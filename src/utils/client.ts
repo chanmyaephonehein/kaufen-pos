@@ -159,7 +159,7 @@ export const getMenuCount = (orderId: number, orderlines: Orderlines[]) => {
   return uniqueMenuIds.length;
 };
 
-export const dataStatistics = (
+export const dataStatistic = (
   status: string,
   orders: Orders[],
   orderlines: Orderlines[],

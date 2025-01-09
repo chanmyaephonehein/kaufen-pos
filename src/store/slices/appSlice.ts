@@ -113,6 +113,8 @@ export const selectTables = (state: RootState) => state.tables.items;
 export const selectCompany = (state: RootState) => state.company.items;
 export const selectOrders = (state: RootState) => state.orders.items;
 export const selectOrderlines = (state: RootState) => state.orderlines.items;
+export const selectDataStatistics = (state: RootState) =>
+  state.dataStatistics.data;
 
 export const appData = createSelector(
   [
@@ -128,6 +130,7 @@ export const appData = createSelector(
     selectOrderlines,
     selectOrders,
     selectTables,
+    selectDataStatistics,
   ],
   (
     app,
@@ -141,7 +144,8 @@ export const appData = createSelector(
     menusMenuCategoriesLocations,
     orderlines,
     orders,
-    tables
+    tables,
+    dataStatistics
   ) => {
     return {
       isLoading: app.isLoading,
@@ -156,6 +160,7 @@ export const appData = createSelector(
       orderlines,
       orders,
       tables,
+      dataStatistics,
     };
   }
 );

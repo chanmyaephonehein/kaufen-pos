@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 
 import {
-  dataStatistics,
+  dataStatistic,
   getSelectedLocationId,
   mostOrderedAnalysis,
 } from "@/utils/client";
@@ -34,44 +34,31 @@ export interface MostOrdered {
   quantity: number;
 }
 
-interface Payload {
-  revenue: number;
-  dishes: number;
-  orders: number;
-}
-
 const Dashboard = () => {
   const currentLocationId = Number(getSelectedLocationId());
-  const { orders, orderlines, menus } = useAppSelector(appData);
-  const [mostOrderedDate, setMostOrderedDate] = useState<string>("1");
-  const [status, setStatus] = useState<string>("1");
-  const [payload, setPayload] = useState<Payload>({
-    revenue: 0,
-    dishes: 0,
-    orders: 0,
-  });
-  const [payloadOrders, setPayloadOrders] = useState<MostOrdered[]>([]);
+  const { orders, orderlines, menus, dataStatistics } = useAppSelector(appData);
+
   const [calendarStatus, setCalendarStatus] = useState<number>(1);
   const dataDashboard: DataDashboard[] = [
     {
       id: 1,
       icon: <DashboardIcon />,
       percent: "+32.40%",
-      amount: `$ ${payload.revenue}`,
+      amount: `$ ${dataStatistics.revenue}`,
       title: "Total Revenue",
     },
     {
       id: 2,
       icon: <DashboardIcon />,
       percent: "-12.40%",
-      amount: `${payload.dishes}`,
+      amount: `${dataStatistics.totalDishes}`,
       title: "Total Dish Ordered",
     },
     {
       id: 3,
       icon: <DashboardIcon />,
       percent: "+2.40%",
-      amount: `${payload.orders}`,
+      amount: `${dataStatistics.customerCount}`,
       title: "Total Customer",
     },
   ];
@@ -121,68 +108,28 @@ const Dashboard = () => {
     ],
   };
 
-  const handleChange = (evt: SelectChangeEvent) => {
-    setMostOrderedDate(evt.target.value as string);
-  };
-
-  const handleChangeRevenue = (evt: SelectChangeEvent) => {
-    setStatus(evt.target.value as string);
-    const output = dataStatistics(
-      status,
-      orders,
-      orderlines,
-      Number(currentLocationId)
-    ) as Payload;
-    setPayload({
-      revenue: output.revenue,
-      dishes: output.dishes,
-      orders: output.orders,
-    });
-  };
-
-  useEffect(() => {
-    const output = dataStatistics(
-      status,
-      orders,
-      orderlines,
-      Number(currentLocationId)
-    ) as Payload;
-    setPayload({
-      revenue: output.revenue,
-      dishes: output.dishes,
-      orders: output.orders,
-    });
-  }, [status]);
-
-  useEffect(() => {
-    const outputOrder = mostOrderedAnalysis(
-      "1",
-      orders,
-      orderlines,
-      menus,
-      Number(currentLocationId)
-    ) as MostOrdered[];
-    setPayloadOrders(outputOrder);
-  }, []);
-
   return (
     <div className="grid grib-rows-3  grid-cols-5 gap-4">
       <div className="m-1 col-span-3 row-span-1">
-        <div className="flex justify-end mb-3">
+        <div className="flex col-span-3 justify-between items-center mb-5">
+          <Calendar calendarStatus={calendarStatus} />
           <FormControl fullWidth size="small" sx={{ maxWidth: 120 }}>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={status}
-              onChange={handleChangeRevenue}
+              value={calendarStatus}
+              onChange={(evt) =>
+                setCalendarStatus(Number(evt.target.value) as number)
+              }
             >
-              <MenuItem value="1">Today</MenuItem>
-              <MenuItem value="2">Week</MenuItem>
-              <MenuItem value="3">Month</MenuItem>
-              <MenuItem value="4">Year</MenuItem>
+              <MenuItem value={1}>By Day</MenuItem>
+              <MenuItem value={2}>By Month</MenuItem>
+              <MenuItem value={3}>By Year</MenuItem>
+              <MenuItem value={4}>By Week</MenuItem>{" "}
+              <MenuItem value={5}>Date Range</MenuItem>
             </Select>
           </FormControl>
-        </div>
+        </div>{" "}
         <div className="flex justify-between ">
           {dataDashboard.map((item) => (
             <div
@@ -203,22 +150,11 @@ const Dashboard = () => {
         <div className="h-96 border-solid border-gray-500 rounded-lg px-3">
           <div className="flex flex-row justify-between items-center">
             <p className="flex text-lg">Most Ordered</p>
-            <FormControl fullWidth size="small" sx={{ maxWidth: 120 }}>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={mostOrderedDate}
-                onChange={handleChange}
-              >
-                <MenuItem value={1}>Today</MenuItem>
-                <MenuItem value={2}>Yesterday</MenuItem>
-              </Select>
-            </FormControl>
           </div>{" "}
           <div>
-            {payloadOrders.map((item) => (
+            {dataStatistics.mostOrderedMenu.map((item) => (
               <div key={item.menuId}>
-                <p>{item.menu}</p>
+                <p>{item.name}</p>
                 <p>{item.quantity}</p>
               </div>
             ))}
@@ -227,39 +163,10 @@ const Dashboard = () => {
         <div className="h-64 border-solid border-gray-500 rounded-lg px-4">
           <div className="flex flex-row justify-between items-center">
             <p className="flex text-lg">Most Type of Order</p>
-            {/* <FormControl fullWidth size="small" sx={{ maxWidth: 120 }}>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={mostOrderedDate}
-                onChange={handleChange}
-              >
-                <MenuItem value={1}>Today</MenuItem>
-                <MenuItem value={2}>Yesterday</MenuItem>
-              </Select>
-            </FormControl> */}
           </div>
         </div>
       </div>
-      <div className="flex col-span-3 justify-between items-center">
-        <Calendar calendarStatus={calendarStatus} />
-        <FormControl fullWidth size="small" sx={{ maxWidth: 120 }}>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={calendarStatus}
-            onChange={(evt) =>
-              setCalendarStatus(Number(evt.target.value) as number)
-            }
-          >
-            <MenuItem value={1}>By Day</MenuItem>
-            <MenuItem value={2}>By Month</MenuItem>
-            <MenuItem value={3}>By Year</MenuItem>
-            <MenuItem value={4}>By Week</MenuItem>{" "}
-            <MenuItem value={5}>Date Range</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
+
       <div className="col-span-3 row-span-2">
         <Chart options={options} />
       </div>
