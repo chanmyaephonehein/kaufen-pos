@@ -86,7 +86,7 @@ const Calendar = ({ calendarStatus }: { calendarStatus: number }) => {
               dispatch(
                 fetchDataStatistics1({
                   locationId: currentLocationId,
-                  date: selectedDay,
+                  date: newDate as Dayjs,
                 })
               );
             }}

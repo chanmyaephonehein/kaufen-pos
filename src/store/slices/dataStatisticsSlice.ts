@@ -1,21 +1,22 @@
 import { config } from "@/config";
+import { Menus } from "@prisma/client";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import dayjs, { Dayjs } from "dayjs";
 
-interface MostOrderedMenu {
+export interface MostOrderedMenu {
   menuId: number;
   name: string;
   quantity: number;
 }
 
 interface DataAnalysis {
+  locationId: number;
+  status: number;
   customerCount: number;
   totalDishes: number;
   mostOrderedMenu: MostOrderedMenu[];
   revenue: string;
   profits: string;
-  locationId: number;
-  status: number;
 }
 
 interface InitialState {
@@ -50,6 +51,7 @@ export const fetchDataStatistics1 = createAsyncThunk(
     );
     console.log("Data Fetching is completed.");
     const data = await response.json();
+    console.log(data);
     thunkAPI.dispatch(setIsLoading(false));
     thunkAPI.dispatch(setDataStatistics(data));
   }
