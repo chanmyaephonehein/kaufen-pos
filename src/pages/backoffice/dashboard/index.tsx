@@ -63,51 +63,6 @@ const Dashboard = () => {
     },
   ];
 
-  const options = {
-    chart: {
-      type: "line",
-    },
-    title: {
-      text: "Data Statistics",
-    },
-    xAxis: {
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
-    },
-    yAxis: {
-      title: {
-        text: "Revenue",
-      },
-    },
-    series: [
-      {
-        name: "Example Series",
-        data: [
-          0.23, 0.12, 0.31, 0.41, 0.68, 0.58, 0.76, 0.78, 0.89, 1.44, 0.99, 1.2,
-        ],
-      },
-      {
-        name: "Example Series",
-        data: [
-          0.03, 0.12, 0.09, 0.34, 0.28, 0.21, 0.34, 1.09, 0.69, 0.76, 0.89,
-          1.01,
-        ],
-      },
-    ],
-  };
-
   return (
     <div className="grid grib-rows-3  grid-cols-5 gap-4">
       <div className="m-1 col-span-3 row-span-1">
@@ -126,7 +81,7 @@ const Dashboard = () => {
               <MenuItem value={2}>By Month</MenuItem>
               <MenuItem value={3}>By Year</MenuItem>
               <MenuItem value={4}>By Week</MenuItem>{" "}
-              <MenuItem value={5}>Date Range</MenuItem>
+              <MenuItem value={5}>Custom</MenuItem>
             </Select>
           </FormControl>
         </div>{" "}
@@ -168,7 +123,7 @@ const Dashboard = () => {
       </div>
 
       <div className="col-span-3 row-span-2">
-        <Chart options={options} />
+        <Chart status={calendarStatus} />
       </div>
     </div>
   );

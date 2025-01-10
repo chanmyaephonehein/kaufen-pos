@@ -48,6 +48,7 @@ const Calendar = ({ calendarStatus }: { calendarStatus: number }) => {
             onChange={(start) => {
               setStartDate(start as Dayjs);
             }}
+            sx={{ width: "200px" }}
           />
           <span>To</span>
           <DatePicker
@@ -57,6 +58,7 @@ const Calendar = ({ calendarStatus }: { calendarStatus: number }) => {
             onChange={(end) => {
               setEndDate(end as Dayjs);
             }}
+            sx={{ width: "200px" }}
           />
         </LocalizationProvider>
       )}
