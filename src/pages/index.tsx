@@ -11,7 +11,7 @@ const Kaufen = () => {
   const router = useRouter();
   return (
     <>
-      <div className="bg-gradient-to-r from-gray-700 to-gray-900 h-full">
+      <div className="">
         <div className="flex flex-col gap-6">
           <AboutUs />
         </div>

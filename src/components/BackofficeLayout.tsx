@@ -40,8 +40,7 @@ const BackofficeLayout = (props: Props) => {
         <TopBar location={currentLocation} />
       </div>
       <div className="grid grid-cols-6 gap-1">
-        {" "}
-        <div className="sticky top-[64px] h-[calc(100vh-64px)] bg-white">
+        <div className="sticky top-24 h-[calc(100vh-64px)] bg-white col-span-1">
           {data && <SideBar />}
         </div>
         <div className="col-span-5">{props.children}</div>

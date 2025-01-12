@@ -101,16 +101,20 @@ const Dashboard = () => {
           ))}
         </div>
       </div>
-      <div className="col-span-2 flex flex-col gap-3 row-span-3">
+      <div className="col-span-2 flex flex-col gap-3 row-span-3 sticky top-24 h-[calc(100vh-64px)]">
         <div className="h-96 border-solid border-gray-500 rounded-lg px-3">
           <div className="flex flex-row justify-between items-center">
-            <p className="flex text-lg">Most Ordered</p>
+            <p className="flex text-3xl font-semibold">Most Ordered</p>
           </div>{" "}
           <div>
             {dataStatistics.mostOrderedMenu.map((item) => (
-              <div key={item.menuId}>
-                <p>{item.name}</p>
-                <p>{item.quantity}</p>
+              <div key={item.menuId} className="flex mb-3">
+                <div className="border-solid border-gray-600 w-20 h-20 mr-6"></div>
+
+                <div className="flex flex-col">
+                  <span className="text-2xl">{item.name}</span>
+                  <span>Quantity: {item.quantity}</span>
+                </div>
               </div>
             ))}
           </div>

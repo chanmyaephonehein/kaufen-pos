@@ -1,43 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import { appData } from "@/store/slices/appSlice";
+import { useAppSelector } from "@/store/hooks";
 
 const Chart = ({ status }: { status: number }) => {
-  const lineChart = "line";
-  const barChart = "bar";
-  const columnChart = "column";
-  const pieChart = "pie";
-  const heatMap = "heatmap";
-  const funnelChart = "funnel";
-  const guageChart = "guage";
-
-  const areaChart = "area";
-  const scatterPlot = "scatter";
-  const histogram = "histogram";
-  const bubbleChart = "bubble";
-
-  const options = {
+  const { dataStatistics } = useAppSelector(appData);
+  const istData = dataStatistics.mostOrderedMenu.map((item) => {
+    const returnValue = { name: item.name, y: item.quantity };
+    return returnValue;
+  });
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const column = {
     chart: {
-      type: columnChart,
+      type: "column",
     },
     title: {
       text: "Data Statistics",
     },
     xAxis: {
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
+      categories: months,
     },
     yAxis: {
       title: {
@@ -60,11 +55,44 @@ const Chart = ({ status }: { status: number }) => {
       },
     ],
   };
+
+  const pie = {
+    chart: {
+      type: "pie",
+    },
+    title: {
+      text: "Most ordered",
+    },
+
+    plotOptions: {
+      pie: {
+        innerSize: "50%", // Makes it a donut chart
+        depth: 45, // Adds 3D effect (optional)
+        dataLabels: {
+          enabled: true,
+          format: "{point.name}: {point.percentage:.1f}%",
+        },
+      },
+    },
+    series: [
+      {
+        name: "Qty",
+        data: istData,
+      },
+    ],
+  };
+
+  console.log(istData);
+
   return (
     <div>
-      <HighchartsReact highcharts={Highcharts} options={options} />
-      <HighchartsReact highcharts={Highcharts} options={options} />
-      <HighchartsReact highcharts={Highcharts} options={options} />
+      {status === 1 && (
+        <HighchartsReact highcharts={Highcharts} options={column} />
+      )}
+      {status === 1 && (
+        <HighchartsReact highcharts={Highcharts} options={pie} />
+      )}
+      {/* <HighchartsReact highcharts={Highcharts} options={options} /> */}
     </div>
   );
 };

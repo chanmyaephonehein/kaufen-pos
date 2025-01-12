@@ -21,7 +21,7 @@ const TopBar = ({ location }: { location: string }) => {
     return;
   };
   return (
-    <div className="flex flex-col my-3 ">
+    <div className="flex flex-col mb-3">
       <div className="flex justify-between items-center">
         <div
           onClick={() => router.push({ pathname: "/backoffice" })}

@@ -1,4 +1,3 @@
-import Layout from "@/components/Layout";
 import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
 import { getSelectedLocationId } from "@/utils/client";
