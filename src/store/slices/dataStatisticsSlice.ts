@@ -14,7 +14,7 @@ interface DataAnalysis {
   status: number;
   customerCount: number;
   totalDishes: number;
-  mostOrderedMenu: MostOrderedMenu[];
+  mostOrderedMenuByNumber: MostOrderedMenu[];
   revenue: string;
   profits: string;
 }
@@ -32,7 +32,7 @@ const initialState: InitialState = {
     status: 0,
     customerCount: 0,
     totalDishes: 0,
-    mostOrderedMenu: [],
+    mostOrderedMenuByNumber: [],
     revenue: "",
     profits: "",
   },

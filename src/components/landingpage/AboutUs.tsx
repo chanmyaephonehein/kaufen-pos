@@ -8,10 +8,19 @@ const AboutUs = () => {
   return (
     <div className="flex flex-row justify-center items-center gap-8 h-screen">
       <Button variant="outlined" onClick={() => router.push("/backoffice")}>
-        Backoffice
+        Admin
       </Button>
       <Button variant="outlined" onClick={() => router.push("/order")}>
         Customer
+      </Button>
+      <Button variant="outlined" onClick={() => router.push("/waiter")}>
+        Waiter
+      </Button>
+      <Button variant="outlined" onClick={() => router.push("/casher")}>
+        Casher
+      </Button>{" "}
+      <Button variant="outlined" onClick={() => router.push("/kitchen")}>
+        Kitchen
       </Button>
     </div>
   );

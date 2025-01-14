@@ -6,7 +6,7 @@ import { useAppSelector } from "@/store/hooks";
 
 const Chart = ({ status }: { status: number }) => {
   const { dataStatistics } = useAppSelector(appData);
-  const istData = dataStatistics.mostOrderedMenu.map((item) => {
+  const istData = dataStatistics.mostOrderedMenuByNumber.map((item) => {
     const returnValue = { name: item.name, y: item.quantity };
     return returnValue;
   });
@@ -86,12 +86,9 @@ const Chart = ({ status }: { status: number }) => {
 
   return (
     <div>
-      {status === 1 && (
-        <HighchartsReact highcharts={Highcharts} options={column} />
-      )}
-      {status === 1 && (
-        <HighchartsReact highcharts={Highcharts} options={pie} />
-      )}
+      {" "}
+      <HighchartsReact highcharts={Highcharts} options={pie} />
+      <HighchartsReact highcharts={Highcharts} options={column} />
       {/* <HighchartsReact highcharts={Highcharts} options={options} /> */}
     </div>
   );

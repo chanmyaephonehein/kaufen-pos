@@ -64,6 +64,10 @@ export default async function handler(
         return prev;
       }, [] as MostOrderedMenu[]);
 
+      const mostOrderedMenuByNumber = mostOrderedMenu.sort(
+        (a, b) => b.quantity - a.quantity
+      );
+
       const status = 1;
       const customerCount = orderIds.length;
       const totalDishes = mostOrderedMenu.reduce((prev, curr) => {
@@ -82,7 +86,7 @@ export default async function handler(
         totalDishes,
         revenue,
         profits,
-        mostOrderedMenu,
+        mostOrderedMenuByNumber,
       };
 
       // console.log(inDateOrderlines);
@@ -154,6 +158,10 @@ export default async function handler(
         return prev;
       }, [] as MostOrderedMenu[]);
 
+      const mostOrderedMenuByNumber = mostOrderedMenu.sort(
+        (a, b) => b.quantity - a.quantity
+      );
+
       const status = 2;
       const customerCount = orderIds.length;
       const totalDishes = mostOrderedMenu.reduce((prev, curr) => {
@@ -172,7 +180,7 @@ export default async function handler(
         totalDishes,
         revenue,
         profits,
-        mostOrderedMenu,
+        mostOrderedMenuByNumber,
       };
 
       return res.status(200).send(returnValue);
@@ -231,6 +239,10 @@ export default async function handler(
         return prev;
       }, [] as MostOrderedMenu[]);
 
+      const mostOrderedMenuByNumber = mostOrderedMenu.sort(
+        (a, b) => b.quantity - a.quantity
+      );
+
       const status = 3;
       const customerCount = orderIds.length;
       const totalDishes = mostOrderedMenu.reduce((prev, curr) => {
@@ -249,7 +261,7 @@ export default async function handler(
         totalDishes,
         revenue,
         profits,
-        mostOrderedMenu,
+        mostOrderedMenuByNumber,
       };
 
       return res.status(200).send(returnValue);
@@ -307,6 +319,10 @@ export default async function handler(
         return prev;
       }, [] as MostOrderedMenu[]);
 
+      const mostOrderedMenuByNumber = mostOrderedMenu.sort(
+        (a, b) => b.quantity - a.quantity
+      );
+
       const status = 4;
       const customerCount = orderIds.length;
       const totalDishes = mostOrderedMenu.reduce((prev, curr) => {
@@ -325,7 +341,7 @@ export default async function handler(
         totalDishes,
         revenue,
         profits,
-        mostOrderedMenu,
+        mostOrderedMenuByNumber,
       };
 
       return res.status(200).send(returnValue);
@@ -385,6 +401,10 @@ export default async function handler(
         return prev;
       }, [] as MostOrderedMenu[]);
 
+      const mostOrderedMenuByNumber = mostOrderedMenu.sort(
+        (a, b) => b.quantity - a.quantity
+      );
+
       const status = 5;
       const customerCount = orderIds.length;
       const totalDishes = mostOrderedMenu.reduce((prev, curr) => {
@@ -403,7 +423,7 @@ export default async function handler(
         totalDishes,
         revenue,
         profits,
-        mostOrderedMenu,
+        mostOrderedMenuByNumber,
       };
 
       return res.status(200).send(returnValue);
