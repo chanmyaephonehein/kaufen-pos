@@ -9,17 +9,11 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 
-import {
-  dataStatistic,
-  getSelectedLocationId,
-  mostOrderedAnalysis,
-} from "@/utils/client";
+import { getSelectedLocationId } from "@/utils/client";
 import { useAppSelector } from "@/store/hooks";
 import { appData } from "@/store/slices/appSlice";
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
-import Chart from "@/components/Chart";
 import Calendar from "@/components/Calendar";
+import Chart from "@/components/MostOrderChart/Chart";
 
 interface DataDashboard {
   id: number;
