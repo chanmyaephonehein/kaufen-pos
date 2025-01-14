@@ -1,6 +1,7 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import {
+  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -37,7 +38,16 @@ export interface MostOrdered {
 const Dashboard = () => {
   const currentLocationId = Number(getSelectedLocationId());
   const { orders, orderlines, menus, dataStatistics } = useAppSelector(appData);
+  const [visibleCount, setVisibleCount] = useState<number>(3);
 
+  const visibleMenu = dataStatistics.mostOrderedMenuByNumber.slice(
+    0,
+    visibleCount
+  );
+
+  const handleLoadMore = () => {
+    setVisibleCount(visibleCount + 3);
+  };
   const [calendarStatus, setCalendarStatus] = useState<number>(1);
   const dataDashboard: DataDashboard[] = [
     {
@@ -102,18 +112,43 @@ const Dashboard = () => {
         </div>
       </div>
       <div className="col-span-2 flex flex-col gap-3 row-span-3 sticky top-24 h-[calc(100vh-64px)]">
-        <div className="h-96 border-solid border-gray-500 rounded-lg px-3">
-          <span className="flex text-3xl font-semibold py-5">Most Ordered</span>
-          <div>
-            {dataStatistics.mostOrderedMenuByNumber.map((item) => (
+        <div
+          className={
+            visibleCount < dataStatistics.mostOrderedMenuByNumber.length
+              ? "h-[400px] border-solid border-gray-500 rounded-lg px-3 py-5 flex flex-col item-between"
+              : "h-[400px] border-solid border-gray-500 rounded-lg px-3  py-5"
+          }
+        >
+          <span className="flex text-3xl font-semibold mb-4">Most Ordered</span>
+          <div className="h-[300px] overflow-y-auto">
+            {visibleMenu.map((item) => (
               <div key={item.menuId} className="flex mb-3">
                 <div className="border-solid border-gray-600 w-20 h-20 mr-6"></div>
-                <div className="flex flex-col">
+                <div className="flex flex-col ">
                   <span className="text-2xl">{item.name}</span>
-                  <span>Quantity: {item.quantity}</span>
+                  <span className="text-gray-500">
+                    Quantity: {item.quantity}
+                  </span>
                 </div>
               </div>
             ))}
+          </div>
+          <div className="flex justify-center">
+            <div className="mt-0 w-2/3 ">
+              {visibleCount < dataStatistics.mostOrderedMenuByNumber.length ? (
+                <Button variant="outlined" onClick={handleLoadMore} fullWidth>
+                  Load More
+                </Button>
+              ) : (
+                <Button
+                  variant="outlined"
+                  fullWidth
+                  onClick={() => setVisibleCount(3)}
+                >
+                  Top 3
+                </Button>
+              )}
+            </div>
           </div>
         </div>
         <div className="h-64 border-solid border-gray-500 rounded-lg px-4">
